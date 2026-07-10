@@ -1,0 +1,233 @@
+{% extends "layouts/app_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+New Meeting | ConnectX
+{% endblock %}
+
+
+{% block app_page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pages/meeting_forms.css' %}">
+
+{% endblock %}
+
+
+{% block app_content %}
+
+<div class="cx-meeting-form-page">
+
+    <section class="cx-meeting-form-shell">
+
+        <div class="cx-meeting-form-header">
+
+            <a
+                href="{% url 'meetings' %}"
+                class="cx-meeting-form-back"
+                aria-label="Back to meetings">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true">
+
+                    <path d="M19 12H5">
+                    </path>
+
+                    <path d="M12 19L5 12L12 5">
+                    </path>
+
+                </svg>
+
+            </a>
+
+
+            <div>
+
+                <span class="cx-meeting-form-eyebrow">
+                    INSTANT MEETING
+                </span>
+
+                <h1>
+                    Start a new meeting
+                </h1>
+
+                <p>
+                    Create a secure ConnectX meeting and enter the room instantly.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form
+            method="POST"
+            class="cx-meeting-form"
+            novalidate>
+
+            {% csrf_token %}
+
+
+            <div class="cx-meeting-form-field">
+
+                <label for="{{ form.title.id_for_label }}">
+                    Meeting title
+                </label>
+
+                <input
+                    type="text"
+                    name="{{ form.title.html_name }}"
+                    id="{{ form.title.id_for_label }}"
+                    value="{{ form.title.value|default:'' }}"
+                    maxlength="150"
+                    placeholder="Example: Project discussion"
+                    autocomplete="off"
+                    required>
+
+                {% for error in form.title.errors %}
+
+                    <span class="cx-meeting-form-error">
+                        {{ error }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="cx-meeting-form-field">
+
+                <label for="{{ form.description.id_for_label }}">
+                    Description
+                    <span>
+                        Optional
+                    </span>
+                </label>
+
+                <textarea
+                    name="{{ form.description.html_name }}"
+                    id="{{ form.description.id_for_label }}"
+                    rows="5"
+                    placeholder="What is this meeting about?">{{ form.description.value|default:'' }}</textarea>
+
+                {% for error in form.description.errors %}
+
+                    <span class="cx-meeting-form-error">
+                        {{ error }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="cx-meeting-form-field">
+
+                <label for="{{ form.max_participants.id_for_label }}">
+                    Maximum participants
+                </label>
+
+                <input
+                    type="number"
+                    name="{{ form.max_participants.html_name }}"
+                    id="{{ form.max_participants.id_for_label }}"
+                    value="{{ form.max_participants.value|default:'100' }}"
+                    min="1"
+                    max="100"
+                    required>
+
+                {% for error in form.max_participants.errors %}
+
+                    <span class="cx-meeting-form-error">
+                        {{ error }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <label class="cx-meeting-form-toggle">
+
+                <input
+                    type="checkbox"
+                    name="{{ form.requires_approval.html_name }}"
+                    {% if form.requires_approval.value %}
+                    checked
+                    {% endif %}>
+
+                <span class="cx-meeting-form-toggle-control">
+                    <span></span>
+                </span>
+
+                <span class="cx-meeting-form-toggle-content">
+
+                    <strong>
+                        Require approval
+                    </strong>
+
+                    <small>
+                        Participants must be approved before entering the meeting.
+                    </small>
+
+                </span>
+
+            </label>
+
+
+            {% for error in form.non_field_errors %}
+
+                <div class="cx-meeting-form-global-error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+
+            <div class="cx-meeting-form-actions">
+
+                <a
+                    href="{% url 'meetings' %}"
+                    class="cx-meeting-form-cancel">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="cx-meeting-form-submit">
+
+                    <span>
+                        Start meeting
+                    </span>
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <path d="M5 12H19">
+                        </path>
+
+                        <path d="M12 5L19 12L12 19">
+                        </path>
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+{% endblock %}

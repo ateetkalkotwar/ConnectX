@@ -1,0 +1,612 @@
+{% extends "layouts/auth_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Sign In | ConnectX
+{% endblock %}
+
+
+{% block auth_page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pages/login.css' %}">
+
+{% endblock %}
+
+
+{% block auth_left %}
+
+<div class="cx-login-hero">
+
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
+    <a
+        href="/"
+        class="cx-login-brand"
+        aria-label="ConnectX home">
+
+        <span
+            class="cx-login-brand-mark"
+            aria-hidden="true">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none">
+
+                <path d="M8 7L16 17"></path>
+
+                <path d="M16 7L8 17"></path>
+
+                <circle
+                    cx="6"
+                    cy="5"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="18"
+                    cy="5"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="6"
+                    cy="19"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="18"
+                    cy="19"
+                    r="2">
+                </circle>
+
+            </svg>
+
+        </span>
+
+
+        <span class="cx-login-brand-name">
+
+            CONNECT<span>X</span>
+
+        </span>
+
+    </a>
+
+
+    <!-- =====================================================
+         HERO CONTENT
+    ====================================================== -->
+
+    <div class="cx-login-heading">
+
+        <h1>
+
+            Welcome<br>
+
+            <span>
+                back.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Continue your conversations, meetings and
+            collaboration from one secure workspace.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOGIN FEATURES
+    ====================================================== -->
+
+    <div class="cx-login-features">
+
+
+        <article class="cx-login-feature">
+
+            <span class="cx-login-feature-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <rect
+                        x="3"
+                        y="5"
+                        width="13"
+                        height="14"
+                        rx="2">
+                    </rect>
+
+                    <path
+                        d="M16 10L21 7V17L16 14">
+                    </path>
+
+                </svg>
+
+            </span>
+
+
+            <div>
+
+                <h3>
+                    Continue your meetings
+                </h3>
+
+                <p>
+                    Rejoin conversations and collaborate
+                    with your team.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="cx-login-feature">
+
+            <span class="cx-login-feature-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path
+                        d="M21 15A4 4 0 0 1 17 19H8L3 22V7A4 4 0 0 1 7 3H17A4 4 0 0 1 21 7Z">
+                    </path>
+
+                    <path d="M8 9H16"></path>
+
+                    <path d="M8 13H13"></path>
+
+                </svg>
+
+            </span>
+
+
+            <div>
+
+                <h3>
+                    Stay connected
+                </h3>
+
+                <p>
+                    Access your messages and continue
+                    team conversations.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="cx-login-feature">
+
+            <span class="cx-login-feature-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path
+                        d="M12 3L20 7V12C20 17 16.5 20.5 12 22C7.5 20.5 4 17 4 12V7Z">
+                    </path>
+
+                    <path
+                        d="M9 12L11 14L15 10">
+                    </path>
+
+                </svg>
+
+            </span>
+
+
+            <div>
+
+                <h3>
+                    Secure access
+                </h3>
+
+                <p>
+                    Your ConnectX account and communication
+                    stay protected.
+                </p>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block auth_right %}
+
+<div class="cx-card cx-login-card">
+
+    <div class="cx-card-content">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="cx-login-card-header">
+
+            <h2>
+                Sign in to ConnectX
+            </h2>
+
+            <p>
+
+                Enter your account details to continue.
+
+            </p>
+
+        </header>
+
+
+        <!-- =================================================
+             LOGIN FORM
+        ================================================== -->
+
+        <form
+            id="cx-login-form"
+            class="cx-login-form"
+            method="POST"
+            novalidate>
+
+            {% csrf_token %}
+
+
+            <!-- =============================================
+                 USERNAME
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4">
+                            </circle>
+
+                            <path
+                                d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        class="cx-input"
+                        placeholder="Enter your username"
+                        maxlength="150"
+                        autocomplete="username"
+                        required>
+
+
+                    <label
+                        for="username"
+                        class="cx-field-label">
+
+                        Username
+
+                    </label>
+
+                </div>
+
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+
+                    {% if form.username.errors %}
+
+                        {{ form.username.errors.0 }}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PASSWORD
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <rect
+                                x="5"
+                                y="10"
+                                width="14"
+                                height="11"
+                                rx="2">
+                            </rect>
+
+                            <path
+                                d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        class="cx-input"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+
+                    <label
+                        for="password"
+                        class="cx-field-label">
+
+                        Password
+
+                    </label>
+
+
+                    <button
+                        type="button"
+                        class="cx-field-action"
+                        data-password-target="password"
+                        aria-label="Show password">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M2 12C4.5 7.5 7.8 5 12 5C16.2 5 19.5 7.5 22 12C19.5 16.5 16.2 19 12 19C7.8 19 4.5 16.5 2 12Z">
+                            </path>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3">
+                            </circle>
+
+                        </svg>
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+
+                    {% if form.password.errors %}
+
+                        {{ form.password.errors.0 }}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 OPTIONS
+            ============================================== -->
+
+            <div class="cx-login-options">
+
+                <label class="cx-checkbox">
+
+                    <input
+                        id="remember_me"
+                        name="remember_me"
+                        type="checkbox"
+                        class="cx-checkbox-input">
+
+
+                    <span
+                        class="cx-checkbox-control"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M5 12L10 17L19 8">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+
+                    <span class="cx-checkbox-text">
+
+                        Remember me
+
+                    </span>
+
+                </label>
+
+
+                <a
+                    href="#"
+                    class="cx-login-forgot">
+
+                    Forgot password?
+
+                </a>
+
+            </div>
+
+
+            <!-- =============================================
+                 DJANGO LOGIN ERROR
+            ============================================== -->
+
+            {% if form.non_field_errors %}
+
+            <div
+                class="
+                    cx-login-form-message
+                    cx-login-form-message--error
+                "
+                role="alert">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true">
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="9">
+                    </circle>
+
+                    <path d="M12 7V13"></path>
+
+                    <path d="M12 17H12.01"></path>
+
+                </svg>
+
+
+                <span>
+
+                    {{ form.non_field_errors.0 }}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =============================================
+                 SUBMIT
+            ============================================== -->
+
+            <button
+                id="cx-login-submit"
+                type="submit"
+                class="cx-btn cx-btn--primary"
+                aria-busy="false">
+
+                <span class="cx-btn-content">
+
+                    <span>
+                        Sign in
+                    </span>
+
+
+                    <span
+                        class="cx-btn-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path d="M5 12H19"></path>
+
+                            <path d="M14 7L19 12L14 17"></path>
+
+                        </svg>
+
+                    </span>
+
+                </span>
+
+
+                <span
+                    class="cx-btn-loader"
+                    aria-hidden="true">
+                </span>
+
+            </button>
+
+
+            <!-- =============================================
+                 REGISTER
+            ============================================== -->
+
+            <div class="cx-login-register">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+
+                <a href="{% url 'register' %}">
+
+                    Create account
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block auth_page_js %}
+
+<script
+    src="{% static 'js/pages/login.js' %}"
+    defer>
+</script>
+
+{% endblock %}

@@ -1,0 +1,534 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/layouts/app.css' %}">
+
+{% block app_page_css %}
+{% endblock %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div
+    id="cx-app-shell"
+    class="cx-app-shell">
+
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+    ====================================================== -->
+
+    <button
+        id="cx-sidebar-overlay"
+        type="button"
+        class="cx-sidebar-overlay"
+        aria-label="Close navigation">
+    </button>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        id="cx-sidebar"
+        class="cx-sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="cx-sidebar-header">
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="cx-sidebar-brand"
+                aria-label="ConnectX dashboard">
+
+                <span
+                    class="cx-sidebar-brand-mark"
+                    aria-hidden="true">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <path d="M8 7L16 17"></path>
+
+                        <path d="M16 7L8 17"></path>
+
+                        <circle
+                            cx="6"
+                            cy="5"
+                            r="2">
+                        </circle>
+
+                        <circle
+                            cx="18"
+                            cy="5"
+                            r="2">
+                        </circle>
+
+                        <circle
+                            cx="6"
+                            cy="19"
+                            r="2">
+                        </circle>
+
+                        <circle
+                            cx="18"
+                            cy="19"
+                            r="2">
+                        </circle>
+
+                    </svg>
+
+                </span>
+
+
+                <span class="cx-sidebar-brand-name">
+
+                    CONNECT<span>X</span>
+
+                </span>
+
+            </a>
+
+
+            <button
+                id="cx-sidebar-close"
+                type="button"
+                class="cx-sidebar-close"
+                aria-label="Close navigation">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path d="M6 6L18 18"></path>
+
+                    <path d="M18 6L6 18"></path>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav
+            class="cx-sidebar-nav"
+            aria-label="Main navigation">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="
+                    cx-sidebar-link
+                    {% if request.resolver_match.url_name == 'dashboard' %}
+                        cx-sidebar-link--active
+                    {% endif %}
+                ">
+
+                <span class="cx-sidebar-link-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <rect
+                            x="3"
+                            y="3"
+                            width="7"
+                            height="7"
+                            rx="2">
+                        </rect>
+
+                        <rect
+                            x="14"
+                            y="3"
+                            width="7"
+                            height="7"
+                            rx="2">
+                        </rect>
+
+                        <rect
+                            x="3"
+                            y="14"
+                            width="7"
+                            height="7"
+                            rx="2">
+                        </rect>
+
+                        <rect
+                            x="14"
+                            y="14"
+                            width="7"
+                            height="7"
+                            rx="2">
+                        </rect>
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- MEETINGS -->
+
+            <a
+                href="{% url 'meetings' %}"
+                class="
+                    cx-sidebar-link
+                    {% if request.resolver_match.url_name == 'meetings' or request.resolver_match.url_name == 'create_meeting' or request.resolver_match.url_name == 'join_meeting' or request.resolver_match.url_name == 'schedule_meeting' or request.resolver_match.url_name == 'meeting_room' %}
+                        cx-sidebar-link--active
+                    {% endif %}
+                ">
+
+                <span class="cx-sidebar-link-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <rect
+                            x="3"
+                            y="5"
+                            width="13"
+                            height="14"
+                            rx="2">
+                        </rect>
+
+                        <path
+                            d="M16 10L21 7V17L16 14">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Meetings
+                </span>
+
+            </a>
+
+
+            <!-- MESSAGES -->
+
+            <a
+                href="#"
+                class="cx-sidebar-link">
+
+                <span class="cx-sidebar-link-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <path
+                            d="M21 15A4 4 0 0 1 17 19H8L3 22V7A4 4 0 0 1 7 3H17A4 4 0 0 1 21 7Z">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Messages
+                </span>
+
+            </a>
+
+
+            <!-- CONTACTS -->
+
+            <a
+                href="#"
+                class="cx-sidebar-link">
+
+                <span class="cx-sidebar-link-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="4">
+                        </circle>
+
+                        <path
+                            d="M2 21C2 17.1 5.1 14 9 14">
+                        </path>
+
+                        <circle
+                            cx="17"
+                            cy="9"
+                            r="3">
+                        </circle>
+
+                        <path
+                            d="M14 15C18.4 15 22 17.7 22 21">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Contacts
+                </span>
+
+            </a>
+
+
+            <!-- SETTINGS -->
+
+            <a
+                href="#"
+                class="cx-sidebar-link">
+
+                <span class="cx-sidebar-link-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="3">
+                        </circle>
+
+                        <path
+                            d="M19.4 15A1.7 1.7 0 0 0 19.7 16.9L20 17.2L17.2 20L16.9 19.7A1.7 1.7 0 0 0 15 19.4A1.7 1.7 0 0 0 14 21V21.5H10V21A1.7 1.7 0 0 0 9 19.4A1.7 1.7 0 0 0 7.1 19.7L6.8 20L4 17.2L4.3 16.9A1.7 1.7 0 0 0 4.6 15A1.7 1.7 0 0 0 3 14H2.5V10H3A1.7 1.7 0 0 0 4.6 9A1.7 1.7 0 0 0 4.3 7.1L4 6.8L6.8 4L7.1 4.3A1.7 1.7 0 0 0 9 4.6A1.7 1.7 0 0 0 10 3V2.5H14V3A1.7 1.7 0 0 0 15 4.6A1.7 1.7 0 0 0 16.9 4.3L17.2 4L20 6.8L19.7 7.1A1.7 1.7 0 0 0 19.4 9A1.7 1.7 0 0 0 21 10H21.5V14H21A1.7 1.7 0 0 0 19.4 15Z">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- USER -->
+
+        <div class="cx-sidebar-user">
+
+            <div class="cx-sidebar-user-avatar">
+
+                {% if request.user.profile_picture %}
+
+                    <img
+                        src="{{ request.user.profile_picture.url }}"
+                        alt="{{ request.user.username }}">
+
+                {% else %}
+
+                    <span>
+
+                        {{ request.user.first_name|first|upper }}
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="cx-sidebar-user-info">
+
+                <strong>
+
+                    {{ request.user.get_full_name|default:request.user.username }}
+
+                </strong>
+
+                <span>
+
+                    @{{ request.user.username }}
+
+                </span>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{% url 'logout' %}"
+                class="cx-sidebar-logout">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    aria-label="Sign out">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <path
+                            d="M10 17L15 12L10 7">
+                        </path>
+
+                        <path
+                            d="M15 12H3">
+                        </path>
+
+                        <path
+                            d="M14 3H19C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H14">
+                        </path>
+
+                    </svg>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         APPLICATION CONTENT
+    ====================================================== -->
+
+    <div class="cx-app-content">
+
+
+        <!-- HEADER -->
+
+        <header class="cx-app-header">
+
+            <button
+                id="cx-sidebar-open"
+                type="button"
+                class="cx-mobile-menu"
+                aria-label="Open navigation"
+                aria-controls="cx-sidebar"
+                aria-expanded="false">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path d="M4 7H20"></path>
+
+                    <path d="M4 12H20"></path>
+
+                    <path d="M4 17H20"></path>
+
+                </svg>
+
+            </button>
+
+
+            <div class="cx-app-header-search">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7">
+                    </circle>
+
+                    <path d="M20 20L16 16"></path>
+
+                </svg>
+
+
+                <input
+                    type="search"
+                    placeholder="Search ConnectX"
+                    aria-label="Search ConnectX">
+
+            </div>
+
+
+            <div class="cx-app-header-actions">
+
+                <button
+                    type="button"
+                    class="cx-header-action"
+                    aria-label="Notifications">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <path
+                            d="M18 8A6 6 0 0 0 6 8C6 15 3 16 3 16H21C21 16 18 15 18 8Z">
+                        </path>
+
+                        <path
+                            d="M10 20H14">
+                        </path>
+
+                    </svg>
+
+                    <span class="cx-header-notification-dot">
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+        <main class="cx-app-main">
+
+            {% block app_content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block page_js %}
+
+<script
+    src="{% static 'js/layouts/app.js' %}"
+    defer>
+</script>
+
+{% block app_page_js %}
+{% endblock %}
+
+{% endblock %}

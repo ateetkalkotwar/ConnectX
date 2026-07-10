@@ -1,0 +1,1123 @@
+/* ==========================================================
+   CONNECTX APPLICATION LAYOUT
+   Version: 1.0
+========================================================== */
+
+
+/* ==========================================================
+   APPLICATION SHELL
+========================================================== */
+
+.cx-app-shell {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 82% 10%,
+            rgba(37, 99, 235, 0.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 20% 90%,
+            rgba(124, 58, 237, 0.10),
+            transparent 34%
+        ),
+        #030712;
+
+    color: var(--cx-text-primary);
+
+}
+
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+.cx-sidebar {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    flex-direction: column;
+
+    width: 280px;
+
+    height: 100vh;
+
+    padding: 28px 20px 22px;
+
+    border-right:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    background:
+        rgba(5, 8, 22, 0.88);
+
+    backdrop-filter:
+        blur(28px);
+
+    -webkit-backdrop-filter:
+        blur(28px);
+
+    box-shadow:
+        24px 0 70px
+        rgba(0, 0, 0, 0.16);
+
+    transition:
+        transform
+        var(--cx-transition-base);
+
+}
+
+
+/* ==========================================================
+   SIDEBAR HEADER
+========================================================== */
+
+.cx-sidebar-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    min-height: 54px;
+
+    margin-bottom: 34px;
+
+    padding-inline: 8px;
+
+}
+
+
+.cx-sidebar-brand {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.cx-sidebar-brand-mark {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    border:
+        1px solid
+        rgba(129, 140, 248, 0.25);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.24),
+            rgba(6, 182, 212, 0.14)
+        );
+
+    box-shadow:
+        0 12px 34px
+        rgba(79, 70, 229, 0.16);
+
+}
+
+
+.cx-sidebar-brand-mark svg {
+
+    width: 24px;
+
+    height: 24px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.cx-sidebar-brand-name {
+
+    color: var(--cx-text-primary);
+
+    font-size: 20px;
+
+    font-weight: var(--cx-font-extrabold);
+
+    letter-spacing: 1.7px;
+
+}
+
+
+.cx-sidebar-brand-name span {
+
+    color: var(--cx-accent);
+
+}
+
+
+.cx-sidebar-close {
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 12px;
+
+    color: var(--cx-text-muted);
+
+}
+
+
+.cx-sidebar-close:hover {
+
+    color: var(--cx-text-primary);
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+}
+
+
+.cx-sidebar-close svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+}
+
+
+/* ==========================================================
+   SIDEBAR NAVIGATION
+========================================================== */
+
+.cx-sidebar-nav {
+
+    display: flex;
+
+    flex: 1;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    min-height: 0;
+
+}
+
+
+.cx-sidebar-link {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 50px;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        var(--cx-radius-md);
+
+    color:
+        var(--cx-text-muted);
+
+    font-size: 14px;
+
+    font-weight:
+        var(--cx-font-medium);
+
+    transition:
+        color
+        var(--cx-transition-base),
+        border-color
+        var(--cx-transition-base),
+        background
+        var(--cx-transition-base),
+        transform
+        var(--cx-transition-base);
+
+}
+
+
+.cx-sidebar-link:hover {
+
+    color:
+        var(--cx-text-primary);
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    transform:
+        translateX(3px);
+
+}
+
+
+.cx-sidebar-link--active {
+
+    border-color:
+        rgba(129, 140, 248, 0.20);
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99, 102, 241, 0.18),
+            rgba(6, 182, 212, 0.07)
+        );
+
+    box-shadow:
+        inset
+        3px
+        0
+        0
+        var(--cx-primary-light);
+
+}
+
+
+.cx-sidebar-link-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 22px;
+
+    height: 22px;
+
+}
+
+
+.cx-sidebar-link-icon svg {
+
+    width: 21px;
+
+    height: 21px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+/* ==========================================================
+   SIDEBAR USER
+========================================================== */
+
+.cx-sidebar-user {
+
+    display: grid;
+
+    grid-template-columns:
+        44px
+        minmax(0, 1fr)
+        38px;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-top: 24px;
+
+    padding:
+        14px
+        10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius:
+        var(--cx-radius-lg);
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+}
+
+
+.cx-sidebar-user-avatar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 44px;
+
+    height: 44px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(129, 140, 248, 0.32);
+
+    border-radius:
+        var(--cx-radius-full);
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb,
+            #06b6d4
+        );
+
+    font-size: 16px;
+
+    font-weight:
+        var(--cx-font-bold);
+
+}
+
+
+.cx-sidebar-user-avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.cx-sidebar-user-info {
+
+    min-width: 0;
+
+}
+
+
+.cx-sidebar-user-info strong,
+.cx-sidebar-user-info span {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+.cx-sidebar-user-info strong {
+
+    color:
+        var(--cx-text-primary);
+
+    font-size: 13px;
+
+    font-weight:
+        var(--cx-font-semibold);
+
+}
+
+
+.cx-sidebar-user-info span {
+
+    margin-top: 3px;
+
+    color:
+        var(--cx-text-muted);
+
+    font-size: 11px;
+
+}
+
+
+.cx-sidebar-logout {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.cx-sidebar-logout button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 12px;
+
+    color:
+        var(--cx-text-muted);
+
+    transition:
+        color
+        var(--cx-transition-base),
+        background
+        var(--cx-transition-base),
+        transform
+        var(--cx-transition-base);
+
+}
+
+
+.cx-sidebar-logout button:hover {
+
+    color:
+        var(--cx-error-light);
+
+    background:
+        rgba(239, 68, 68, 0.09);
+
+}
+
+
+.cx-sidebar-logout button:active {
+
+    transform:
+        scale(0.92);
+
+}
+
+
+.cx-sidebar-logout svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+/* ==========================================================
+   APPLICATION CONTENT
+========================================================== */
+
+.cx-app-content {
+
+    min-height: 100vh;
+
+    margin-left: 280px;
+
+}
+
+
+/* ==========================================================
+   APPLICATION HEADER
+========================================================== */
+
+.cx-app-header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 50;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    width: 100%;
+
+    min-height: 78px;
+
+    padding:
+        14px
+        clamp(
+            24px,
+            4vw,
+            54px
+        );
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    background:
+        rgba(3, 7, 18, 0.72);
+
+    backdrop-filter:
+        blur(24px);
+
+    -webkit-backdrop-filter:
+        blur(24px);
+
+}
+
+
+/* ==========================================================
+   MOBILE MENU
+========================================================== */
+
+.cx-mobile-menu {
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 44px;
+
+    height: 44px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 13px;
+
+    color:
+        var(--cx-text-primary);
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+}
+
+
+.cx-mobile-menu svg {
+
+    width: 22px;
+
+    height: 22px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+}
+
+
+/* ==========================================================
+   HEADER SEARCH
+========================================================== */
+
+.cx-app-header-search {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    max-width: 560px;
+
+}
+
+
+.cx-app-header-search svg {
+
+    position: absolute;
+
+    left: 17px;
+
+    z-index: 2;
+
+    width: 19px;
+
+    height: 19px;
+
+    color:
+        var(--cx-text-muted);
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    pointer-events: none;
+
+}
+
+
+.cx-app-header-search input {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding:
+        0
+        18px
+        0
+        49px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius:
+        var(--cx-radius-md);
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    color:
+        var(--cx-text-primary);
+
+    font-size: 13px;
+
+    transition:
+        border-color
+        var(--cx-transition-base),
+        background
+        var(--cx-transition-base),
+        box-shadow
+        var(--cx-transition-base);
+
+}
+
+
+.cx-app-header-search input::placeholder {
+
+    color:
+        var(--cx-text-muted);
+
+}
+
+
+.cx-app-header-search input:focus {
+
+    border-color:
+        var(--cx-primary-light);
+
+    background:
+        rgba(99, 102, 241, 0.06);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99, 102, 241, 0.10);
+
+}
+
+
+/* ==========================================================
+   HEADER ACTIONS
+========================================================== */
+
+.cx-app-header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-left: auto;
+
+}
+
+
+.cx-header-action {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+    color:
+        var(--cx-text-secondary);
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    transition:
+        color
+        var(--cx-transition-base),
+        border-color
+        var(--cx-transition-base),
+        background
+        var(--cx-transition-base),
+        transform
+        var(--cx-transition-base);
+
+}
+
+
+.cx-header-action:hover {
+
+    border-color:
+        rgba(129, 140, 248, 0.28);
+
+    color:
+        var(--cx-text-primary);
+
+    background:
+        rgba(255, 255, 255, 0.065);
+
+}
+
+
+.cx-header-action:active {
+
+    transform:
+        scale(0.93);
+
+}
+
+
+.cx-header-action svg {
+
+    width: 21px;
+
+    height: 21px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.cx-header-notification-dot {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    width: 7px;
+
+    height: 7px;
+
+    border:
+        2px solid
+        #070b17;
+
+    border-radius:
+        var(--cx-radius-full);
+
+    background:
+        var(--cx-error-light);
+
+}
+
+
+/* ==========================================================
+   PAGE CONTENT
+========================================================== */
+
+.cx-app-main {
+
+    width: 100%;
+
+    max-width: 1700px;
+
+    margin-inline: auto;
+
+    padding:
+        clamp(
+            28px,
+            4vw,
+            54px
+        );
+
+}
+
+
+/* ==========================================================
+   SIDEBAR OVERLAY
+========================================================== */
+
+.cx-sidebar-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 90;
+
+    display: none;
+
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        rgba(0, 0, 0, 0.62);
+
+    backdrop-filter:
+        blur(4px);
+
+    -webkit-backdrop-filter:
+        blur(4px);
+
+}
+
+
+/* ==========================================================
+   TABLET AND MOBILE NAVIGATION
+========================================================== */
+
+@media (max-width: 1024px) {
+
+    .cx-sidebar {
+
+        width: min(
+            320px,
+            86vw
+        );
+
+        transform:
+            translateX(-100%);
+
+    }
+
+
+    .cx-app-shell.cx-sidebar-open
+    .cx-sidebar {
+
+        transform:
+            translateX(0);
+
+    }
+
+
+    .cx-app-shell.cx-sidebar-open
+    .cx-sidebar-overlay {
+
+        display: block;
+
+    }
+
+
+    .cx-sidebar-close {
+
+        display: flex;
+
+    }
+
+
+    .cx-app-content {
+
+        margin-left: 0;
+
+    }
+
+
+    .cx-mobile-menu {
+
+        display: flex;
+
+    }
+
+
+    .cx-app-main {
+
+        padding:
+            32px
+            28px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 767px) {
+
+    .cx-app-header {
+
+        min-height: 70px;
+
+        gap: 12px;
+
+        padding:
+            11px
+            16px;
+
+    }
+
+
+    .cx-mobile-menu {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+
+    .cx-app-header-search input {
+
+        height: 44px;
+
+    }
+
+
+    .cx-header-action {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+
+    .cx-app-main {
+
+        padding:
+            24px
+            16px
+            38px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   SMALL MOBILE
+========================================================== */
+
+@media (max-width: 480px) {
+
+    .cx-app-header-search input {
+
+        padding-right: 12px;
+
+    }
+
+
+    .cx-app-header-search input::placeholder {
+
+        font-size: 12px;
+
+    }
+
+
+    .cx-sidebar {
+
+        padding:
+            24px
+            16px
+            18px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cx-sidebar {
+
+        transition: none;
+
+    }
+
+}

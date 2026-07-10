@@ -1,0 +1,91 @@
+/* ==========================================================
+   CONNECTX AURORA BACKGROUND
+========================================================== */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    width:600px;
+
+    height:600px;
+
+    background:#6366F1;
+
+    filter:blur(180px);
+
+    opacity:.30;
+
+    top:-250px;
+
+    left:-200px;
+
+    animation:moveOne 18s infinite alternate ease-in-out;
+
+    z-index:-2;
+
+}
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:600px;
+
+    height:600px;
+
+    background:#06B6D4;
+
+    filter:blur(180px);
+
+    opacity:.25;
+
+    bottom:-250px;
+
+    right:-200px;
+
+    animation:moveTwo 20s infinite alternate ease-in-out;
+
+    z-index:-2;
+
+}
+
+/* ===========================
+   ANIMATION
+=========================== */
+
+@keyframes moveOne{
+
+    from{
+
+        transform:translate(0,0);
+
+    }
+
+    to{
+
+        transform:translate(120px,80px);
+
+    }
+
+}
+
+@keyframes moveTwo{
+
+    from{
+
+        transform:translate(0,0);
+
+    }
+
+    to{
+
+        transform:translate(-100px,-120px);
+
+    }
+
+}

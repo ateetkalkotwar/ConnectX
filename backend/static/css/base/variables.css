@@ -1,0 +1,279 @@
+/* ==========================================================
+   CONNECTX DESIGN SYSTEM
+   Version: 1.0
+========================================================== */
+
+:root {
+
+    /* ======================================================
+       BRAND COLORS
+    ====================================================== */
+
+    --cx-primary: #6366f1;
+    --cx-primary-light: #818cf8;
+    --cx-primary-dark: #4f46e5;
+
+    --cx-secondary: #8b5cf6;
+    --cx-secondary-light: #a78bfa;
+    --cx-secondary-dark: #7c3aed;
+
+    --cx-accent: #06b6d4;
+    --cx-accent-light: #22d3ee;
+
+    /* ======================================================
+       STATUS COLORS
+    ====================================================== */
+
+    --cx-success: #22c55e;
+    --cx-success-light: #4ade80;
+
+    --cx-warning: #f59e0b;
+    --cx-warning-light: #fbbf24;
+
+    --cx-error: #ef4444;
+    --cx-error-light: #f87171;
+
+    --cx-info: #3b82f6;
+
+    /* ======================================================
+       BACKGROUND COLORS
+    ====================================================== */
+
+    --cx-bg-primary: #050816;
+    --cx-bg-secondary: #090d1f;
+    --cx-bg-tertiary: #10152b;
+
+    --cx-bg-elevated: rgba(15, 20, 42, 0.92);
+
+    /* ======================================================
+       GLASS COLORS
+    ====================================================== */
+
+    --cx-glass-bg: rgba(255, 255, 255, 0.055);
+
+    --cx-glass-bg-hover: rgba(255, 255, 255, 0.08);
+
+    --cx-glass-border: rgba(255, 255, 255, 0.10);
+
+    --cx-glass-border-hover: rgba(129, 140, 248, 0.45);
+
+    /* ======================================================
+       TEXT COLORS
+    ====================================================== */
+
+    --cx-text-primary: #f8fafc;
+
+    --cx-text-secondary: #a5aec5;
+
+    --cx-text-muted: #69738d;
+
+    --cx-text-disabled: #4b556d;
+
+    /* ======================================================
+       GRADIENTS
+    ====================================================== */
+
+    --cx-gradient-primary:
+        linear-gradient(
+            135deg,
+            #6366f1 0%,
+            #8b5cf6 50%,
+            #06b6d4 100%
+        );
+
+    --cx-gradient-button:
+        linear-gradient(
+            110deg,
+            #4f46e5,
+            #7c3aed,
+            #06b6d4
+        );
+
+    --cx-gradient-text:
+        linear-gradient(
+            90deg,
+            #818cf8,
+            #c084fc,
+            #22d3ee
+        );
+
+    --cx-gradient-border:
+        linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.8),
+            rgba(139, 92, 246, 0.35),
+            rgba(6, 182, 212, 0.7)
+        );
+
+    /* ======================================================
+       FONT FAMILY
+    ====================================================== */
+
+    --cx-font-primary:
+        "Poppins",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    /* ======================================================
+       FONT SIZE
+    ====================================================== */
+
+    --cx-text-xs: 0.75rem;
+
+    --cx-text-sm: 0.875rem;
+
+    --cx-text-base: 1rem;
+
+    --cx-text-lg: 1.125rem;
+
+    --cx-text-xl: 1.25rem;
+
+    --cx-text-2xl: 1.5rem;
+
+    --cx-text-3xl: 1.875rem;
+
+    --cx-text-4xl: 2.25rem;
+
+    --cx-text-5xl: 3rem;
+
+    --cx-text-6xl: 3.75rem;
+
+    /* ======================================================
+       FONT WEIGHT
+    ====================================================== */
+
+    --cx-font-regular: 400;
+
+    --cx-font-medium: 500;
+
+    --cx-font-semibold: 600;
+
+    --cx-font-bold: 700;
+
+    --cx-font-extrabold: 800;
+
+    /* ======================================================
+       SPACING SYSTEM
+    ====================================================== */
+
+    --cx-space-1: 0.25rem;
+
+    --cx-space-2: 0.5rem;
+
+    --cx-space-3: 0.75rem;
+
+    --cx-space-4: 1rem;
+
+    --cx-space-5: 1.25rem;
+
+    --cx-space-6: 1.5rem;
+
+    --cx-space-8: 2rem;
+
+    --cx-space-10: 2.5rem;
+
+    --cx-space-12: 3rem;
+
+    --cx-space-16: 4rem;
+
+    --cx-space-20: 5rem;
+
+    /* ======================================================
+       BORDER RADIUS
+    ====================================================== */
+
+    --cx-radius-xs: 6px;
+
+    --cx-radius-sm: 10px;
+
+    --cx-radius-md: 14px;
+
+    --cx-radius-lg: 18px;
+
+    --cx-radius-xl: 24px;
+
+    --cx-radius-2xl: 32px;
+
+    --cx-radius-full: 9999px;
+
+    /* ======================================================
+       SHADOWS
+    ====================================================== */
+
+    --cx-shadow-sm:
+        0 4px 14px rgba(0, 0, 0, 0.20);
+
+    --cx-shadow-md:
+        0 12px 35px rgba(0, 0, 0, 0.30);
+
+    --cx-shadow-lg:
+        0 24px 70px rgba(0, 0, 0, 0.42);
+
+    --cx-shadow-primary:
+        0 12px 35px rgba(99, 102, 241, 0.30);
+
+    --cx-shadow-accent:
+        0 12px 35px rgba(6, 182, 212, 0.20);
+
+    /* ======================================================
+       BLUR
+    ====================================================== */
+
+    --cx-blur-sm: 8px;
+
+    --cx-blur-md: 16px;
+
+    --cx-blur-lg: 28px;
+
+    --cx-blur-xl: 60px;
+
+    /* ======================================================
+       TRANSITIONS
+    ====================================================== */
+
+    --cx-transition-fast: 150ms ease;
+
+    --cx-transition-base: 250ms ease;
+
+    --cx-transition-slow: 400ms ease;
+
+    /* ======================================================
+       INPUT SIZE
+    ====================================================== */
+
+    --cx-input-height: 54px;
+
+    /* ======================================================
+       BUTTON SIZE
+    ====================================================== */
+
+    --cx-button-height: 56px;
+
+    /* ======================================================
+       CONTAINER
+    ====================================================== */
+
+    --cx-container-xl: 1440px;
+
+    --cx-container-lg: 1200px;
+
+    /* ======================================================
+       Z INDEX
+    ====================================================== */
+
+    --cx-z-background: -1;
+
+    --cx-z-base: 1;
+
+    --cx-z-dropdown: 100;
+
+    --cx-z-sticky: 200;
+
+    --cx-z-overlay: 500;
+
+    --cx-z-modal: 1000;
+
+    --cx-z-toast: 2000;
+}

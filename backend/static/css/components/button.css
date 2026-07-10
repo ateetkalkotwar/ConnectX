@@ -1,0 +1,227 @@
+/* ==========================================================
+   CONNECTX BUTTON COMPONENT
+   Version: 1.0
+========================================================== */
+
+.cx-btn {
+
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: var(--cx-space-2);
+
+    width: 100%;
+
+    min-height: var(--cx-button-height);
+
+    padding:
+        0
+        var(--cx-space-6);
+
+    overflow: hidden;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--cx-radius-md);
+
+    color: #ffffff;
+
+    font-size: var(--cx-text-sm);
+
+    font-weight: var(--cx-font-semibold);
+
+    letter-spacing: 0.01em;
+
+    transition:
+        transform var(--cx-transition-base),
+        box-shadow var(--cx-transition-base),
+        opacity var(--cx-transition-base);
+
+}
+
+
+.cx-btn--primary {
+
+    background: var(--cx-gradient-button);
+
+    background-size: 200% 200%;
+
+    box-shadow: var(--cx-shadow-primary);
+
+}
+
+
+.cx-btn--primary::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -100%;
+
+    left: -45%;
+
+    width: 35%;
+
+    height: 300%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+        );
+
+    transform: rotate(24deg);
+
+    transition:
+        left
+        600ms
+        ease;
+
+}
+
+
+.cx-btn--primary:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 42px rgba(99, 102, 241, 0.38);
+
+}
+
+
+.cx-btn--primary:hover::before {
+
+    left: 120%;
+
+}
+
+
+.cx-btn--primary:active {
+
+    transform:
+        translateY(0)
+        scale(0.98);
+
+}
+
+
+.cx-btn-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: var(--cx-space-2);
+
+}
+
+
+.cx-btn-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-btn-icon svg {
+
+    width: 18px;
+
+    height: 18px;
+
+    stroke: currentColor;
+
+    stroke-width: 2;
+
+}
+
+
+.cx-btn:hover .cx-btn-icon {
+
+    transform: translateX(4px);
+
+}
+
+
+.cx-btn-loader {
+
+    display: none;
+
+    width: 20px;
+
+    height: 20px;
+
+    border: 2px solid rgba(255, 255, 255, 0.35);
+
+    border-top-color: #ffffff;
+
+    border-radius: var(--cx-radius-full);
+
+    animation:
+        cxSpin
+        700ms
+        linear
+        infinite;
+
+}
+
+
+.cx-btn--loading {
+
+    pointer-events: none;
+
+}
+
+
+.cx-btn--loading .cx-btn-content {
+
+    display: none;
+
+}
+
+
+.cx-btn--loading .cx-btn-loader {
+
+    display: block;
+
+}
+
+
+.cx-btn:disabled {
+
+    opacity: 0.5;
+
+    box-shadow: none;
+
+    transform: none;
+
+}
+
+
+.cx-btn:disabled::before {
+
+    display: none;
+
+}

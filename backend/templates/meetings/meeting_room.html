@@ -1,0 +1,640 @@
+{% extends "layouts/app_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+{{ meeting.title }} | ConnectX
+{% endblock %}
+
+
+{% block app_page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pages/meeting_room.css' %}">
+
+{% endblock %}
+
+
+{% block app_content %}
+
+<div
+    class="cx-meeting-room"
+    data-meeting-code="{{ meeting.meeting_code }}"
+    data-current-user-id="{{ request.user.pk }}"
+    data-current-username="{{ request.user.username }}"
+    data-state-url="{% url 'update_participant_state' meeting.meeting_code %}"
+    data-is-host="{% if meeting.host == request.user %}true{% else %}false{% endif %}"
+    data-host-moderation-enabled="{% if meeting.host_moderation_enabled %}true{% else %}false{% endif %}"
+    data-is-muted="{% if participant.is_muted %}true{% else %}false{% endif %}"
+    data-is-video-enabled="{% if participant.is_video_enabled %}true{% else %}false{% endif %}"
+    data-is-screen-sharing="{% if participant.is_screen_sharing %}true{% else %}false{% endif %}"
+    data-forced-muted="{% if participant.forced_muted %}true{% else %}false{% endif %}"
+    data-forced-video-disabled="{% if participant.forced_video_disabled %}true{% else %}false{% endif %}">
+
+
+    <div
+        class="cx-meeting-activity-toasts"
+        data-meeting-activity-toasts>
+    </div>
+
+
+    <!-- =====================================================
+         ROOM HEADER
+    ====================================================== -->
+
+    <header class="cx-meeting-room-header">
+
+        <div class="cx-meeting-room-info">
+
+            <span class="cx-meeting-room-live">
+
+                <span></span>
+
+                LIVE
+
+            </span>
+
+
+            <div class="cx-meeting-room-title">
+
+                <h1>
+                    {{ meeting.title }}
+                </h1>
+
+                <p>
+
+                    Meeting code:
+
+                    <strong>
+                        {{ meeting.meeting_code }}
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cx-meeting-room-header-actions">
+
+            <span class="cx-meeting-room-role">
+
+                {% if meeting.host == request.user %}
+
+                    Host
+
+                {% else %}
+
+                    {{ participant.get_role_display }}
+
+                {% endif %}
+
+            </span>
+
+
+            <form
+                method="POST"
+                action="{% url 'leave_meeting' meeting.meeting_code %}">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="cx-meeting-room-leave">
+
+                    Leave meeting
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         ROOM BODY
+    ====================================================== -->
+
+    <div class="cx-meeting-room-body">
+
+
+        <!-- =================================================
+             MEETING STAGE
+        ================================================== -->
+
+        <main class="cx-meeting-room-main">
+
+            <section
+                class="cx-meeting-video-grid"
+                data-video-grid>
+
+
+                <!-- =========================================
+                     LOCAL PARTICIPANT
+                ========================================== -->
+
+                <article
+                    class="cx-meeting-video-tile cx-meeting-video-tile--local"
+                    data-video-participant-id="{{ request.user.pk }}">
+
+                    <video
+                        class="cx-meeting-local-video"
+                        data-local-video
+                        autoplay
+                        muted
+                        playsinline>
+                    </video>
+
+
+                    <div
+                        class="cx-meeting-video-placeholder"
+                        data-video-placeholder>
+
+                        <span>
+                            {{ request.user.username|first|upper }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="cx-meeting-video-meta">
+
+                        <span>
+                            {{ request.user.username }} (You)
+                        </span>
+
+                        <small>
+
+                            {% if meeting.host == request.user %}
+
+                                Host
+
+                            {% else %}
+
+                                {{ participant.get_role_display }}
+
+                            {% endif %}
+
+                        </small>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 MEETING CONTROLS
+            ================================================== -->
+
+            <div class="cx-meeting-room-controls">
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
+                    data-meeting-control="mute"
+                    aria-label="Toggle microphone"
+                    aria-pressed="false">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <rect
+                            x="9"
+                            y="3"
+                            width="6"
+                            height="11"
+                            rx="3">
+                        </rect>
+
+                        <path
+                            d="M5 11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11">
+                        </path>
+
+                        <path d="M12 18V22">
+                        </path>
+
+                    </svg>
+
+                    <span
+                        data-control-label>
+
+                        Mute
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
+                    data-meeting-control="camera"
+                    aria-label="Toggle camera"
+                    aria-pressed="false">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <rect
+                            x="3"
+                            y="5"
+                            width="13"
+                            height="14"
+                            rx="2">
+                        </rect>
+
+                        <path d="M16 10L21 7V17L16 14">
+                        </path>
+
+                    </svg>
+
+                    <span
+                        data-control-label>
+
+                        Camera
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
+                    data-meeting-control="share"
+                    aria-label="Share screen"
+                    aria-pressed="false">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="14"
+                            rx="2">
+                        </rect>
+
+                        <path d="M8 22H16">
+                        </path>
+
+                        <path d="M12 18V22">
+                        </path>
+
+                        <path d="M12 14V7">
+                        </path>
+
+                        <path d="M9 10L12 7L15 10">
+                        </path>
+
+                    </svg>
+
+                    <span
+                        data-control-label>
+
+                        Share
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
+                    data-meeting-control="people"
+                    aria-label="Open participants"
+                    aria-expanded="true">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="4">
+                        </circle>
+
+                        <path
+                            d="M2 21C2 17.134 5.134 14 9 14C12.866 14 16 17.134 16 21">
+                        </path>
+
+                        <path
+                            d="M16 4C18.209 4 20 5.791 20 8C20 10.209 18.209 12 16 12">
+                        </path>
+
+                        <path
+                            d="M18 15C20.337 15.824 22 18.054 22 20.667">
+                        </path>
+
+                    </svg>
+
+                    <span>
+                        People
+                    </span>
+
+                    <small
+                        class="cx-meeting-control-count"
+                        data-people-control-count>
+
+                        {{ active_participants|length }}
+
+                    </small>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
+                    data-meeting-control="chat"
+                    aria-label="Open meeting chat">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <path
+                            d="M21 15C21 16.105 20.105 17 19 17H8L3 21V5C3 3.895 3.895 3 5 3H19C20.105 3 21 3.895 21 5V15Z">
+                        </path>
+
+                    </svg>
+
+                    <span>
+                        Chat
+                    </span>
+
+                </button>
+
+            </div>
+
+        </main>
+
+
+        <!-- =================================================
+             PARTICIPANTS PANEL
+        ================================================== -->
+
+        <aside
+            class="cx-meeting-room-panel"
+            data-participant-panel>
+
+            <div class="cx-meeting-room-panel-handle">
+            </div>
+
+
+            <div class="cx-meeting-room-panel-header">
+
+                <div>
+
+                    <span>
+                        PARTICIPANTS
+                    </span>
+
+                    <h2>
+                        In this meeting
+                    </h2>
+
+                </div>
+
+
+                <span
+                    class="cx-meeting-room-count"
+                    data-participant-count>
+
+                    {{ active_participants|length }}
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="cx-meeting-room-participants"
+                data-participant-list>
+
+                {% for active_participant in active_participants %}
+
+                    <article
+                        class="cx-meeting-room-participant"
+                        data-participant-id="{{ active_participant.pk }}"
+                        data-user-id="{{ active_participant.user.pk }}"
+                        data-participant-username="{{ active_participant.user.username }}"
+                        data-participant-role="{{ active_participant.role }}"
+                        {% if meeting.host == request.user and meeting.host_moderation_enabled and active_participant.user != request.user %}
+                            data-moderation-url="{% url 'moderate_participant' meeting.meeting_code active_participant.pk %}"
+                        {% endif %}>
+
+
+                        <span
+                            class="cx-meeting-room-participant-avatar">
+
+                            {{ active_participant.user.username|first|upper }}
+
+                        </span>
+
+
+                        <div
+                            class="cx-meeting-room-participant-info">
+
+                            <strong
+                                data-participant-username>
+
+                                {{ active_participant.user.username }}
+
+                                {% if active_participant.user == request.user %}
+
+                                    (You)
+
+                                {% endif %}
+
+                            </strong>
+
+
+                            <small
+                                data-participant-role>
+
+                                {{ active_participant.get_role_display }}
+
+                            </small>
+
+                        </div>
+
+
+                        <span
+                            class="cx-meeting-room-participant-state"
+                            data-participant-media-state>
+
+
+                            <span
+                                data-participant-microphone-state
+                                title="{% if active_participant.is_muted or active_participant.forced_muted %}Muted{% else %}Microphone on{% endif %}"
+                                aria-label="{% if active_participant.is_muted or active_participant.forced_muted %}Muted{% else %}Microphone on{% endif %}">
+
+                                {% if active_participant.is_muted or active_participant.forced_muted %}
+
+                                    Mic off
+
+                                {% else %}
+
+                                    Mic on
+
+                                {% endif %}
+
+                            </span>
+
+
+                            <span
+                                data-participant-video-state
+                                title="{% if active_participant.is_video_enabled and not active_participant.forced_video_disabled %}Camera on{% else %}Camera off{% endif %}"
+                                aria-label="{% if active_participant.is_video_enabled and not active_participant.forced_video_disabled %}Camera on{% else %}Camera off{% endif %}">
+
+                                {% if active_participant.is_video_enabled and not active_participant.forced_video_disabled %}
+
+                                    Video on
+
+                                {% else %}
+
+                                    Video off
+
+                                {% endif %}
+
+                            </span>
+
+
+                            {% if active_participant.is_screen_sharing %}
+
+                                <span
+                                    class="cx-meeting-room-participant-screen"
+                                    data-participant-screen-state
+                                    title="Sharing screen"
+                                    aria-label="Sharing screen">
+
+                                    Screen
+
+                                </span>
+
+                            {% endif %}
+
+                        </span>
+
+
+                        {% if meeting.host == request.user and meeting.host_moderation_enabled and active_participant.user != request.user %}
+
+                            <div
+                                class="cx-meeting-room-participant-actions">
+
+
+                                <button
+                                    type="button"
+                                    class="cx-meeting-room-participant-menu-button"
+                                    data-participant-menu-button
+                                    aria-label="Participant controls"
+                                    aria-haspopup="menu">
+
+                                    ⋮
+
+                                </button>
+
+
+                                <div
+                                    class="cx-meeting-room-participant-menu"
+                                    data-participant-menu
+                                    role="menu"
+                                    hidden>
+
+
+                                    <button
+                                        type="button"
+                                        data-moderation-action="soft_mute"
+                                        role="menuitem">
+
+                                        Mute participant
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        data-moderation-action="force_mute"
+                                        role="menuitem">
+
+                                        Force mute
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        data-moderation-action="disable_camera"
+                                        role="menuitem">
+
+                                        Turn camera off
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        data-moderation-action="restrict_camera"
+                                        role="menuitem">
+
+                                        Restrict camera
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        data-moderation-action="remove"
+                                        role="menuitem">
+
+                                        Remove participant
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block app_page_js %}
+
+<script
+    type="module"
+    src="{% static 'js/meetings/meeting_room.js' %}">
+</script>
+
+{% endblock %}

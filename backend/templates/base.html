@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         DOCUMENT
+    ====================================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="ConnectX - Secure meetings, real-time communication and collaboration.">
+
+    <meta
+        name="theme-color"
+        content="#050816">
+      
+
+    <!-- =====================================================
+         TITLE
+    ====================================================== -->
+      
+    <title>
+        {% block title %}
+        ConnectX
+        {% endblock %}
+    </title>
+
+
+    <!-- =====================================================
+         FONT CONNECTION
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+
+    <!-- =====================================================
+         FONT
+    ====================================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <!-- =====================================================
+         DESIGN FOUNDATION
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base/variables.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base/animations.css' %}">
+
+
+    <!-- =====================================================
+         GLOBAL COMPONENTS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/components/input.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/components/button.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/components/card.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/components/upload.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/components/checkbox.css' %}">
+
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+
+    {% block page_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         APPLICATION
+    ====================================================== -->
+
+    <div class="cx-app">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGE JAVASCRIPT
+    ====================================================== -->
+
+    {% block page_js %}
+    {% endblock %}
+
+</body>
+
+</html>

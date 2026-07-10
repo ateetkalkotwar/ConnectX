@@ -1,0 +1,1587 @@
+/* ==========================================================
+   CONNECTX MEETING ROOM
+   Version: 1.2
+========================================================== */
+
+
+.cx-meeting-room {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+
+    min-height: calc(100vh - 72px);
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 18% 8%,
+            rgba(99, 102, 241, 0.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 82% 90%,
+            rgba(139, 92, 246, 0.09),
+            transparent 32%
+        ),
+        #080b14;
+
+    color: #f8fafc;
+}
+
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.cx-meeting-room-header {
+    position: relative;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    min-height: 78px;
+
+    padding:
+        14px
+        24px;
+
+    gap: 24px;
+
+    border-bottom:
+        1px
+        solid
+        rgba(148, 163, 184, 0.12);
+
+    background:
+        rgba(8, 11, 20, 0.88);
+
+    backdrop-filter:
+        blur(18px);
+}
+
+
+.cx-meeting-room-info {
+    display: flex;
+
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 16px;
+}
+
+
+.cx-meeting-room-live {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    padding:
+        7px
+        10px;
+
+    border:
+        1px
+        solid
+        rgba(248, 113, 113, 0.25);
+
+    border-radius: 999px;
+
+    background:
+        rgba(127, 29, 29, 0.22);
+
+    color: #fca5a5;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+}
+
+
+.cx-meeting-room-live > span {
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+
+    box-shadow:
+        0 0 0 5px
+        rgba(239, 68, 68, 0.12);
+
+    animation:
+        cxMeetingLivePulse
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes cxMeetingLivePulse {
+
+    0%,
+    100% {
+        opacity: 0.55;
+
+        transform: scale(0.85);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform: scale(1);
+    }
+
+}
+
+
+.cx-meeting-room-title {
+    min-width: 0;
+}
+
+
+.cx-meeting-room-title h1 {
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #f8fafc;
+
+    font-size:
+        clamp(
+            17px,
+            1.6vw,
+            22px
+        );
+
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.cx-meeting-room-title p {
+    margin:
+        5px
+        0
+        0;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+.cx-meeting-room-title strong {
+    color: #c7d2fe;
+
+    font-weight: 600;
+
+    letter-spacing: 0.04em;
+}
+
+
+.cx-meeting-room-header-actions {
+    display: flex;
+
+    align-items: center;
+
+    flex-shrink: 0;
+
+    gap: 12px;
+}
+
+
+.cx-meeting-room-role {
+    padding:
+        7px
+        11px;
+
+    border:
+        1px
+        solid
+        rgba(129, 140, 248, 0.24);
+
+    border-radius: 999px;
+
+    background:
+        rgba(79, 70, 229, 0.12);
+
+    color: #c7d2fe;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.cx-meeting-room-leave {
+    min-height: 38px;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px
+        solid
+        rgba(248, 113, 113, 0.28);
+
+    border-radius: 10px;
+
+    background:
+        rgba(127, 29, 29, 0.22);
+
+    color: #fecaca;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cx-meeting-room-leave:hover {
+    border-color:
+        rgba(248, 113, 113, 0.55);
+
+    background:
+        rgba(185, 28, 28, 0.34);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ==========================================================
+   ROOM BODY
+========================================================== */
+
+.cx-meeting-room-body {
+    position: relative;
+
+    display: flex;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================================
+   MAIN STAGE
+========================================================== */
+
+.cx-meeting-room-main {
+    display: flex;
+
+    flex: 1;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    padding:
+        18px
+        20px
+        16px;
+
+    gap: 16px;
+}
+
+
+/* ==========================================================
+   VIDEO GRID
+========================================================== */
+
+.cx-meeting-video-grid {
+    display: grid;
+
+    flex: 1;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                min(100%, 280px),
+                1fr
+            )
+        );
+
+    align-content: center;
+
+    min-height: 0;
+
+    gap: 14px;
+
+    overflow-y: auto;
+}
+
+
+.cx-meeting-video-tile {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 260px;
+
+    overflow: hidden;
+
+    border:
+        1px
+        solid
+        rgba(148, 163, 184, 0.14);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 41, 59, 0.92),
+            rgba(15, 23, 42, 0.98)
+        );
+
+    box-shadow:
+        0 22px 55px
+        rgba(0, 0, 0, 0.24);
+}
+
+
+.cx-meeting-local-video {
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 260px;
+
+    object-fit: cover;
+
+    background: #020617;
+}
+
+
+.cx-meeting-local-video--screen {
+    object-fit: contain;
+}
+
+
+.cx-meeting-video-placeholder {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(99, 102, 241, 0.2),
+            transparent 52%
+        ),
+        #111827;
+}
+
+
+.cx-meeting-video-placeholder--hidden {
+    display: none;
+}
+
+
+.cx-meeting-video-placeholder > span {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 92px;
+
+    height: 92px;
+
+    border:
+        1px
+        solid
+        rgba(165, 180, 252, 0.24);
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    color: #ffffff;
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 18px 50px
+        rgba(79, 70, 229, 0.28);
+}
+
+
+.cx-meeting-video-meta {
+    position: absolute;
+
+    right: 12px;
+
+    bottom: 12px;
+
+    left: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        9px
+        11px;
+
+    gap: 12px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 10px;
+
+    background:
+        rgba(2, 6, 23, 0.64);
+
+    backdrop-filter:
+        blur(12px);
+}
+
+
+.cx-meeting-video-meta span {
+    overflow: hidden;
+
+    color: #f8fafc;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.cx-meeting-video-meta small {
+    flex-shrink: 0;
+
+    color: #a5b4fc;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================================
+   CONTROLS
+========================================================== */
+
+.cx-meeting-room-controls {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    min-height: 70px;
+
+    padding:
+        9px
+        12px;
+
+    gap: 9px;
+
+    border:
+        1px
+        solid
+        rgba(148, 163, 184, 0.12);
+
+    border-radius: 18px;
+
+    background:
+        rgba(15, 23, 42, 0.74);
+
+    backdrop-filter:
+        blur(18px);
+}
+
+
+.cx-meeting-control {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    min-width: 70px;
+
+    min-height: 52px;
+
+    padding:
+        7px
+        10px;
+
+    gap: 5px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: #cbd5e1;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cx-meeting-control:hover {
+    color: #ffffff;
+
+    background:
+        rgba(99, 102, 241, 0.13);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.cx-meeting-control--active {
+    color: #ffffff;
+
+    background:
+        rgba(79, 70, 229, 0.28);
+}
+
+
+.cx-meeting-control:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+.cx-meeting-control svg {
+    width: 20px;
+
+    height: 20px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+}
+
+
+.cx-meeting-control > span {
+    font-size: 11px;
+
+    font-weight: 650;
+}
+
+
+.cx-meeting-control-count {
+    position: absolute;
+
+    top: 3px;
+
+    right: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 18px;
+
+    height: 18px;
+
+    padding:
+        0
+        5px;
+
+    border-radius: 999px;
+
+    background: #4f46e5;
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* ==========================================================
+   PARTICIPANT PANEL
+========================================================== */
+
+.cx-meeting-room-panel {
+    position: relative;
+
+    z-index: 15;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 0 0 330px;
+
+    width: 330px;
+
+    min-height: 0;
+
+    border-left:
+        1px
+        solid
+        rgba(148, 163, 184, 0.12);
+
+    background:
+        rgba(10, 15, 28, 0.96);
+
+    box-shadow:
+        -18px
+        0
+        45px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+.cx-meeting-room-panel[hidden] {
+    display: none;
+}
+
+
+.cx-meeting-room-panel-handle {
+    display: none;
+}
+
+
+.cx-meeting-room-panel-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        22px
+        20px
+        17px;
+
+    gap: 16px;
+
+    border-bottom:
+        1px
+        solid
+        rgba(148, 163, 184, 0.1);
+}
+
+
+.cx-meeting-room-panel-header span {
+    color: #818cf8;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+}
+
+
+.cx-meeting-room-panel-header h2 {
+    margin:
+        5px
+        0
+        0;
+
+    color: #f8fafc;
+
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+
+.cx-meeting-room-count {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 34px;
+
+    height: 34px;
+
+    padding:
+        0
+        9px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(79, 70, 229, 0.18);
+
+    color: #c7d2fe !important;
+
+    font-size: 13px !important;
+
+    letter-spacing: 0 !important;
+}
+
+
+.cx-meeting-room-participants {
+    flex: 1;
+
+    min-height: 0;
+
+    padding:
+        12px
+        10px
+        22px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(129, 140, 248, 0.38)
+        transparent;
+}
+
+
+.cx-meeting-room-participant {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    min-width: 0;
+
+    min-height: 62px;
+
+    padding:
+        9px
+        10px;
+
+    gap: 11px;
+
+    border-radius: 12px;
+
+    transition:
+        background 0.2s ease;
+}
+
+
+.cx-meeting-room-participant:hover {
+    background:
+        rgba(99, 102, 241, 0.08);
+}
+
+
+.cx-meeting-room-participant-avatar {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 38px;
+
+    width: 38px;
+
+    height: 38px;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+
+.cx-meeting-room-participant-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.cx-meeting-room-participant-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.cx-meeting-room-participant-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: #e2e8f0;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.cx-meeting-room-participant-info small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.cx-meeting-room-participant-state {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 30px;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 9px;
+
+    color: #94a3b8;
+}
+
+
+.cx-meeting-room-participant-state svg {
+    width: 17px;
+
+    height: 17px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+}
+
+
+/* ==========================================================
+   HOST MODERATION
+========================================================== */
+
+.cx-meeting-moderation {
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+
+.cx-meeting-moderation-trigger {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    width: 30px;
+
+    height: 30px;
+
+    padding: 0;
+
+    gap: 3px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.cx-meeting-moderation-trigger:hover,
+.cx-meeting-moderation-trigger[aria-expanded="true"] {
+    background:
+        rgba(99, 102, 241, 0.14);
+}
+
+
+.cx-meeting-moderation-trigger > span {
+    width: 3px;
+
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: #94a3b8;
+}
+
+
+.cx-meeting-moderation-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+
+    right: 0;
+
+    z-index: 100;
+
+    width: 218px;
+
+    padding: 6px;
+
+    border:
+        1px
+        solid
+        rgba(148, 163, 184, 0.16);
+
+    border-radius: 12px;
+
+    background: #111827;
+
+    box-shadow:
+        0 22px 55px
+        rgba(0, 0, 0, 0.46);
+}
+
+
+.cx-meeting-moderation-menu[hidden] {
+    display: none;
+}
+
+
+.cx-meeting-moderation-menu button {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 36px;
+
+    padding:
+        0
+        10px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #cbd5e1;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-size: 12px;
+
+    text-align: left;
+}
+
+
+.cx-meeting-moderation-menu button:hover {
+    background:
+        rgba(99, 102, 241, 0.12);
+
+    color: #ffffff;
+}
+
+
+.cx-meeting-moderation-menu button:disabled {
+    opacity: 0.5;
+
+    cursor: wait;
+}
+
+
+.cx-meeting-moderation-menu
+.cx-meeting-moderation-danger {
+    color: #fca5a5;
+}
+
+
+.cx-meeting-moderation-menu
+.cx-meeting-moderation-danger:hover {
+    background:
+        rgba(185, 28, 28, 0.18);
+
+    color: #fecaca;
+}
+
+
+/* ==========================================================
+   ACTIVITY TOASTS
+========================================================== */
+
+.cx-meeting-activity-toasts {
+    position: fixed;
+
+    top: 92px;
+
+    left: 50%;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    flex-direction: column;
+
+    width:
+        min(
+            calc(100% - 32px),
+            420px
+        );
+
+    gap: 8px;
+
+    pointer-events: none;
+
+    transform:
+        translateX(-50%);
+}
+
+
+.cx-meeting-activity-toast {
+    width: fit-content;
+
+    max-width: 100%;
+
+    padding:
+        10px
+        15px;
+
+    border:
+        1px
+        solid
+        rgba(148, 163, 184, 0.16);
+
+    border-radius: 999px;
+
+    background:
+        rgba(15, 23, 42, 0.94);
+
+    color: #e2e8f0;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    text-align: center;
+
+    box-shadow:
+        0 14px 38px
+        rgba(0, 0, 0, 0.3);
+
+    backdrop-filter:
+        blur(14px);
+
+    animation:
+        cxMeetingToastEnter
+        0.25s
+        ease
+        both;
+}
+
+
+.cx-meeting-activity-toast--join {
+    border-color:
+        rgba(74, 222, 128, 0.26);
+}
+
+
+.cx-meeting-activity-toast--leave {
+    border-color:
+        rgba(148, 163, 184, 0.25);
+}
+
+
+.cx-meeting-activity-toast--warning {
+    border-color:
+        rgba(248, 113, 113, 0.34);
+
+    color: #fecaca;
+}
+
+
+.cx-meeting-activity-toast--leaving {
+    animation:
+        cxMeetingToastLeave
+        0.25s
+        ease
+        both;
+}
+
+
+@keyframes cxMeetingToastEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(-8px)
+            scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+@keyframes cxMeetingToastLeave {
+
+    from {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            translateY(-6px)
+            scale(0.96);
+    }
+
+}
+
+
+/* ==========================================================
+   TABLET
+========================================================== */
+
+@media (max-width: 1024px) {
+
+    .cx-meeting-room-panel {
+        flex-basis: 300px;
+
+        width: 300px;
+    }
+
+
+    .cx-meeting-room-main {
+        padding-inline: 14px;
+    }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 767px) {
+
+    .cx-meeting-room {
+        min-height:
+            calc(
+                100dvh
+                - 64px
+            );
+    }
+
+
+    .cx-meeting-room-header {
+        min-height: 68px;
+
+        padding:
+            10px
+            12px;
+
+        gap: 10px;
+    }
+
+
+    .cx-meeting-room-info {
+        gap: 9px;
+    }
+
+
+    .cx-meeting-room-live {
+        padding:
+            6px
+            8px;
+
+        font-size: 9px;
+    }
+
+
+    .cx-meeting-room-title p {
+        display: none;
+    }
+
+
+    .cx-meeting-room-role {
+        display: none;
+    }
+
+
+    .cx-meeting-room-leave {
+        min-height: 35px;
+
+        padding-inline: 10px;
+
+        font-size: 11px;
+    }
+
+
+    .cx-meeting-room-main {
+        padding:
+            10px
+            8px
+            8px;
+
+        gap: 9px;
+    }
+
+
+    .cx-meeting-video-grid {
+        gap: 8px;
+    }
+
+
+    .cx-meeting-video-tile,
+    .cx-meeting-local-video {
+        min-height: 220px;
+
+        border-radius: 14px;
+    }
+
+
+    .cx-meeting-room-controls {
+        flex-wrap: nowrap;
+
+        justify-content: space-around;
+
+        min-height: 62px;
+
+        padding:
+            6px
+            4px;
+
+        gap: 1px;
+
+        border-radius: 14px;
+    }
+
+
+    .cx-meeting-control {
+        min-width: 0;
+
+        width: 20%;
+
+        min-height: 50px;
+
+        padding:
+            6px
+            2px;
+    }
+
+
+    .cx-meeting-control svg {
+        width: 19px;
+
+        height: 19px;
+    }
+
+
+    .cx-meeting-control > span {
+        font-size: 9px;
+    }
+
+
+    .cx-meeting-control-count {
+        top: 2px;
+
+        right: 8px;
+    }
+
+
+    .cx-meeting-room-panel {
+        position: absolute;
+
+        right: 0;
+
+        bottom: 0;
+
+        left: 0;
+
+        z-index: 200;
+
+        flex-basis: auto;
+
+        width: 100%;
+
+        max-height: 68%;
+
+        border-top:
+            1px
+            solid
+            rgba(148, 163, 184, 0.18);
+
+        border-left: 0;
+
+        border-radius:
+            22px
+            22px
+            0
+            0;
+
+        box-shadow:
+            0
+            -24px
+            60px
+            rgba(0, 0, 0, 0.48);
+    }
+
+
+    .cx-meeting-room-panel-handle {
+        display: block;
+
+        width: 42px;
+
+        height: 4px;
+
+        margin:
+            9px
+            auto
+            0;
+
+        border-radius: 999px;
+
+        background:
+            rgba(148, 163, 184, 0.42);
+    }
+
+
+    .cx-meeting-room-panel-header {
+        padding:
+            14px
+            16px
+            13px;
+    }
+
+
+    .cx-meeting-room-participants {
+        padding-bottom:
+            max(
+                24px,
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    .cx-meeting-moderation-menu {
+        position: fixed;
+
+        right: 12px;
+
+        bottom:
+            max(
+                14px,
+                env(safe-area-inset-bottom)
+            );
+
+        top: auto;
+
+        left: 12px;
+
+        width: auto;
+
+        max-height: 58vh;
+
+        overflow-y: auto;
+
+        border-radius: 16px;
+    }
+
+
+    .cx-meeting-moderation-menu button {
+        min-height: 43px;
+
+        font-size: 13px;
+    }
+
+
+    .cx-meeting-activity-toasts {
+        top: 78px;
+    }
+
+}
+
+
+/* ==========================================================
+   SMALL MOBILE
+========================================================== */
+
+@media (max-width: 420px) {
+
+    .cx-meeting-room-title h1 {
+        max-width: 135px;
+
+        font-size: 15px;
+    }
+
+
+    .cx-meeting-room-live {
+        display: none;
+    }
+
+
+    .cx-meeting-video-placeholder > span {
+        width: 74px;
+
+        height: 74px;
+
+        font-size: 27px;
+    }
+
+
+    .cx-meeting-video-meta {
+        right: 8px;
+
+        bottom: 8px;
+
+        left: 8px;
+
+        padding:
+            8px
+            9px;
+    }
+
+
+    .cx-meeting-control > span {
+        font-size: 8px;
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cx-meeting-room-live > span,
+    .cx-meeting-activity-toast,
+    .cx-meeting-activity-toast--leaving {
+        animation: none;
+    }
+
+}

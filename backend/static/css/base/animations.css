@@ -1,0 +1,549 @@
+/* ==========================================================
+   CONNECTX ANIMATION SYSTEM
+   Version: 1.0
+========================================================== */
+
+
+/* ==========================================================
+   FADE IN
+========================================================== */
+
+@keyframes cxFadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* ==========================================================
+   FADE UP
+========================================================== */
+
+@keyframes cxFadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(24px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   FADE DOWN
+========================================================== */
+
+@keyframes cxFadeDown {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-24px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   FADE LEFT
+========================================================== */
+
+@keyframes cxFadeLeft {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(30px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   FADE RIGHT
+========================================================== */
+
+@keyframes cxFadeRight {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(-30px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   SCALE IN
+========================================================== */
+
+@keyframes cxScaleIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: scale(0.94);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: scale(1);
+
+    }
+
+}
+
+
+/* ==========================================================
+   FLOAT
+========================================================== */
+
+@keyframes cxFloat {
+
+    0%,
+    100% {
+
+        transform: translateY(0);
+
+    }
+
+    50% {
+
+        transform: translateY(-10px);
+
+    }
+
+}
+
+
+/* ==========================================================
+   SOFT FLOAT
+========================================================== */
+
+@keyframes cxSoftFloat {
+
+    0%,
+    100% {
+
+        transform: translate3d(0, 0, 0);
+
+    }
+
+    50% {
+
+        transform: translate3d(0, -6px, 0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   PULSE
+========================================================== */
+
+@keyframes cxPulse {
+
+    0%,
+    100% {
+
+        opacity: 1;
+
+        transform: scale(1);
+
+    }
+
+    50% {
+
+        opacity: 0.7;
+
+        transform: scale(0.96);
+
+    }
+
+}
+
+
+/* ==========================================================
+   GLOW
+========================================================== */
+
+@keyframes cxGlow {
+
+    0%,
+    100% {
+
+        box-shadow:
+            0 0 0 rgba(99, 102, 241, 0);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 0 35px rgba(99, 102, 241, 0.32);
+
+    }
+
+}
+
+
+/* ==========================================================
+   AURORA MOVEMENT
+========================================================== */
+
+@keyframes cxAurora {
+
+    0% {
+
+        transform:
+            translate3d(-4%, -3%, 0)
+            rotate(0deg)
+            scale(1);
+
+    }
+
+    33% {
+
+        transform:
+            translate3d(5%, 2%, 0)
+            rotate(8deg)
+            scale(1.08);
+
+    }
+
+    66% {
+
+        transform:
+            translate3d(-2%, 5%, 0)
+            rotate(-5deg)
+            scale(0.96);
+
+    }
+
+    100% {
+
+        transform:
+            translate3d(-4%, -3%, 0)
+            rotate(0deg)
+            scale(1);
+
+    }
+
+}
+
+
+/* ==========================================================
+   GRADIENT MOVEMENT
+========================================================== */
+
+@keyframes cxGradientMove {
+
+    0% {
+
+        background-position: 0% 50%;
+
+    }
+
+    50% {
+
+        background-position: 100% 50%;
+
+    }
+
+    100% {
+
+        background-position: 0% 50%;
+
+    }
+
+}
+
+
+/* ==========================================================
+   BORDER ROTATION
+========================================================== */
+
+@keyframes cxBorderRotate {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+/* ==========================================================
+   SPIN
+========================================================== */
+
+@keyframes cxSpin {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+/* ==========================================================
+   SHAKE
+========================================================== */
+
+@keyframes cxShake {
+
+    0%,
+    100% {
+
+        transform: translateX(0);
+
+    }
+
+    20% {
+
+        transform: translateX(-5px);
+
+    }
+
+    40% {
+
+        transform: translateX(5px);
+
+    }
+
+    60% {
+
+        transform: translateX(-3px);
+
+    }
+
+    80% {
+
+        transform: translateX(3px);
+
+    }
+
+}
+
+
+/* ==========================================================
+   SUCCESS POP
+========================================================== */
+
+@keyframes cxSuccessPop {
+
+    0% {
+
+        opacity: 0;
+
+        transform: scale(0.6);
+
+    }
+
+    60% {
+
+        opacity: 1;
+
+        transform: scale(1.12);
+
+    }
+
+    100% {
+
+        transform: scale(1);
+
+    }
+
+}
+
+
+/* ==========================================================
+   UTILITY ANIMATION CLASSES
+========================================================== */
+
+.cx-animate-fade-in {
+
+    animation:
+        cxFadeIn
+        500ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-fade-up {
+
+    animation:
+        cxFadeUp
+        600ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-fade-down {
+
+    animation:
+        cxFadeDown
+        600ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-fade-left {
+
+    animation:
+        cxFadeLeft
+        600ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-fade-right {
+
+    animation:
+        cxFadeRight
+        600ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-scale-in {
+
+    animation:
+        cxScaleIn
+        500ms
+        ease
+        both;
+
+}
+
+
+.cx-animate-float {
+
+    animation:
+        cxFloat
+        5s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* ==========================================================
+   ANIMATION DELAYS
+========================================================== */
+
+.cx-delay-1 {
+
+    animation-delay: 100ms;
+
+}
+
+
+.cx-delay-2 {
+
+    animation-delay: 200ms;
+
+}
+
+
+.cx-delay-3 {
+
+    animation-delay: 300ms;
+
+}
+
+
+.cx-delay-4 {
+
+    animation-delay: 400ms;
+
+}
+
+
+.cx-delay-5 {
+
+    animation-delay: 500ms;
+
+}

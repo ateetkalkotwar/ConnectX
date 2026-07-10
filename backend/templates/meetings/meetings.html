@@ -1,0 +1,596 @@
+{% extends "layouts/app_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Meetings | ConnectX
+{% endblock %}
+
+
+{% block app_page_css %}
+
+<!-- <link
+    rel="stylesheet"
+    href="{% static 'css/pages/meetings.css' %}"> -->
+
+{% endblock %}
+
+
+{% block app_content %}
+
+<div class="cx-meetings">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="cx-meetings-header">
+
+        <div class="cx-meetings-header-content">
+
+            <span class="cx-meetings-eyebrow">
+                CONNECTX MEETINGS
+            </span>
+
+            <h1>
+                Meetings
+            </h1>
+
+            <p>
+                Start, join, and manage your ConnectX meetings.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'create_meeting' %}"
+            class="cx-meetings-primary-action">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true">
+
+                <rect
+                    x="3"
+                    y="5"
+                    width="13"
+                    height="14"
+                    rx="2">
+                </rect>
+
+                <path d="M16 10L21 7V17L16 14">
+                </path>
+
+                <path d="M9.5 9V15">
+                </path>
+
+                <path d="M6.5 12H12.5">
+                </path>
+
+            </svg>
+
+            <span>
+                New meeting
+            </span>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+
+    <section class="cx-meetings-actions">
+
+        <a
+            href="{% url 'create_meeting' %}"
+            class="
+                cx-meetings-action
+                cx-meetings-action--primary
+            ">
+
+            <span class="cx-meetings-action-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <rect
+                        x="3"
+                        y="5"
+                        width="13"
+                        height="14"
+                        rx="2">
+                    </rect>
+
+                    <path d="M16 10L21 7V17L16 14">
+                    </path>
+
+                    <path d="M9.5 9V15">
+                    </path>
+
+                    <path d="M6.5 12H12.5">
+                    </path>
+
+                </svg>
+
+            </span>
+
+            <span class="cx-meetings-action-content">
+
+                <strong>
+                    New meeting
+                </strong>
+
+                <small>
+                    Start an instant video meeting
+                </small>
+
+            </span>
+
+        </a>
+
+
+        <a
+            href="{% url 'join_meeting' %}"
+            class="cx-meetings-action">
+
+            <span class="cx-meetings-action-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path d="M14 5L21 12L14 19">
+                    </path>
+
+                    <path d="M21 12H9">
+                    </path>
+
+                    <path
+                        d="M9 5H5C3.9 5 3 5.9 3 7V17C3 18.1 3.9 19 5 19H9">
+                    </path>
+
+                </svg>
+
+            </span>
+
+            <span class="cx-meetings-action-content">
+
+                <strong>
+                    Join meeting
+                </strong>
+
+                <small>
+                    Enter a meeting code
+                </small>
+
+            </span>
+
+        </a>
+
+
+        <a
+            href="{% url 'schedule_meeting' %}"
+            class="cx-meetings-action">
+
+            <span class="cx-meetings-action-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2">
+                    </rect>
+
+                    <path d="M8 3V7">
+                    </path>
+
+                    <path d="M16 3V7">
+                    </path>
+
+                    <path d="M3 10H21">
+                    </path>
+
+                    <path d="M12 14V18">
+                    </path>
+
+                    <path d="M10 16H14">
+                    </path>
+
+                </svg>
+
+            </span>
+
+            <span class="cx-meetings-action-content">
+
+                <strong>
+                    Schedule meeting
+                </strong>
+
+                <small>
+                    Plan a meeting for later
+                </small>
+
+            </span>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOSTED MEETINGS
+    ====================================================== -->
+
+    <section class="cx-meetings-section">
+
+        <div class="cx-meetings-section-header">
+
+            <div>
+
+                <span class="cx-meetings-section-label">
+                    YOUR MEETINGS
+                </span>
+
+                <h2>
+                    Hosted by you
+                </h2>
+
+            </div>
+
+            <span class="cx-meetings-count">
+                {{ hosted_meetings|length }}
+            </span>
+
+        </div>
+
+
+        {% if hosted_meetings %}
+
+            <div class="cx-meetings-list">
+
+                {% for meeting in hosted_meetings %}
+
+                    <article class="cx-meeting-card">
+
+                        <div class="cx-meeting-card-main">
+
+                            <span class="cx-meeting-card-icon">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none">
+
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="13"
+                                        height="14"
+                                        rx="2">
+                                    </rect>
+
+                                    <path d="M16 10L21 7V17L16 14">
+                                    </path>
+
+                                </svg>
+
+                            </span>
+
+
+                            <div class="cx-meeting-card-content">
+
+                                <div class="cx-meeting-card-heading">
+
+                                    <h3>
+                                        {{ meeting.title }}
+                                    </h3>
+
+                                    <span
+                                        class="
+                                            cx-meeting-status
+                                            cx-meeting-status--{{ meeting.status }}
+                                        ">
+
+                                        {{ meeting.get_status_display }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="cx-meeting-card-meta">
+
+                                    <span>
+                                        Code:
+                                        <strong>
+                                            {{ meeting.meeting_code }}
+                                        </strong>
+                                    </span>
+
+                                    {% if meeting.scheduled_at %}
+
+                                        <span>
+                                            {{ meeting.scheduled_at|date:"d M Y, h:i A" }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span>
+                                            Created {{ meeting.created_at|timesince }} ago
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="cx-meeting-card-actions">
+
+                            {% if meeting.status == "live" %}
+
+                                <a
+                                    href="{% url 'meeting_room' meeting.meeting_code %}"
+                                    class="cx-meeting-card-button">
+
+                                    Enter room
+
+                                </a>
+
+                            {% elif meeting.status == "scheduled" %}
+
+                                <span class="cx-meeting-card-note">
+                                    Scheduled
+                                </span>
+
+                            {% else %}
+
+                                <span class="cx-meeting-card-note">
+                                    {{ meeting.get_status_display }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="cx-meetings-empty">
+
+                <span class="cx-meetings-empty-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <rect
+                            x="3"
+                            y="5"
+                            width="13"
+                            height="14"
+                            rx="2">
+                        </rect>
+
+                        <path d="M16 10L21 7V17L16 14">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <h3>
+                    No hosted meetings yet
+                </h3>
+
+                <p>
+                    Start an instant meeting or schedule one for later.
+                </p>
+
+                <a href="{% url 'create_meeting' %}">
+                    Start a meeting
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         JOINED MEETINGS
+    ====================================================== -->
+
+    <section class="cx-meetings-section">
+
+        <div class="cx-meetings-section-header">
+
+            <div>
+
+                <span class="cx-meetings-section-label">
+                    PARTICIPATION
+                </span>
+
+                <h2>
+                    Joined meetings
+                </h2>
+
+            </div>
+
+            <span class="cx-meetings-count">
+                {{ joined_meetings|length }}
+            </span>
+
+        </div>
+
+
+        {% if joined_meetings %}
+
+            <div class="cx-meetings-list">
+
+                {% for meeting in joined_meetings %}
+
+                    <article class="cx-meeting-card">
+
+                        <div class="cx-meeting-card-main">
+
+                            <span class="cx-meeting-card-icon">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none">
+
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="13"
+                                        height="14"
+                                        rx="2">
+                                    </rect>
+
+                                    <path d="M16 10L21 7V17L16 14">
+                                    </path>
+
+                                </svg>
+
+                            </span>
+
+
+                            <div class="cx-meeting-card-content">
+
+                                <div class="cx-meeting-card-heading">
+
+                                    <h3>
+                                        {{ meeting.title }}
+                                    </h3>
+
+                                    <span
+                                        class="
+                                            cx-meeting-status
+                                            cx-meeting-status--{{ meeting.status }}
+                                        ">
+
+                                        {{ meeting.get_status_display }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="cx-meeting-card-meta">
+
+                                    <span>
+                                        Host:
+                                        <strong>
+                                            {{ meeting.host.username }}
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        Code:
+                                        <strong>
+                                            {{ meeting.meeting_code }}
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="cx-meeting-card-actions">
+
+                            {% if meeting.status == "live" %}
+
+                                <a
+                                    href="{% url 'meeting_room' meeting.meeting_code %}"
+                                    class="cx-meeting-card-button">
+
+                                    Enter room
+
+                                </a>
+
+                            {% else %}
+
+                                <span class="cx-meeting-card-note">
+                                    {{ meeting.get_status_display }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="cx-meetings-empty">
+
+                <span class="cx-meetings-empty-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none">
+
+                        <path d="M14 5L21 12L14 19">
+                        </path>
+
+                        <path d="M21 12H9">
+                        </path>
+
+                        <path
+                            d="M9 5H5C3.9 5 3 5.9 3 7V17C3 18.1 3.9 19 5 19H9">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                <h3>
+                    No joined meetings yet
+                </h3>
+
+                <p>
+                    Join a ConnectX meeting using a valid meeting code.
+                </p>
+
+                <a href="{% url 'join_meeting' %}">
+                    Join a meeting
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

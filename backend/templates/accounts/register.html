@@ -1,0 +1,1256 @@
+{% extends "layouts/auth_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Create Account | ConnectX
+{% endblock %}
+
+
+{% block auth_page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pages/register.css' %}">
+
+{% endblock %}
+
+
+{% block auth_left %}
+
+<div class="cx-register-hero">
+
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
+    <a
+        href="/"
+        class="cx-register-brand"
+        aria-label="ConnectX home">
+
+        <span
+            class="cx-register-brand-mark"
+            aria-hidden="true">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none">
+
+                <path
+                    d="M8 7L16 17">
+                </path>
+
+                <path
+                    d="M16 7L8 17">
+                </path>
+
+                <circle
+                    cx="6"
+                    cy="5"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="18"
+                    cy="5"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="6"
+                    cy="19"
+                    r="2">
+                </circle>
+
+                <circle
+                    cx="18"
+                    cy="19"
+                    r="2">
+                </circle>
+
+            </svg>
+
+        </span>
+
+        <span class="cx-register-brand-name">
+
+            CONNECT<span>X</span>
+
+        </span>
+
+    </a>
+
+
+    <!-- =====================================================
+         HERO HEADING
+    ====================================================== -->
+
+    <div class="cx-register-heading">
+
+        <h1>
+
+            <span class="cx-register-heading-line">
+                Connect.
+            </span>
+
+            <span
+                class="
+                    cx-register-heading-line
+                    cx-register-heading-line--gradient
+                ">
+
+                Collaborate.
+
+            </span>
+
+            <span class="cx-register-heading-line">
+                Create.
+            </span>
+
+        </h1>
+
+        <p>
+
+            One secure space for meaningful conversations,
+            real-time collaboration and ideas that move
+            teams forward.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FEATURES
+    ====================================================== -->
+
+    <div class="cx-register-features">
+
+        <!-- HD MEETINGS -->
+
+        <article
+            class="
+                cx-feature-card
+                cx-register-feature
+            ">
+
+            <div class="cx-feature-card-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <rect
+                        x="3"
+                        y="5"
+                        width="13"
+                        height="14"
+                        rx="2">
+                    </rect>
+
+                    <path
+                        d="M16 10L21 7V17L16 14">
+                    </path>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                HD Meetings
+            </h3>
+
+            <p>
+
+                Clear, secure video conversations
+                built for focused collaboration.
+
+            </p>
+
+        </article>
+
+
+        <!-- LIVE CHAT -->
+
+        <article
+            class="
+                cx-feature-card
+                cx-register-feature
+            ">
+
+            <div class="cx-feature-card-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path
+                        d="M21 15A4 4 0 0 1 17 19H8L3 22V7A4 4 0 0 1 7 3H17A4 4 0 0 1 21 7Z">
+                    </path>
+
+                    <path
+                        d="M8 9H16">
+                    </path>
+
+                    <path
+                        d="M8 13H13">
+                    </path>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Live Chat
+            </h3>
+
+            <p>
+
+                Keep conversations moving with
+                fast real-time team messaging.
+
+            </p>
+
+        </article>
+
+
+        <!-- SCREEN SHARING -->
+
+        <article
+            class="
+                cx-feature-card
+                cx-register-feature
+            ">
+
+            <div class="cx-feature-card-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="13"
+                        rx="2">
+                    </rect>
+
+                    <path
+                        d="M8 21H16">
+                    </path>
+
+                    <path
+                        d="M12 17V21">
+                    </path>
+
+                    <path
+                        d="M12 13V7">
+                    </path>
+
+                    <path
+                        d="M9 10L12 7L15 10">
+                    </path>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Screen Sharing
+            </h3>
+
+            <p>
+
+                Present ideas, designs and work
+                without interrupting the meeting.
+
+            </p>
+
+        </article>
+
+
+        <!-- SMART COLLABORATION -->
+
+        <article
+            class="
+                cx-feature-card
+                cx-register-feature
+            ">
+
+            <div class="cx-feature-card-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none">
+
+                    <path
+                        d="M12 3L13.7 8.3L19 10L13.7 11.7L12 17L10.3 11.7L5 10L10.3 8.3Z">
+                    </path>
+
+                    <path
+                        d="M19 16L19.7 18.3L22 19L19.7 19.7L19 22L18.3 19.7L16 19L18.3 18.3Z">
+                    </path>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Smart Collaboration
+            </h3>
+
+            <p>
+
+                A modern workspace designed for
+                productive and connected teams.
+
+            </p>
+
+        </article>
+
+    </div>
+
+
+    <!-- =====================================================
+         SECURITY
+    ====================================================== -->
+
+    <div class="cx-register-security">
+
+        <span class="cx-register-security-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none">
+
+                <path
+                    d="M12 3L20 7V12C20 17 16.5 20.5 12 22C7.5 20.5 4 17 4 12V7Z">
+                </path>
+
+                <path
+                    d="M9 12L11 14L15 10">
+                </path>
+
+            </svg>
+
+        </span>
+
+        <span>
+            Built with privacy and secure communication in mind
+        </span>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block auth_right %}
+
+<div class="cx-card cx-register-card">
+
+    <div class="cx-card-content">
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="cx-register-card-header">
+
+            <h2>
+                Create your account
+            </h2>
+
+            <p>
+
+                Join ConnectX and start collaborating
+                with your team.
+
+            </p>
+
+        </header>
+
+
+        <!-- =================================================
+             REGISTER FORM
+        ================================================== -->
+
+        <form
+            id="cx-register-form"
+            class="cx-register-form"
+            method="POST"
+            enctype="multipart/form-data"
+            novalidate>
+
+            {% csrf_token %}
+
+
+            <!-- =============================================
+                 FIRST NAME + LAST NAME
+            ============================================== -->
+
+            <div class="cx-register-row">
+
+                <!-- FIRST NAME -->
+
+                <div class="cx-field">
+
+                    <div class="cx-field-wrapper">
+
+                        <span
+                            class="cx-field-icon"
+                            aria-hidden="true">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="4">
+                                </circle>
+
+                                <path
+                                    d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <input
+                            id="first_name"
+                            name="first_name"
+                            type="text"
+                            class="cx-input"
+                            placeholder="Enter your first name"
+                            maxlength="50"
+                            autocomplete="given-name"
+                            required>
+
+                        <label
+                            for="first_name"
+                            class="cx-field-label">
+
+                            First name
+
+                        </label>
+
+                    </div>
+
+                    <div
+                        class="cx-field-message"
+                        aria-live="polite">
+                    </div>
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div class="cx-field">
+
+                    <div class="cx-field-wrapper">
+
+                        <span
+                            class="cx-field-icon"
+                            aria-hidden="true">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="4">
+                                </circle>
+
+                                <path
+                                    d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <input
+                            id="last_name"
+                            name="last_name"
+                            type="text"
+                            class="cx-input"
+                            placeholder="Enter your last name"
+                            maxlength="50"
+                            autocomplete="family-name"
+                            required>
+
+                        <label
+                            for="last_name"
+                            class="cx-field-label">
+
+                            Last name
+
+                        </label>
+
+                    </div>
+
+                    <div
+                        class="cx-field-message"
+                        aria-live="polite">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 USERNAME
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4">
+                            </circle>
+
+                            <path
+                                d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        class="cx-input"
+                        placeholder="Choose a unique username"
+                        minlength="3"
+                        maxlength="30"
+                        autocomplete="username"
+                        required>
+
+                    <label
+                        for="username"
+                        class="cx-field-label">
+
+                        Username
+
+                    </label>
+
+                    <span
+                        class="cx-field-status"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M5 12L10 17L19 8">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                </div>
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 EMAIL
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="14"
+                                rx="2">
+                            </rect>
+
+                            <path
+                                d="M3 7L12 13L21 7">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        class="cx-input"
+                        placeholder="Enter your email address"
+                        maxlength="254"
+                        autocomplete="email"
+                        required>
+
+                    <label
+                        for="email"
+                        class="cx-field-label">
+
+                        Email address
+
+                    </label>
+
+                    <span
+                        class="cx-field-status"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M5 12L10 17L19 8">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                </div>
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PASSWORD
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <rect
+                                x="5"
+                                y="10"
+                                width="14"
+                                height="11"
+                                rx="2">
+                            </rect>
+
+                            <path
+                                d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        class="cx-input"
+                        placeholder="Create a strong password"
+                        autocomplete="new-password"
+                        required>
+
+                    <label
+                        for="password"
+                        class="cx-field-label">
+
+                        Password
+
+                    </label>
+
+                    <button
+                        type="button"
+                        class="cx-field-action"
+                        data-password-target="password"
+                        aria-label="Show password">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M2 12C4.5 7.5 7.8 5 12 5C16.2 5 19.5 7.5 22 12C19.5 16.5 16.2 19 12 19C7.8 19 4.5 16.5 2 12Z">
+                            </path>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3">
+                            </circle>
+
+                        </svg>
+
+                    </button>
+
+                </div>
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PASSWORD STRENGTH
+            ============================================== -->
+
+            <div
+                id="cx-password-strength"
+                class="cx-password-strength">
+
+                <div class="cx-password-strength-header">
+
+                    <span class="cx-password-strength-label">
+                        Password strength
+                    </span>
+
+                    <span
+                        id="cx-password-strength-value"
+                        class="cx-password-strength-value">
+
+                        Not set
+
+                    </span>
+
+                </div>
+
+                <div class="cx-password-strength-track">
+
+                    <span class="cx-password-strength-segment"></span>
+
+                    <span class="cx-password-strength-segment"></span>
+
+                    <span class="cx-password-strength-segment"></span>
+
+                    <span class="cx-password-strength-segment"></span>
+
+                </div>
+
+
+                <div class="cx-password-requirements">
+
+                    <div
+                        class="cx-password-requirement"
+                        data-password-rule="length">
+
+                        <span class="cx-password-requirement-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <path
+                                    d="M5 12L10 17L19 8">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <span>
+                            8+ characters
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="cx-password-requirement"
+                        data-password-rule="uppercase">
+
+                        <span class="cx-password-requirement-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <path
+                                    d="M5 12L10 17L19 8">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <span>
+                            Uppercase letter
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="cx-password-requirement"
+                        data-password-rule="number">
+
+                        <span class="cx-password-requirement-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <path
+                                    d="M5 12L10 17L19 8">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <span>
+                            One number
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="cx-password-requirement"
+                        data-password-rule="special">
+
+                        <span class="cx-password-requirement-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <path
+                                    d="M5 12L10 17L19 8">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <span>
+                            Special character
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 CONFIRM PASSWORD
+            ============================================== -->
+
+            <div class="cx-field">
+
+                <div class="cx-field-wrapper">
+
+                    <span
+                        class="cx-field-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <rect
+                                x="5"
+                                y="10"
+                                width="14"
+                                height="11"
+                                rx="2">
+                            </rect>
+
+                            <path
+                                d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <input
+                        id="confirm_password"
+                        name="confirm_password"
+                        type="password"
+                        class="cx-input"
+                        placeholder="Re-enter your password"
+                        autocomplete="new-password"
+                        required>
+
+                    <label
+                        for="confirm_password"
+                        class="cx-field-label">
+
+                        Confirm password
+
+                    </label>
+
+                    <button
+                        type="button"
+                        class="cx-field-action"
+                        data-password-target="confirm_password"
+                        aria-label="Show password">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M2 12C4.5 7.5 7.8 5 12 5C16.2 5 19.5 7.5 22 12C19.5 16.5 16.2 19 12 19C7.8 19 4.5 16.5 2 12Z">
+                            </path>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3">
+                            </circle>
+
+                        </svg>
+
+                    </button>
+
+                </div>
+
+                <div
+                    class="cx-field-message"
+                    aria-live="polite">
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PROFILE PICTURE
+            ============================================== -->
+
+            <div>
+
+                <div class="cx-register-upload-label">
+
+                    <span>
+                        Profile picture
+                    </span>
+
+                    <span class="cx-register-upload-optional">
+                        Optional
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="cx-profile-upload"
+                    class="cx-upload">
+
+                    <input
+                        id="profile_picture"
+                        name="profile_picture"
+                        type="file"
+                        class="cx-upload-input"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+
+
+                    <label
+                        for="profile_picture"
+                        class="cx-upload-box">
+
+                        <span class="cx-upload-avatar">
+
+                            <img
+                                id="cx-upload-preview"
+                                src=""
+                                alt="Profile picture preview"
+                                hidden>
+
+                            <svg
+                                id="cx-upload-placeholder"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="4">
+                                </circle>
+
+                                <path
+                                    d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+
+                        <span class="cx-upload-content">
+
+                            <span class="cx-upload-title">
+                                Add your photo
+                            </span>
+
+                            <span class="cx-upload-description">
+
+                                Drag and drop or browse.
+                                JPG, PNG or WebP up to 5 MB.
+
+                            </span>
+
+                        </span>
+
+
+                        <span
+                            class="cx-upload-action"
+                            aria-hidden="true">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none">
+
+                                <path
+                                    d="M12 16V4">
+                                </path>
+
+                                <path
+                                    d="M7 9L12 4L17 9">
+                                </path>
+
+                                <path
+                                    d="M5 14V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V14">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                    </label>
+
+
+                    <div
+                        id="cx-upload-message"
+                        class="cx-upload-message"
+                        aria-live="polite">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 TERMS
+            ============================================== -->
+
+            <div class="cx-register-terms">
+
+                <label class="cx-checkbox">
+
+                    <input
+                        id="terms"
+                        name="terms"
+                        type="checkbox"
+                        class="cx-checkbox-input"
+                        required>
+
+                    <span
+                        class="cx-checkbox-control"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M5 12L10 17L19 8">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span class="cx-checkbox-text">
+
+                        I agree to the
+
+                        <a href="#">
+                            Terms of Service
+                        </a>
+
+                        and
+
+                        <a href="#">
+                            Privacy Policy
+                        </a>.
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- =============================================
+                 FORM MESSAGE
+            ============================================== -->
+
+            <div
+                id="cx-register-form-message"
+                class="cx-register-form-message"
+                role="alert"
+                aria-live="assertive">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true">
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="9">
+                    </circle>
+
+                    <path
+                        d="M12 7V13">
+                    </path>
+
+                    <path
+                        d="M12 17H12.01">
+                    </path>
+
+                </svg>
+
+                <span data-form-message></span>
+
+            </div>
+
+
+            <!-- =============================================
+                 SUBMIT BUTTON
+            ============================================== -->
+
+            <button
+                id="cx-register-submit"
+                type="submit"
+                class="cx-btn cx-btn--primary"
+                aria-busy="false">
+
+                <span class="cx-btn-content">
+
+                    <span>
+                        Create account
+                    </span>
+
+                    <span
+                        class="cx-btn-icon"
+                        aria-hidden="true">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none">
+
+                            <path
+                                d="M5 12H19">
+                            </path>
+
+                            <path
+                                d="M14 7L19 12L14 17">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                </span>
+
+                <span
+                    class="cx-btn-loader"
+                    aria-hidden="true">
+                </span>
+
+            </button>
+
+
+            <!-- =============================================
+                 LOGIN
+            ============================================== -->
+
+            <div class="cx-register-login">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a href="#">
+                    Sign in
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block auth_page_js %}
+
+<script
+    src="{% static 'js/pages/register.js' %}"
+    defer>
+</script>
+
+{% endblock %}

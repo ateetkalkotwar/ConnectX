@@ -1,0 +1,196 @@
+/* ==========================================================
+   CONNECTX CARD COMPONENT
+   Version: 1.0
+========================================================== */
+
+.cx-card {
+
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid var(--cx-glass-border);
+
+    border-radius: var(--cx-radius-xl);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    box-shadow: var(--cx-shadow-lg);
+
+    backdrop-filter:
+        blur(var(--cx-blur-md))
+        saturate(135%);
+
+    -webkit-backdrop-filter:
+        blur(var(--cx-blur-md))
+        saturate(135%);
+
+}
+
+
+.cx-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(129, 140, 248, 0.08),
+            transparent 35%,
+            transparent 65%,
+            rgba(34, 211, 238, 0.05)
+        );
+
+    pointer-events: none;
+
+}
+
+
+.cx-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 12%;
+
+    width: 76%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.55),
+            transparent
+        );
+
+    opacity: 0.6;
+
+}
+
+
+.cx-card-content {
+
+    position: relative;
+
+    z-index: 1;
+
+}
+
+
+.cx-feature-card {
+
+    position: relative;
+
+    padding: var(--cx-space-4);
+
+    overflow: hidden;
+
+    border: 1px solid var(--cx-glass-border);
+
+    border-radius: var(--cx-radius-lg);
+
+    background: var(--cx-glass-bg);
+
+    backdrop-filter:
+        blur(var(--cx-blur-sm));
+
+    -webkit-backdrop-filter:
+        blur(var(--cx-blur-sm));
+
+    transition:
+        transform var(--cx-transition-base),
+        border-color var(--cx-transition-base),
+        background var(--cx-transition-base),
+        box-shadow var(--cx-transition-base);
+
+}
+
+
+.cx-feature-card:hover {
+
+    transform: translateY(-5px);
+
+    border-color: var(--cx-glass-border-hover);
+
+    background: var(--cx-glass-bg-hover);
+
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, 0.2);
+
+}
+
+
+.cx-feature-card-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    margin-bottom: var(--cx-space-3);
+
+    border: 1px solid rgba(129, 140, 248, 0.2);
+
+    border-radius: var(--cx-radius-sm);
+
+    color: var(--cx-primary-light);
+
+    background: rgba(99, 102, 241, 0.1);
+
+}
+
+
+.cx-feature-card-icon svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+}
+
+
+.cx-feature-card h3 {
+
+    margin-bottom: var(--cx-space-1);
+
+    font-size: var(--cx-text-sm);
+
+    font-weight: var(--cx-font-semibold);
+
+}
+
+
+.cx-feature-card p {
+
+    font-size: var(--cx-text-xs);
+
+    line-height: 1.55;
+
+}

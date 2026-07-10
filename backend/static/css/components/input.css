@@ -1,0 +1,460 @@
+/* ==========================================================
+   CONNECTX INPUT COMPONENT
+   Version: 1.0
+========================================================== */
+
+.cx-form-group {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+
+.cx-field {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+
+.cx-field-wrapper {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: var(--cx-input-height);
+
+    border: 1px solid var(--cx-glass-border);
+
+    border-radius: var(--cx-radius-md);
+
+    background: rgba(255, 255, 255, 0.045);
+
+    transition:
+        border-color var(--cx-transition-base),
+        background var(--cx-transition-base),
+        box-shadow var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-field-wrapper:hover {
+
+    border-color: rgba(129, 140, 248, 0.32);
+
+    background: rgba(255, 255, 255, 0.06);
+
+}
+
+
+.cx-field-wrapper:focus-within {
+
+    border-color: var(--cx-primary-light);
+
+    background: rgba(99, 102, 241, 0.07);
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.11),
+        0 10px 30px rgba(0, 0, 0, 0.12);
+
+}
+
+
+.cx-field-icon {
+
+    position: absolute;
+
+    left: 18px;
+
+    top: 50%;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 20px;
+
+    height: 20px;
+
+    color: var(--cx-text-muted);
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+
+    transition:
+        color var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-field-icon svg {
+
+    width: 19px;
+
+    height: 19px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+}
+
+
+.cx-field-wrapper:focus-within .cx-field-icon {
+
+    color: var(--cx-primary-light);
+
+}
+
+
+.cx-input {
+
+    width: 100%;
+
+    height: var(--cx-input-height);
+
+    padding:
+        20px
+        48px
+        7px
+        52px;
+
+    border: none;
+
+    border-radius: inherit;
+
+    background: transparent;
+
+    color: var(--cx-text-primary);
+
+    font-size: var(--cx-text-sm);
+
+    font-weight: var(--cx-font-medium);
+
+    caret-color: var(--cx-accent);
+
+}
+
+
+.cx-input::placeholder {
+
+    color: transparent;
+
+}
+
+
+.cx-field-label {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 52px;
+
+    z-index: 2;
+
+    color: var(--cx-text-muted);
+
+    font-size: var(--cx-text-sm);
+
+    font-weight: var(--cx-font-regular);
+
+    transform: translateY(-50%);
+
+    transform-origin: left center;
+
+    pointer-events: none;
+
+    transition:
+        top var(--cx-transition-base),
+        color var(--cx-transition-base),
+        font-size var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-input:focus ~ .cx-field-label,
+.cx-input:not(:placeholder-shown) ~ .cx-field-label {
+
+    top: 9px;
+
+    color: var(--cx-primary-light);
+
+    font-size: 10px;
+
+    font-weight: var(--cx-font-semibold);
+
+    transform: translateY(0);
+
+}
+
+
+.cx-input:not(:focus):not(:placeholder-shown) ~ .cx-field-label {
+
+    color: var(--cx-text-muted);
+
+}
+
+
+.cx-field-action {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 16px;
+
+    z-index: 3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: var(--cx-radius-sm);
+
+    color: var(--cx-text-muted);
+
+    transform: translateY(-50%);
+
+    transition:
+        color var(--cx-transition-base),
+        background var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-field-action:hover {
+
+    color: var(--cx-text-primary);
+
+    background: rgba(255, 255, 255, 0.07);
+
+}
+
+
+.cx-field-action:active {
+
+    transform:
+        translateY(-50%)
+        scale(0.92);
+
+}
+
+
+.cx-field-action svg {
+
+    width: 18px;
+
+    height: 18px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+}
+
+
+.cx-field-message {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--cx-space-2);
+
+    min-height: 17px;
+
+    margin-top: 5px;
+
+    padding-inline: 4px;
+
+    color: var(--cx-text-muted);
+
+    font-size: 11px;
+
+    line-height: 1.35;
+
+}
+
+
+.cx-field-message:empty {
+
+    min-height: 0;
+
+    margin-top: 0;
+
+}
+
+
+.cx-field--success .cx-field-wrapper {
+
+    border-color: rgba(34, 197, 94, 0.65);
+
+}
+
+
+.cx-field--success .cx-field-icon,
+.cx-field--success .cx-field-message {
+
+    color: var(--cx-success-light);
+
+}
+
+
+.cx-field--error .cx-field-wrapper {
+
+    border-color: rgba(239, 68, 68, 0.72);
+
+    box-shadow:
+        0 0 0 3px rgba(239, 68, 68, 0.08);
+
+}
+
+
+.cx-field--error .cx-field-icon,
+.cx-field--error .cx-field-message {
+
+    color: var(--cx-error-light);
+
+}
+
+
+.cx-field--error {
+
+    animation:
+        cxShake
+        320ms
+        ease;
+
+}
+
+
+.cx-field-status {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 17px;
+
+    z-index: 2;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transform: translateY(-50%);
+
+}
+
+
+.cx-field-status svg {
+
+    width: 18px;
+
+    height: 18px;
+
+}
+
+
+.cx-field--success .cx-field-status {
+
+    display: flex;
+
+    color: var(--cx-success-light);
+
+}
+
+
+.cx-field--loading .cx-field-status {
+
+    display: flex;
+
+}
+
+
+.cx-field--loading .cx-field-status::before {
+
+    content: "";
+
+    width: 16px;
+
+    height: 16px;
+
+    border: 2px solid rgba(255, 255, 255, 0.16);
+
+    border-top-color: var(--cx-primary-light);
+
+    border-radius: var(--cx-radius-full);
+
+    animation:
+        cxSpin
+        700ms
+        linear
+        infinite;
+
+}
+
+
+/* ==========================================================
+   BROWSER AUTOFILL FIX
+========================================================== */
+
+.cx-input:-webkit-autofill,
+.cx-input:-webkit-autofill:hover,
+.cx-input:-webkit-autofill:focus,
+.cx-input:-webkit-autofill:active {
+
+    -webkit-text-fill-color: var(--cx-text-primary) !important;
+
+    -webkit-box-shadow:
+        0 0 0 1000px #0b1430 inset !important;
+
+    box-shadow:
+        0 0 0 1000px #0b1430 inset !important;
+
+    caret-color: var(--cx-text-primary) !important;
+
+    border-radius: inherit;
+
+    transition:
+        background-color 9999s ease-in-out 0s;
+
+}
+
+
+@media (max-width: 767px) {
+
+    .cx-input {
+
+        font-size: 16px;
+
+    }
+
+}

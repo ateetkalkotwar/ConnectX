@@ -1,0 +1,241 @@
+/* ==========================================================
+   CONNECTX GLOBAL FOUNDATION
+========================================================== */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   CONNECTX GLOBAL FOUNDATION
+========================================================== */
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    background: #030712;
+}
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    background: #030712;
+}
+
+body {
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    color: #ffffff;
+
+    font-family:
+        "Poppins",
+        "Segoe UI",
+        Arial,
+        sans-serif !important;
+
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+.cx-app {
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+
+    font-family:
+        "Poppins",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family:
+        "Poppins",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-weight: 700;
+}
+
+
+a {
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+a:hover,
+a:focus,
+a:active,
+a:visited {
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+button,
+input,
+textarea,
+select {
+    margin: 0;
+
+    color: inherit;
+
+    font-family:
+        "Poppins",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+button {
+    padding: 0;
+
+    border: 0;
+
+    background: none;
+
+    cursor: pointer;
+}
+
+
+input,
+textarea,
+select {
+    border: 0;
+
+    outline: none;
+}
+
+
+img,
+svg,
+video,
+canvas {
+    display: block;
+
+    max-width: 100%;
+}
+
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+
+[hidden] {
+    display: none !important;
+}
+
+
+::selection {
+    color: #ffffff;
+
+    background: rgba(124, 58, 237, 0.7);
+}
+
+
+:focus-visible {
+    outline: 2px solid #22d3ee;
+
+    outline-offset: 3px;
+}
+
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+
+::-webkit-scrollbar-track {
+    background: #030712;
+}
+
+
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            #7c3aed,
+            #2563eb,
+            #06b6d4
+        );
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+
+        scroll-behavior: auto !important;
+    }
+
+}

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block page_css %}
+
+    <!-- =====================================================
+         AUTHENTICATION LAYOUT
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/layouts/auth.css' %}">
+
+
+    <!-- =====================================================
+         AUTHENTICATION PAGE CSS
+    ====================================================== -->
+
+    {% block auth_page_css %}
+    {% endblock %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="cx-auth">
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
+    <div
+        class="cx-auth-background"
+        aria-hidden="true">
+
+        <!-- GRID -->
+
+        <div class="cx-auth-grid"></div>
+
+
+        <!-- AURORA -->
+
+        <div
+            class="
+                cx-auth-aurora
+                cx-auth-aurora--one
+            ">
+        </div>
+
+        <div
+            class="
+                cx-auth-aurora
+                cx-auth-aurora--two
+            ">
+        </div>
+
+
+        <!-- GLOW ORBS -->
+
+        <div
+            class="
+                cx-auth-orb
+                cx-auth-orb--one
+            ">
+        </div>
+
+        <div
+            class="
+                cx-auth-orb
+                cx-auth-orb--two
+            ">
+        </div>
+
+        <div
+            class="
+                cx-auth-orb
+                cx-auth-orb--three
+            ">
+        </div>
+
+
+        <!-- PARTICLES -->
+
+        <div class="cx-auth-particles">
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+            <span class="cx-auth-particle"></span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AUTHENTICATION SHELL
+    ====================================================== -->
+
+    <div class="cx-auth-shell">
+
+        <!-- =================================================
+             LEFT PANEL
+        ================================================== -->
+
+        <section
+            class="cx-auth-left"
+            aria-label="ConnectX introduction">
+
+            {% block auth_left %}
+            {% endblock %}
+
+        </section>
+
+
+        <!-- =================================================
+             RIGHT PANEL
+        ================================================== -->
+
+        <section
+            class="cx-auth-right"
+            aria-label="Authentication">
+
+            <div class="cx-auth-card-shell">
+
+                {% block auth_right %}
+                {% endblock %}
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+{% block page_js %}
+
+    {% block auth_page_js %}
+    {% endblock %}
+
+{% endblock %}

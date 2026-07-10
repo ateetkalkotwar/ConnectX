@@ -1,0 +1,174 @@
+/* ==========================================================
+   CONNECTX CHECKBOX COMPONENT
+   Version: 1.0
+========================================================== */
+
+.cx-checkbox {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: var(--cx-space-3);
+
+    cursor: pointer;
+
+    user-select: none;
+
+}
+
+
+.cx-checkbox-input {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    opacity: 0;
+
+}
+
+
+.cx-checkbox-control {
+
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 19px;
+
+    height: 19px;
+
+    margin-top: 1px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 6px;
+
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    transition:
+        border-color var(--cx-transition-base),
+        background var(--cx-transition-base),
+        box-shadow var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-checkbox-control svg {
+
+    width: 13px;
+
+    height: 13px;
+
+    stroke: currentColor;
+
+    stroke-width: 3;
+
+    opacity: 0;
+
+    transform: scale(0.5);
+
+    transition:
+        opacity var(--cx-transition-fast),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-checkbox:hover .cx-checkbox-control {
+
+    border-color: var(--cx-primary-light);
+
+}
+
+
+.cx-checkbox-input:focus-visible + .cx-checkbox-control {
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.13);
+
+}
+
+
+.cx-checkbox-input:checked + .cx-checkbox-control {
+
+    border-color: transparent;
+
+    background: var(--cx-gradient-primary);
+
+    box-shadow:
+        0 5px 16px rgba(99, 102, 241, 0.28);
+
+}
+
+
+.cx-checkbox-input:checked + .cx-checkbox-control svg {
+
+    opacity: 1;
+
+    transform: scale(1);
+
+}
+
+
+.cx-checkbox-input:active + .cx-checkbox-control {
+
+    transform: scale(0.9);
+
+}
+
+
+.cx-checkbox-text {
+
+    color: var(--cx-text-secondary);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+}
+
+
+.cx-checkbox-text a {
+
+    color: var(--cx-primary-light);
+
+    font-weight: var(--cx-font-medium);
+
+    transition:
+        color var(--cx-transition-base);
+
+}
+
+
+.cx-checkbox-text a:hover {
+
+    color: var(--cx-accent-light);
+
+}
+
+
+.cx-checkbox--error .cx-checkbox-control {
+
+    border-color: var(--cx-error);
+
+}
+
+
+.cx-checkbox--error .cx-checkbox-text {
+
+    color: var(--cx-error-light);
+
+}

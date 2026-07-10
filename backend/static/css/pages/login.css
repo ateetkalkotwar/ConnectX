@@ -1,0 +1,820 @@
+/* ==========================================================
+   CONNECTX LOGIN PAGE
+   Version: 1.0
+========================================================== */
+
+
+/* ==========================================================
+   LOGIN HERO
+========================================================== */
+
+.cx-login-hero {
+
+    width: 100%;
+
+    max-width: 620px;
+
+}
+
+
+/* ==========================================================
+   BRAND
+========================================================== */
+
+.cx-login-brand {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 54px;
+
+}
+
+
+.cx-login-brand-mark {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    border: 1px solid rgba(129, 140, 248, 0.28);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.22),
+            rgba(6, 182, 212, 0.14)
+        );
+
+    box-shadow:
+        0 14px 38px rgba(79, 70, 229, 0.18);
+
+}
+
+
+.cx-login-brand-mark svg {
+
+    width: 27px;
+
+    height: 27px;
+
+    stroke: #ffffff;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.cx-login-brand-name {
+
+    color: var(--cx-text-primary);
+
+    font-size: 25px;
+
+    font-weight: var(--cx-font-extrabold);
+
+    letter-spacing: 2px;
+
+}
+
+
+.cx-login-brand-name span {
+
+    color: var(--cx-accent);
+
+}
+
+
+/* ==========================================================
+   HERO HEADING
+========================================================== */
+
+.cx-login-heading {
+
+    margin-bottom: 48px;
+
+}
+
+
+.cx-login-heading h1 {
+
+    margin: 0;
+
+    color: var(--cx-text-primary);
+
+    font-size:
+        clamp(
+            52px,
+            5vw,
+            78px
+        );
+
+    font-weight: var(--cx-font-extrabold);
+
+    line-height: 0.98;
+
+    letter-spacing: -3px;
+
+}
+
+
+.cx-login-heading h1 span {
+
+    background:
+        linear-gradient(
+            90deg,
+            #8b5cf6,
+            #6366f1,
+            #22d3ee
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+
+}
+
+
+.cx-login-heading p {
+
+    max-width: 530px;
+
+    margin-top: 28px;
+
+    color: var(--cx-text-secondary);
+
+    font-size: 17px;
+
+    line-height: 1.75;
+
+}
+
+
+/* ==========================================================
+   LOGIN FEATURES
+========================================================== */
+
+.cx-login-features {
+
+    display: grid;
+
+    gap: 16px;
+
+    width: 100%;
+
+    max-width: 540px;
+
+}
+
+
+.cx-login-feature {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 18px 20px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: var(--cx-radius-lg);
+
+    background: rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        border-color var(--cx-transition-base),
+        background var(--cx-transition-base),
+        transform var(--cx-transition-base);
+
+}
+
+
+.cx-login-feature:hover {
+
+    border-color: rgba(129, 140, 248, 0.32);
+
+    background: rgba(255, 255, 255, 0.06);
+
+    transform: translateX(6px);
+
+}
+
+
+.cx-login-feature-icon {
+
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 15px;
+
+    color: var(--cx-primary-light);
+
+    background: rgba(99, 102, 241, 0.12);
+
+}
+
+
+.cx-login-feature-icon svg {
+
+    width: 23px;
+
+    height: 23px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.cx-login-feature h3 {
+
+    margin: 0 0 5px;
+
+    color: var(--cx-text-primary);
+
+    font-size: 15px;
+
+    font-weight: var(--cx-font-semibold);
+
+}
+
+
+.cx-login-feature p {
+
+    margin: 0;
+
+    color: var(--cx-text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+}
+
+
+/* ==========================================================
+   LOGIN CARD
+========================================================== */
+
+.cx-login-card {
+
+    width: 100%;
+
+    max-width: 560px;
+
+}
+
+
+.cx-login-card .cx-card-content {
+
+    padding:
+        clamp(
+            32px,
+            4vw,
+            52px
+        );
+
+}
+
+
+/* ==========================================================
+   CARD HEADER
+========================================================== */
+
+.cx-login-card-header {
+
+    margin-bottom: 34px;
+
+    text-align: center;
+
+}
+
+
+.cx-login-card-header h2 {
+
+    margin: 0;
+
+    color: var(--cx-text-primary);
+
+    font-size:
+        clamp(
+            30px,
+            3vw,
+            42px
+        );
+
+    font-weight: var(--cx-font-bold);
+
+    line-height: 1.15;
+
+    letter-spacing: -1.2px;
+
+}
+
+
+.cx-login-card-header p {
+
+    margin-top: 12px;
+
+    color: var(--cx-text-secondary);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* ==========================================================
+   LOGIN FORM
+========================================================== */
+
+.cx-login-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    width: 100%;
+
+}
+
+
+/* ==========================================================
+   LOGIN OPTIONS
+========================================================== */
+
+.cx-login-options {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.cx-login-forgot {
+
+    color: var(--cx-primary-light);
+
+    font-size: 13px;
+
+    font-weight: var(--cx-font-semibold);
+
+    transition:
+        color var(--cx-transition-base),
+        opacity var(--cx-transition-base);
+
+}
+
+
+.cx-login-forgot:hover {
+
+    color: var(--cx-accent);
+
+}
+
+
+/* ==========================================================
+   FORM MESSAGE
+========================================================== */
+
+.cx-login-form-message {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    border-radius: var(--cx-radius-md);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+.cx-login-form-message svg {
+
+    flex: 0 0 auto;
+
+    width: 19px;
+
+    height: 19px;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.cx-login-form-message--error {
+
+    border: 1px solid rgba(239, 68, 68, 0.3);
+
+    color: var(--cx-error-light);
+
+    background: rgba(239, 68, 68, 0.08);
+
+}
+
+
+/* ==========================================================
+   REGISTER LINK
+========================================================== */
+
+.cx-login-register {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color: var(--cx-text-muted);
+
+    font-size: 13px;
+
+    text-align: center;
+
+}
+
+
+.cx-login-register a {
+
+    color: var(--cx-primary-light);
+
+    font-weight: var(--cx-font-semibold);
+
+}
+
+
+.cx-login-register a:hover {
+
+    color: var(--cx-accent);
+
+}
+
+
+/* ==========================================================
+   LARGE DESKTOP
+========================================================== */
+
+@media (min-width: 1440px) {
+
+    .cx-login-card {
+
+        max-width: 580px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   LAPTOP HEIGHT
+========================================================== */
+
+@media (max-height: 820px) and (min-width: 1025px) {
+
+    .cx-login-brand {
+
+        margin-bottom: 30px;
+
+    }
+
+
+    .cx-login-heading {
+
+        margin-bottom: 30px;
+
+    }
+
+
+    .cx-login-heading h1 {
+
+        font-size: 58px;
+
+    }
+
+
+    .cx-login-heading p {
+
+        margin-top: 20px;
+
+        font-size: 15px;
+
+    }
+
+
+    .cx-login-features {
+
+        gap: 11px;
+
+    }
+
+
+    .cx-login-feature {
+
+        padding: 13px 16px;
+
+    }
+
+
+    .cx-login-feature-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+
+    .cx-login-card .cx-card-content {
+
+        padding: 34px 40px;
+
+    }
+
+
+    .cx-login-card-header {
+
+        margin-bottom: 26px;
+
+    }
+
+
+    .cx-login-form {
+
+        gap: 16px;
+
+    }
+
+}
+
+
+/* ==========================================================
+   TABLET
+========================================================== */
+
+@media (max-width: 1024px) {
+
+    .cx-login-hero {
+
+        max-width: 760px;
+
+        margin-inline: auto;
+
+        text-align: center;
+
+    }
+
+
+    .cx-login-brand {
+
+        margin-bottom: 36px;
+
+    }
+
+
+    .cx-login-heading p {
+
+        margin-inline: auto;
+
+    }
+
+
+    .cx-login-features {
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+
+        max-width: 100%;
+
+        margin-inline: auto;
+
+    }
+
+
+    .cx-login-feature {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        text-align: left;
+
+    }
+
+
+    .cx-login-card {
+
+        max-width: 620px;
+
+        margin-inline: auto;
+
+    }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 767px) {
+
+    .cx-login-brand {
+
+        margin-bottom: 28px;
+
+    }
+
+
+    .cx-login-brand-mark {
+
+        width: 43px;
+
+        height: 43px;
+
+    }
+
+
+    .cx-login-brand-name {
+
+        font-size: 21px;
+
+    }
+
+
+    .cx-login-heading {
+
+        margin-bottom: 32px;
+
+    }
+
+
+    .cx-login-heading h1 {
+
+        font-size:
+            clamp(
+                44px,
+                14vw,
+                62px
+            );
+
+        letter-spacing: -2px;
+
+    }
+
+
+    .cx-login-heading p {
+
+        margin-top: 20px;
+
+        font-size: 15px;
+
+        line-height: 1.65;
+
+    }
+
+
+    .cx-login-features {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .cx-login-feature {
+
+        flex-direction: row;
+
+        align-items: center;
+
+    }
+
+
+    .cx-login-card .cx-card-content {
+
+        padding: 28px 22px;
+
+    }
+
+
+    .cx-login-card-header {
+
+        margin-bottom: 28px;
+
+    }
+
+
+    .cx-login-card-header h2 {
+
+        font-size: 30px;
+
+    }
+
+
+    .cx-login-form {
+
+        gap: 18px;
+
+    }
+
+
+    .cx-login-options {
+
+        align-items: flex-start;
+
+    }
+
+}
+
+
+/* ==========================================================
+   SMALL MOBILE
+========================================================== */
+
+@media (max-width: 420px) {
+
+    .cx-login-options {
+
+        flex-direction: column;
+
+        gap: 14px;
+
+    }
+
+
+    .cx-login-forgot {
+
+        align-self: flex-end;
+
+    }
+
+
+    .cx-login-register {
+
+        flex-wrap: wrap;
+
+    }
+
+}
