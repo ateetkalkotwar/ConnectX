@@ -1,29 +1,7 @@
 /* ==========================================================
    CONNECTX GLOBAL FOUNDATION
 ========================================================== */
-html,
-body {
-    margin: 0 !important;
-    padding: 0 !important;
-}
 
-
-/* ==========================================================
-   CONNECTX GLOBAL FOUNDATION
-========================================================== */
-
-html,
-body {
-    width: 100%;
-    min-height: 100%;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    border: 0 !important;
-
-    background: #030712;
-}
 html,
 body {
     width: 100%;

@@ -122,16 +122,33 @@
 
     <div class="cx-meeting-room-body">
 
+        <div class="cx-meeting-workspace">
 
-        <!-- =================================================
-             MEETING STAGE
-        ================================================== -->
+        <!-- ==========================================
+             ACTIVE WORKSPACE
+        =========================================== -->
 
         <main class="cx-meeting-room-main">
 
             <section
-                class="cx-meeting-video-grid"
-                data-video-grid>
+                class="cx-meeting-stage"
+                data-video-stage>
+
+                <div
+                    class="cx-meeting-stage-video"
+                    data-active-video-stage>
+
+                </div>
+
+            </section>
+
+            <section
+                class="cx-meeting-thumbnail-strip"
+                data-thumbnail-strip>
+
+                <div
+                    class="cx-meeting-video-grid"
+                    data-video-grid>
 
 
                 <!-- =========================================
@@ -185,6 +202,8 @@
                     </div>
 
                 </article>
+
+                </div>
 
             </section>
 

@@ -8,6 +8,7 @@
    - Dynamic participant creation
    - Dynamic participant removal
    - Participant state UI
+   - Participant speaking UI
    - Participant activity toasts
    - Participant lookup by user ID
    - Participant lookup by participation ID
@@ -26,6 +27,7 @@
    - Create meeting WebSocket
    - Create signaling WebSocket
    - Manage WebRTC peers
+   - Analyse audio streams
    - Send moderation requests
    - Access camera or microphone
 ========================================================== */
@@ -415,7 +417,313 @@ function getParticipantRoleLabel(
 
 
 /* ==========================================================
-   CREATE PARTICIPANT STATE ICON
+   CREATE SPEAKING INDICATOR MARKUP
+========================================================== */
+
+
+function createSpeakingIndicatorMarkup() {
+
+    return `
+
+        <span
+            class="cx-participant-speaking-indicator"
+            data-participant-speaking-indicator
+            title="Speaking"
+            aria-label="Speaking"
+            aria-hidden="true">
+
+            <span
+                class="cx-participant-speaking-bar">
+            </span>
+
+            <span
+                class="cx-participant-speaking-bar">
+            </span>
+
+            <span
+                class="cx-participant-speaking-bar">
+            </span>
+
+        </span>
+
+    `;
+
+}
+
+
+/* ==========================================================
+   ENSURE SPEAKING INDICATOR
+========================================================== */
+
+
+function ensureSpeakingIndicator(
+    participantElement
+) {
+
+    if (!participantElement) {
+
+        return null;
+
+    }
+
+
+    let speakingIndicator = (
+
+        participantElement.querySelector(
+            "[data-participant-speaking-indicator]"
+        )
+
+    );
+
+
+    if (speakingIndicator) {
+
+        return speakingIndicator;
+
+    }
+
+
+    const participantInfo = (
+
+        participantElement.querySelector(
+            ".cx-meeting-room-participant-info"
+        )
+
+    );
+
+
+    if (!participantInfo) {
+
+        return null;
+
+    }
+
+
+    const indicatorContainer = (
+        document.createElement(
+            "span"
+        )
+    );
+
+
+    indicatorContainer.innerHTML = (
+        createSpeakingIndicatorMarkup()
+    );
+
+
+    speakingIndicator = (
+
+        indicatorContainer.firstElementChild
+
+    );
+
+
+    if (!speakingIndicator) {
+
+        return null;
+
+    }
+
+
+    participantInfo.appendChild(
+        speakingIndicator
+    );
+
+
+    return speakingIndicator;
+
+}
+
+
+/* ==========================================================
+   SET PARTICIPANT SPEAKING STATE
+========================================================== */
+
+
+function setParticipantSpeaking(
+    userId,
+    speaking,
+    audioLevel = 0
+) {
+
+    const normalizedUserId = Number(
+        userId
+    );
+
+
+    if (
+
+        !Number.isInteger(
+            normalizedUserId
+        )
+
+        ||
+
+        normalizedUserId <= 0
+
+    ) {
+
+        return false;
+
+    }
+
+
+    const participantElement = (
+
+        getParticipantByUserId(
+            normalizedUserId
+        )
+
+    );
+
+
+    if (!participantElement) {
+
+        return false;
+
+    }
+
+
+    const isSpeaking = Boolean(
+        speaking
+    );
+
+
+    const normalizedAudioLevel = Math.max(
+
+        0,
+
+        Math.min(
+
+            1,
+
+            Number(audioLevel)
+            ||
+            0
+
+        )
+
+    );
+
+
+    const speakingIndicator = (
+
+        ensureSpeakingIndicator(
+            participantElement
+        )
+
+    );
+
+
+    participantElement.classList.toggle(
+
+        "cx-meeting-room-participant--speaking",
+
+        isSpeaking
+
+    );
+
+
+    participantElement.dataset.speaking = String(
+        isSpeaking
+    );
+
+
+    participantElement.style.setProperty(
+
+        "--cx-participant-audio-level",
+
+        String(
+            normalizedAudioLevel
+        )
+
+    );
+
+
+    if (speakingIndicator) {
+
+        speakingIndicator.classList.toggle(
+
+            "cx-participant-speaking-indicator--active",
+
+            isSpeaking
+
+        );
+
+
+        speakingIndicator.setAttribute(
+
+            "aria-hidden",
+
+            String(
+                !isSpeaking
+            )
+
+        );
+
+    }
+
+
+    const videoTile = document.querySelector(
+
+        `[data-remote-video-user-id="${normalizedUserId}"]`
+
+    );
+
+
+    if (videoTile) {
+
+        videoTile.classList.toggle(
+
+            "cx-meeting-video-tile--speaking",
+
+            isSpeaking
+
+        );
+
+
+        videoTile.style.setProperty(
+
+            "--cx-participant-audio-level",
+
+            String(
+                normalizedAudioLevel
+            )
+
+        );
+
+    }
+
+
+    return true;
+
+}
+
+
+/* ==========================================================
+   CLEAR PARTICIPANT SPEAKING STATE
+========================================================== */
+
+
+function clearParticipantSpeaking(
+    userId
+) {
+
+    return setParticipantSpeaking(
+
+        userId,
+
+        false,
+
+        0
+
+    );
+
+}
+
+
+/* ==========================================================
+   CREATE PARTICIPANT STATE MARKUP
 ========================================================== */
 
 
@@ -481,9 +789,15 @@ function createParticipantStateMarkup(
                 title="${escapeHtml(microphoneState)}"
                 aria-label="${escapeHtml(microphoneState)}">
 
-                ${participant.is_muted || participant.forced_muted
-                    ? "Mic off"
-                    : "Mic on"}
+                ${
+                    participant.is_muted
+                    ||
+                    participant.forced_muted
+
+                        ? "Mic off"
+
+                        : "Mic on"
+                }
 
             </span>
 
@@ -692,6 +1006,11 @@ function createParticipantElement(
     );
 
 
+    participantElement.dataset.speaking = (
+        "false"
+    );
+
+
     if (participant.moderation_url) {
 
         participantElement.dataset.moderationUrl = (
@@ -756,6 +1075,9 @@ function createParticipantElement(
                 ${roleLabel}
 
             </small>
+
+
+            ${createSpeakingIndicatorMarkup()}
 
         </div>
 
@@ -847,6 +1169,29 @@ function updateParticipantStateUI(
     }
 
 
+    ensureSpeakingIndicator(
+        participantElement
+    );
+
+
+    const usernameElement = (
+
+        participantElement.querySelector(
+            "[data-participant-username]"
+        )
+
+    );
+
+
+    const roleElement = (
+
+        participantElement.querySelector(
+            "[data-participant-role]"
+        )
+
+    );
+
+
     const microphoneState = (
 
         participantElement.querySelector(
@@ -872,6 +1217,28 @@ function updateParticipantStateUI(
         )
 
     );
+
+
+    if (usernameElement) {
+
+        usernameElement.textContent = (
+            participant.username
+        );
+
+    }
+
+
+    if (roleElement) {
+
+        roleElement.textContent = (
+
+            getParticipantRoleLabel(
+                participant.role
+            )
+
+        );
+
+    }
 
 
     if (microphoneState) {
@@ -914,6 +1281,19 @@ function updateParticipantStateUI(
             microphoneLabel
 
         );
+
+
+        if (
+            participant.is_muted
+            ||
+            participant.forced_muted
+        ) {
+
+            clearParticipantSpeaking(
+                participant.user_id
+            );
+
+        }
 
     }
 
@@ -1254,6 +1634,11 @@ function removeParticipant(
     );
 
 
+    clearParticipantSpeaking(
+        userId
+    );
+
+
     participantElement.remove();
 
 
@@ -1517,7 +1902,20 @@ function initializeServerRenderedParticipants() {
 
                 );
 
+
+                return;
+
             }
+
+
+            participantElement.dataset.speaking = (
+                "false"
+            );
+
+
+            ensureSpeakingIndicator(
+                participantElement
+            );
 
         }
     );
@@ -1561,6 +1959,10 @@ export {
     getParticipantByUserId,
 
     updateParticipantCount,
+
+    setParticipantSpeaking,
+
+    clearParticipantSpeaking,
 
     createParticipantElement,
 

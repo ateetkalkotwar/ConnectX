@@ -20,6 +20,22 @@
 ========================================================== */
 
 
+// These functions will be moved to video_stage.js
+// after the video stage implementation is complete.
+
+
+import {
+
+    attachRemoteStream,
+
+    updateRemoteVideoVisibility,
+
+    removeRemoteVideoTile,
+
+} from "./video_stage.js";
+
+
+
 import {
     getMeetingContext,
 } from "./meeting_context.js";
@@ -386,133 +402,6 @@ function createRemoteVideoTile(
 
 
 /* ==========================================================
-   UPDATE REMOTE VIDEO VISIBILITY
-========================================================== */
-
-
-function updateRemoteVideoVisibility(
-    userId
-) {
-
-    const context = getMeetingContext();
-
-
-    const normalizedUserId = Number(
-        userId
-    );
-
-
-    const stream = (
-
-        context
-            .remoteStreams
-            .get(
-                normalizedUserId
-            )
-
-    );
-
-
-    const tile = (
-
-        context
-            .elements
-            .videoGrid
-            ?.querySelector(
-
-                `[data-video-participant-id="${normalizedUserId}"]`
-
-            )
-
-    );
-
-
-    if (
-        !stream
-        ||
-        !tile
-    ) {
-
-        return;
-
-    }
-
-
-    const remoteVideo = (
-
-        tile.querySelector(
-            "[data-remote-video]"
-        )
-
-    );
-
-
-    const placeholder = (
-
-        tile.querySelector(
-            "[data-remote-video-placeholder]"
-        )
-
-    );
-
-
-    if (!remoteVideo) {
-
-        return;
-
-    }
-
-
-    const videoTrack = (
-
-        stream
-            .getVideoTracks()[0]
-
-        ||
-
-        null
-
-    );
-
-
-    const hasLiveVideo = (
-
-        Boolean(
-            videoTrack
-        )
-
-        &&
-
-        videoTrack.readyState === "live"
-
-        &&
-
-        !videoTrack.muted
-
-    );
-
-
-    remoteVideo.hidden = (
-        !hasLiveVideo
-    );
-
-
-    if (placeholder) {
-
-        placeholder.classList.toggle(
-
-            "cx-meeting-video-placeholder--hidden",
-
-            hasLiveVideo
-
-        );
-
-    }
-
-}
-
-
-/* ==========================================================
    BIND REMOTE TRACK VISIBILITY
 ========================================================== */
 
@@ -550,84 +439,6 @@ function bindRemoteTrackVisibility(
 
 }
 
-
-/* ==========================================================
-   ATTACH REMOTE STREAM
-========================================================== */
-
-
-function attachRemoteStream(
-    userId,
-    username,
-    stream
-) {
-
-    const tile = (
-
-        createRemoteVideoTile(
-            userId,
-            username
-        )
-
-    );
-
-
-    if (!tile) {
-
-        return;
-
-    }
-
-
-    const remoteVideo = (
-
-        tile.querySelector(
-            "[data-remote-video]"
-        )
-
-    );
-
-
-    if (!remoteVideo) {
-
-        return;
-
-    }
-
-
-    if (
-        remoteVideo.srcObject !== stream
-    ) {
-
-        remoteVideo.srcObject = (
-            stream
-        );
-
-    }
-
-
-    updateRemoteVideoVisibility(
-        userId
-    );
-
-
-    remoteVideo
-        .play()
-        .catch(
-            (error) => {
-
-                console.warn(
-
-                    "ConnectX remote media autoplay blocked:",
-
-                    error
-
-                );
-
-            }
-        );
-
-}
 
 
 /* ==========================================================
@@ -2012,227 +1823,100 @@ async function replaceOutgoingVideoTrack(
 
 
 /* ==========================================================
-   REMOVE REMOTE VIDEO TILE
-========================================================== */
-
-
-function removeRemoteVideoTile(
-    userId
-) {
-
-    const context = getMeetingContext();
-
-
-    const normalizedUserId = Number(
-        userId
-    );
-
-
-    const tile = (
-
-        context
-            .elements
-            .videoGrid
-            ?.querySelector(
-
-                `[data-video-participant-id="${normalizedUserId}"]`
-
-            )
-
-    );
-
-
-    if (!tile) {
-
-        return;
-
-    }
-
-
-    const remoteVideo = (
-
-        tile.querySelector(
-            "[data-remote-video]"
-        )
-
-    );
-
-
-    if (remoteVideo) {
-
-        remoteVideo.pause();
-
-
-        remoteVideo.srcObject = null;
-
-    }
-
-
-    tile.remove();
-
-
-    console.log(
-
-        "ConnectX remote video tile removed:",
-
-        normalizedUserId
-
-    );
-
-}
-
-
-/* ==========================================================
    CLEANUP PEER
 ========================================================== */
 
-
-function cleanupPeer(
-    userId
-) {
+function cleanupPeer(userId) {
 
     const context = getMeetingContext();
 
+    const normalizedUserId = Number(userId);
 
-    const normalizedUserId = Number(
-        userId
+    const peerConnection = context.peerConnections.get(
+        normalizedUserId
     );
 
-
-    const peerConnection = (
-
-        context
-            .peerConnections
-            .get(
-                normalizedUserId
-            )
-
-    );
-
-
-    if (peerConnection) {
-
-        context.peerConnections.delete(
-            normalizedUserId
-        );
-
-
-        try {
-
-            peerConnection.close();
-
-        } catch (error) {
-
-            console.warn(
-
-                "ConnectX peer close error:",
-
-                error
-
-            );
-
-        }
-
+    if (!peerConnection) {
+        return;
     }
 
+    try {
 
-    const remoteStream = (
+        peerConnection.ontrack = null;
+        peerConnection.onicecandidate = null;
+        peerConnection.onconnectionstatechange = null;
+        peerConnection.oniceconnectionstatechange = null;
 
-        context
-            .remoteStreams
-            .get(
-                normalizedUserId
-            )
+        peerConnection.getSenders().forEach((sender) => {
 
-    );
+            try {
+                sender.replaceTrack(null);
+            } catch (error) {}
 
+        });
 
-    if (remoteStream) {
+        peerConnection.close();
 
-        remoteStream
-            .getTracks()
-            .forEach(
-                (track) => {
+    } catch (error) {
 
-                    track.stop();
-
-                }
-            );
-
-
-        context.remoteStreams.delete(
-            normalizedUserId
+        console.warn(
+            "ConnectX peer cleanup warning:",
+            error
         );
 
     }
 
+    context.peerConnections.delete(
+        normalizedUserId
+    );
 
     context.pendingIceCandidates.delete(
         normalizedUserId
     );
 
-
-    context.peerUsernames.delete(
+    context.remoteStreams.delete(
         normalizedUserId
     );
-
-
-    removeRemoteVideoTile(
-        normalizedUserId
-    );
-
 
     console.log(
-
-        "ConnectX WebRTC peer cleaned:",
-
+        "ConnectX peer cleaned:",
         normalizedUserId
-
     );
 
 }
+
 
 
 /* ==========================================================
    CLEANUP ALL PEERS
 ========================================================== */
 
-
 function cleanupAllPeers() {
 
     const context = getMeetingContext();
 
-
-    const peerIds = (
-
-        Array.from(
-            context
-                .peerConnections
-                .keys()
-        )
-
+    const peerIds = Array.from(
+        context.peerConnections.keys()
     );
 
+    peerIds.forEach((userId) => {
 
-    peerIds.forEach(
-        (userId) => {
+        cleanupPeer(userId);
 
-            cleanupPeer(
-                userId
-            );
+    });
 
-        }
-    );
-
-
+    context.peerConnections.clear();
+    context.remoteStreams.clear();
     context.pendingIceCandidates.clear();
-
+    context.peerUsernames.clear();
 
     console.log(
-        "ConnectX all WebRTC peers cleaned."
+        "ConnectX all peer connections cleaned."
     );
 
 }
+
+
 
 
 /* ==========================================================

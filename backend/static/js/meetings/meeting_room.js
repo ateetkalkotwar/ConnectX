@@ -24,6 +24,11 @@
 
 
 import {
+    initializeVideoStage,
+} from "./video_stage.js";
+
+
+import {
     initializeMeetingContext,
     getMeetingContext,
 } from "./meeting_context.js";
@@ -151,6 +156,9 @@ async function initializeMeetingRoom() {
 
 
         initializeParticipants();
+        
+
+        initializeVideoStage();
 
 
         initializeMeetingControls();
