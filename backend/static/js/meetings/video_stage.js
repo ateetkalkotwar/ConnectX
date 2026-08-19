@@ -105,8 +105,146 @@ function initializeVideoStage() {
             context.currentUserId
         );
 
-        runtime.activeParticipantId =
-            context.currentUserId;
+
+        const localVideo =
+            localTile.querySelector(
+                "[data-local-video]"
+            );
+
+        if (localVideo) {
+
+        localVideo.addEventListener(
+            "loadedmetadata",
+            () => {
+
+                const currentContext =
+                    getMeetingContext();
+
+                if (
+                    currentContext.localStream
+                ) {
+
+                    setActiveParticipant(
+                        currentContext.currentUserId
+                    );
+
+                }
+
+            },
+            { once: true }
+        );
+
+        localVideo.addEventListener(
+            "canplay",
+            () => {
+
+                const currentContext =
+                    getMeetingContext();
+
+                if (
+                    currentContext.localStream
+                ) {
+
+                    setActiveParticipant(
+                        currentContext.currentUserId
+                    );
+
+                }
+
+            },
+            { once: true }
+        );
+
+    }
+
+        if (
+            localVideo &&
+            context.localStream
+        ) {
+
+            if (
+                localVideo.srcObject !==
+                context.localStream
+            ) {
+
+                localVideo.srcObject =
+                    context.localStream;
+
+            }
+
+
+            /*
+            * Ensure the local camera video
+            * actually starts rendering frames.
+            */
+
+            localVideo.onloadedmetadata = () => {
+
+                localVideo.play().catch(
+                    (error) => {
+
+                        console.warn(
+                            "ConnectX local video metadata playback blocked:",
+                            error
+                        );
+
+                    }
+                );
+
+            };
+
+            localVideo.oncanplay = () => {
+
+                localVideo.play().catch(
+                    (error) => {
+
+                        console.warn(
+                            "ConnectX local video canplay playback blocked:",
+                            error
+                        );
+
+                    }
+                );
+
+            };
+
+            localVideo.muted = true;
+            localVideo.autoplay = true;
+            localVideo.playsInline = true;
+
+            localVideo.play().catch(
+                (error) => {
+
+                    console.warn(
+                        "ConnectX local video playback blocked:",
+                        error
+                    );
+
+                }
+            );
+
+        }
+
+        /*
+        * Do NOT set activeParticipantId
+        * manually here.
+        *
+        * Let setActiveParticipant()
+        * initialize the stage properly.
+        */
+
+        if (context.localStream) {
+
+            setActiveParticipant(
+                context.currentUserId
+            );
+
+        }
+        else {
+
+            runtime.activeParticipantId = null;
+
+        }
 
     }
 
@@ -1157,14 +1295,27 @@ function attachRemoteStream(
      */
 
     if (
-
         video.srcObject !== stream
-
     ) {
 
         video.srcObject = stream;
 
     }
+
+    video.hidden = false;
+
+    video.play().catch(
+        (error) => {
+
+            console.warn(
+                "ConnectX remote video immediate playback blocked:",
+                error
+            );
+
+        }
+    );
+
+
 
     /*
      * Start speaking detector.
@@ -1179,36 +1330,56 @@ function attachRemoteStream(
     );
 
     /*
-     * Update camera state.
-     */
+    * Update camera state immediately.
+    */
 
     updateRemoteVideoVisibility(
-
         participantId
-
     );
 
     /*
-     * Attempt autoplay.
-     */
+    * Re-check after remote video metadata
+    * becomes available.
+    */
 
-    video.play()
+    video.onloadedmetadata = () => {
 
-        .catch(
+        console.log(
+            "ConnectX remote video metadata loaded:",
+            {
+                participantId,
+                readyState: video.readyState,
+                videoWidth: video.videoWidth,
+                videoHeight: video.videoHeight,
+                srcObjectTracks:
+                    video.srcObject
+                        ? video.srcObject.getTracks().map(
+                            track => ({
+                                kind: track.kind,
+                                readyState: track.readyState,
+                                enabled: track.enabled
+                            })
+                        )
+                        : []
+            }
+        );
 
+        updateRemoteVideoVisibility(
+            participantId
+        );
+
+        video.play().catch(
             (error) => {
 
                 console.warn(
-
-                    "Autoplay blocked:",
-
+                    "ConnectX remote video playback blocked:",
                     error
-
                 );
 
             }
-
         );
+
+    };
 
     /*
      * If no participant is active,
@@ -1299,28 +1470,22 @@ function updateRemoteVideoVisibility(
     }
 
     /*
-     * Find current video track.
-     */
+    * Find current video track.
+    */
 
     const videoTrack =
-
         stream.getVideoTracks()[0] ||
-
         null;
 
     const hasVideo =
-
         Boolean(videoTrack) &&
-
         videoTrack.readyState === "live" &&
-
         videoTrack.enabled &&
-
         !videoTrack.muted;
 
     /*
-     * Show / Hide video.
-     */
+    * Show / Hide video.
+    */
 
     video.hidden = !hasVideo;
 
@@ -1359,37 +1524,46 @@ function updateRemoteVideoVisibility(
      */
 
     if (
-
         runtime.activeParticipantId ===
-
         participantId
-
     ) {
 
         const stageVideo =
-
             runtime.stage?.querySelector(
-
-                "[data-remote-video]"
-
+                "[data-stage-video]"
             );
 
-        if (
+        const stagePlaceholder =
+            runtime.stage?.querySelector(
+                "[data-stage-placeholder]"
+            );
 
-            stageVideo &&
-
-            stageVideo !== video
-
-        ) {
+        if (stageVideo) {
 
             stageVideo.srcObject =
-
-                stream;
+                hasVideo
+                    ? stream
+                    : null;
 
             stageVideo.hidden =
-
                 !hasVideo;
 
+        }
+
+        if (stagePlaceholder) {
+
+            stagePlaceholder.hidden =
+                hasVideo;
+
+            stagePlaceholder.classList.toggle(
+                "cx-stage-placeholder-visible",
+                !hasVideo
+            );
+
+            stagePlaceholder.innerHTML =
+                !hasVideo && placeholder
+                    ? placeholder.innerHTML
+                    : "";
         }
 
     }
@@ -1589,13 +1763,23 @@ function setActiveParticipant(
     );
 
     if (
-
         runtime.activeParticipantId ===
         participantId
-
     ) {
 
-        return;
+        const currentStream =
+            participantId ===
+            context.currentUserId
+                ? context.localStream
+                : context.remoteStreams.get(
+                    participantId
+                );
+
+        if (!currentStream) {
+
+            return;
+
+        }
 
     }
 
@@ -1740,18 +1924,12 @@ function setActiveParticipant(
     if (stream) {
 
         const track =
-
             stream.getVideoTracks()[0];
 
         hasVideo =
-
             Boolean(track) &&
-
             track.readyState === "live" &&
-
-            track.enabled &&
-
-            !track.muted;
+            track.enabled;
 
     }
 

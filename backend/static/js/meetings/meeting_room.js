@@ -256,8 +256,19 @@ async function initializeMeetingRoom() {
          * attempted before signaling starts.
          */
 
+        
+
+        console.log(
+            "ConnectX ABOUT TO CONNECT SIGNALING SOCKET"
+        );
+
 
         connectSignalingSocket();
+
+
+        console.log(
+            "ConnectX SIGNALING SOCKET CONNECT CALL COMPLETED"
+        );
 
 
         console.log(

@@ -25,6 +25,15 @@ import {
 
 
 /* ==========================================================
+   CAMERA RECOVERY
+========================================================== */
+
+let cameraRecoveryInProgress = false;
+
+let cameraDeviceChangeHandler = null;
+
+
+/* ==========================================================
    AUDIO TRACK
 ========================================================== */
 
@@ -160,6 +169,21 @@ function updateLocalVideoVisibility() {
 
     );
 
+    console.log(
+        "ConnectX LOCAL VIDEO VISIBILITY:",
+        {
+            hasVideoTrack: Boolean(videoTrack),
+            videoTrackReadyState: videoTrack
+                ? videoTrack.readyState
+                : null,
+            isVideoEnabled: context.isVideoEnabled,
+            forcedVideoDisabled: context.forcedVideoDisabled,
+            isScreenSharing: context.isScreenSharing,
+            shouldShowVideo: shouldShowVideo,
+            localVideoHiddenBefore: localVideo.hidden,
+        }
+    );
+
 
     localVideo.hidden = (
         !shouldShowVideo
@@ -207,11 +231,17 @@ async function showCameraStream() {
         context.localStream
     );
 
-
     localVideo.classList.remove(
         "cx-meeting-local-video--screen"
     );
 
+    localVideo.hidden = false;
+
+    if (context.elements.videoPlaceholder) {
+        context.elements.videoPlaceholder.classList.add(
+            "cx-meeting-video-placeholder--hidden"
+        );
+    }
 
     updateLocalVideoVisibility();
 
@@ -233,18 +263,31 @@ async function showCameraStream() {
 
     ) {
 
+
         try {
 
-            await localVideo.play();
+            const playPromise = localVideo.play();
+
+            if (playPromise) {
+
+                playPromise.catch(
+                    (error) => {
+
+                        console.warn(
+                            "ConnectX local camera playback blocked:",
+                            error
+                        );
+
+                    }
+                );
+
+            }
 
         } catch (error) {
 
             console.warn(
-
-                "ConnectX local camera playback blocked:",
-
+                "ConnectX local camera playback failed:",
                 error
-
             );
 
         }
@@ -352,6 +395,8 @@ async function initializeMicrophone() {
                     video: false,
 
                 })
+
+                
 
         );
 
@@ -529,6 +574,261 @@ async function initializeCamera() {
 }
 
 
+
+/* ==========================================================
+   RECOVER CAMERA
+========================================================== */
+
+async function recoverCamera() {
+
+    const context = getMeetingContext();
+
+    if (cameraRecoveryInProgress) {
+
+        return false;
+
+    }
+
+    cameraRecoveryInProgress = true;
+
+    try {
+
+        console.log(
+            "ConnectX camera recovery started."
+        );
+
+        const videoStream =
+            await navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: true,
+            });
+
+        const newVideoTrack =
+            videoStream.getVideoTracks()[0];
+
+        if (!newVideoTrack) {
+
+            videoStream
+                .getTracks()
+                .forEach(
+                    (track) => {
+                        track.stop();
+                    }
+                );
+
+            console.warn(
+                "ConnectX camera recovery failed: no video track."
+            );
+
+            return false;
+
+        }
+
+        newVideoTrack.enabled = (
+            context.isVideoEnabled
+            &&
+            !context.forcedVideoDisabled
+        );
+
+        /*
+         * Remove the old dead camera track.
+         */
+
+        const oldVideoTrack =
+            getVideoTrack();
+
+        if (oldVideoTrack) {
+
+            context.localStream.removeTrack(
+                oldVideoTrack
+            );
+
+            oldVideoTrack.stop();
+
+        }
+
+        /*
+         * Add the new camera track.
+         */
+
+        context.localStream.addTrack(
+            newVideoTrack
+        );
+
+        context.isVideoEnabled = true;
+
+        /*
+         * Reconnect the new camera track to
+         * every existing WebRTC peer.
+         *
+         * We will use the existing WebRTC
+         * replacement mechanism.
+         */
+
+        const {
+            replaceOutgoingVideoTrack
+        } = await import(
+            "./webrtc.js"
+        );
+
+        await replaceOutgoingVideoTrack(
+            newVideoTrack
+        );
+
+        /*
+         * Restore local video.
+         */
+
+        await showCameraStream();
+
+        updateLocalVideoVisibility();
+
+        console.log(
+            "ConnectX camera recovery completed:",
+            {
+                trackId:
+                    newVideoTrack.id,
+                readyState:
+                    newVideoTrack.readyState,
+                enabled:
+                    newVideoTrack.enabled,
+            }
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.warn(
+            "ConnectX camera recovery unavailable:",
+            error
+        );
+
+        context.isVideoEnabled = false;
+
+        updateLocalVideoVisibility();
+
+        return false;
+
+    } finally {
+
+        cameraRecoveryInProgress = false;
+
+    }
+
+}
+
+
+
+/* ==========================================================
+   MONITOR CAMERA TRACK
+========================================================== */
+
+function monitorCameraTrack(
+    videoTrack
+) {
+
+    if (!videoTrack) {
+
+        return;
+
+    }
+
+    videoTrack.addEventListener(
+        "ended",
+        () => {
+
+            console.warn(
+                "ConnectX camera track ended."
+            );
+
+            updateLocalVideoVisibility();
+
+            /*
+             * Give the browser/device a moment
+             * before attempting recovery.
+             */
+
+            window.setTimeout(
+                () => {
+
+                    recoverCamera();
+
+                },
+                500
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ==========================================================
+   MONITOR CAMERA DEVICE CHANGES
+========================================================== */
+
+function startCameraDeviceMonitoring() {
+
+    if (
+        !navigator.mediaDevices
+        ||
+        !navigator.mediaDevices.addEventListener
+    ) {
+
+        return;
+
+    }
+
+    if (cameraDeviceChangeHandler) {
+
+        return;
+
+    }
+
+    cameraDeviceChangeHandler =
+        () => {
+
+            const context =
+                getMeetingContext();
+
+            const currentTrack =
+                getVideoTrack();
+
+            /*
+             * If a live camera already exists,
+             * nothing needs to be recovered.
+             */
+
+            if (
+                currentTrack
+                &&
+                currentTrack.readyState === "live"
+            ) {
+
+                return;
+
+            }
+
+            console.log(
+                "ConnectX camera device change detected."
+            );
+
+            recoverCamera();
+
+        };
+
+    navigator.mediaDevices.addEventListener(
+        "devicechange",
+        cameraDeviceChangeHandler
+    );
+
+}
+
+
+
+
 /* ==========================================================
    INITIALIZE LOCAL MEDIA
 ========================================================== */
@@ -536,7 +836,15 @@ async function initializeCamera() {
 
 async function initializeLocalMedia() {
 
+    console.log(
+        "ConnectX initializeLocalMedia START"
+    );
+
     const context = getMeetingContext();
+
+    console.log(
+        "ConnectX requesting camera and microphone"
+    );
 
 
     if (
@@ -600,6 +908,13 @@ async function initializeLocalMedia() {
             .then(
                 (audioTrack) => {
 
+                    console.log(
+                        "ConnectX microphone initialization completed:",
+                        {
+                            available: Boolean(audioTrack),
+                        }
+                    );
+
                     if (audioTrack) {
 
                         context.localStream.addTrack(
@@ -623,9 +938,20 @@ async function initializeLocalMedia() {
             .then(
                 (videoTrack) => {
 
+                    console.log(
+                        "ConnectX camera initialization completed:",
+                        {
+                            available: Boolean(videoTrack),
+                        }
+                    );
+
                     if (videoTrack) {
 
                         context.localStream.addTrack(
+                            videoTrack
+                        );
+
+                        monitorCameraTrack(
                             videoTrack
                         );
 
@@ -649,11 +975,26 @@ async function initializeLocalMedia() {
     ]);
 
 
+    console.log(
+        "ConnectX media acquisition promises completed:",
+        {
+            audioTracks:
+                context.localStream
+                    .getAudioTracks()
+                    .length,
+
+            videoTracks:
+                context.localStream
+                    .getVideoTracks()
+                    .length,
+        }
+    );
+
+
     await showCameraStream();
 
 
     console.log(
-
         "ConnectX local media initialized:",
 
         {
@@ -682,6 +1023,8 @@ async function initializeLocalMedia() {
 
 
     return context.localStream;
+
+    startCameraDeviceMonitoring();
 
 }
 
@@ -936,5 +1279,7 @@ export {
     cleanupLocalMedia,
 
     stopLocalMedia,
+
+    recoverCamera,
 
 };

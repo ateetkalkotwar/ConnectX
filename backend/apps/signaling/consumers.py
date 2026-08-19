@@ -129,6 +129,16 @@ class SignalingConsumer(
             },
         )
 
+        await channel_layer.group_send(
+            self.signaling_group_name,
+            {
+                "type": "signaling_peer_sync_request",
+                "requester_user_id": self.user.pk,
+                "requester_username": self.user.username,
+                "requester_channel_name": self.channel_name,
+            },
+        )
+
 
         print(
             "ConnectX signaling socket connected:",
@@ -253,6 +263,41 @@ class SignalingConsumer(
             "type"
         )
 
+        if message_type == "signaling_peer_sync_request":
+
+            channel_layer = (
+                get_channel_layer()
+            )
+
+            if channel_layer is None:
+
+                await self.send_error(
+                    message=(
+                        "Signaling channel layer "
+                        "is unavailable."
+                    ),
+                )
+
+                return
+
+
+            await channel_layer.group_send(
+                self.signaling_group_name,
+                {
+                    "type": (
+                        "signaling_peer_sync_request"
+                    ),
+                    "requester_user_id": (
+                        self.user.pk
+                    ),
+                    "requester_channel_name": (
+                        self.channel_name
+                    ),
+                },
+            )
+
+            return
+
 
         if message_type == "ping":
 
@@ -271,6 +316,7 @@ class SignalingConsumer(
             "webrtc_offer",
             "webrtc_answer",
             "webrtc_ice_candidate",
+            
         }
 
 
@@ -430,6 +476,18 @@ class SignalingConsumer(
             return
 
 
+        print(
+            "ConnectX FORWARDING WEBRTC SIGNAL:",
+            {
+                "meeting_code": self.meeting_code,
+                "signal_type": signal_type,
+                "sender_user_id": current_user_id,
+                "target_user_id": target_user_id,
+                "target_participant_exists": target_participant_exists,
+            },
+        )
+
+
         await channel_layer.group_send(
             self.signaling_group_name,
             {
@@ -449,6 +507,8 @@ class SignalingConsumer(
                 "payload": payload,
             },
         )
+
+
 
 
     # ======================================================
@@ -494,6 +554,86 @@ class SignalingConsumer(
 
 
     # ======================================================
+    # SIGNALING PEER SYNC REQUEST
+    # ======================================================
+
+    async def signaling_peer_sync_request(
+        self,
+        event,
+    ):
+
+        current_user_id = getattr(
+            self.user,
+            "pk",
+            None,
+        )
+
+        requester_user_id = event.get(
+            "requester_user_id"
+        )
+
+        if (
+            requester_user_id is None
+            or
+            current_user_id is None
+        ):
+
+            return
+
+
+        if (
+            requester_user_id
+            ==
+            current_user_id
+        ):
+
+            return
+
+
+        channel_layer = (
+            get_channel_layer()
+        )
+
+
+        if channel_layer is None:
+
+            return
+
+
+        await channel_layer.send(
+            event["requester_channel_name"],
+            {
+                "type": "signaling_peer_ready_direct",
+                "user_id": current_user_id,
+                "username": self.user.username,
+            },
+        )
+
+
+    # ======================================================
+    # SIGNALING PEER READY DIRECT
+    # ======================================================
+
+    async def signaling_peer_ready_direct(
+        self,
+        event,
+    ):
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "signaling_peer_ready",
+                    "user_id": event[
+                        "user_id"
+                    ],
+                    "username": event[
+                        "username"
+                    ],
+                }
+            )
+        )
+
+    # ======================================================
     # WEBRTC SIGNAL EVENT
     # ======================================================
 
@@ -516,6 +656,18 @@ class SignalingConsumer(
         ):
 
             return
+
+
+        print(
+            "ConnectX DELIVERING WEBRTC SIGNAL:",
+            {
+                "meeting_code": self.meeting_code,
+                "signal_type": event["signal_type"],
+                "sender_user_id": event["sender_user_id"],
+                "target_user_id": event["target_user_id"],
+                "receiver_user_id": current_user_id,
+            },
+        )
 
 
         await self.send(

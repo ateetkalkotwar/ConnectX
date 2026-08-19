@@ -32,7 +32,8 @@ import {
     getScreenTrack,
     showCameraStream,
     showScreenStream,
-    stopMediaStream,
+    updateLocalVideoVisibility,
+    stopMediaStream
 } from "./media.js";
 
 
@@ -304,14 +305,24 @@ async function stopScreenShare(
 
     try {
 
-        await restoreCameraTrack();
+        /*
+        * Screen sharing is now ending.
+        *
+        * IMPORTANT:
+        * Set this BEFORE restoring the camera so that
+        * showCameraStream() does not hide the camera.
+        */
+        context.isScreenSharing = false;
 
+        await restoreCameraTrack();
 
         releaseScreenStream();
 
-
-        context.isScreenSharing = false;
-
+        /*
+        * Force the local camera UI to synchronize
+        * after the state transition.
+        */
+        updateLocalVideoVisibility();
 
         if (synchronizeState) {
 
@@ -370,16 +381,14 @@ async function stopScreenShare(
          */
 
 
-        releaseScreenStream();
-
-
         context.isScreenSharing = false;
 
+        releaseScreenStream();
 
         try {
-
             await restoreCameraTrack();
 
+            updateLocalVideoVisibility();
         } catch (restoreError) {
 
             console.error(

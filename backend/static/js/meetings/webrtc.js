@@ -46,6 +46,12 @@ import {
 } from "./participants.js";
 
 
+import {
+    getAudioTrack,
+    getVideoTrack,
+    getScreenTrack,
+} from "./media.js";
+
 /* ==========================================================
    RTC CONFIGURATION
 ========================================================== */
@@ -90,6 +96,13 @@ const RTC_CONFIGURATION = {
 
 
 let signalSender = null;
+
+
+/*
+ * Prevent concurrent offer creation for the
+ * same peer connection.
+ */
+const offerCreationInProgress = new Set();
 
 
 /* ==========================================================
@@ -540,88 +553,221 @@ function addRemoteTrack(
    ENSURE VIDEO TRANSCEIVER
 ========================================================== */
 
-
 function ensureVideoTransceiver(
     peerConnection
 ) {
 
-    const existingVideoTransceiver = (
-
+    const videoTransceiver = (
         peerConnection
             .getTransceivers()
             .find(
                 (transceiver) => {
 
                     return (
-
                         transceiver
                             .receiver
                             .track
-                            .kind
+                            ?.kind
                         ===
                         "video"
-
                     );
 
                 }
             )
-
     );
 
 
-    if (existingVideoTransceiver) {
+    if (videoTransceiver) {
 
-        return existingVideoTransceiver;
+        if (
+            videoTransceiver.direction
+            ===
+            "recvonly"
+        ) {
+
+            videoTransceiver.direction =
+                "sendrecv";
+
+        }
+
+        return videoTransceiver;
 
     }
 
 
-    const videoTransceiver = (
+    /*
+     * This should normally only happen for
+     * defensive recovery.
+     *
+     * New peer connections create their
+     * audio/video transceivers up front.
+     */
 
+    const newVideoTransceiver = (
         peerConnection.addTransceiver(
-
             "video",
-
             {
-
                 direction: "sendrecv",
-
             }
-
         )
-
     );
 
 
     console.log(
-        "ConnectX video transceiver created."
+        "ConnectX video transceiver created:",
+        {
+            mid: newVideoTransceiver.mid,
+            direction: newVideoTransceiver.direction,
+        }
     );
 
 
-    return videoTransceiver;
+    return newVideoTransceiver;
 
 }
+
+
+/* ==========================================================
+   INITIALIZE MEDIA TRANSCEIVERS
+========================================================== */
+
+function initializeMediaTransceivers(
+    peerConnection
+) {
+
+    /*
+     * IMPORTANT:
+     *
+     * Always create audio first and video second.
+     *
+     * This guarantees a stable m-line order:
+     *
+     *   m=audio
+     *   m=video
+     *
+     * Track replacement must never create a new
+     * media section during renegotiation.
+     */
+
+    const transceivers =
+        peerConnection.getTransceivers();
+
+
+    let audioTransceiver =
+        transceivers.find(
+            (transceiver) => {
+
+                return (
+                    transceiver
+                        .receiver
+                        .track
+                        ?.kind
+                    ===
+                    "audio"
+                );
+
+            }
+        );
+
+
+    if (!audioTransceiver) {
+
+        audioTransceiver =
+            peerConnection.addTransceiver(
+                "audio",
+                {
+                    direction: "sendrecv",
+                }
+            );
+
+    } else if (
+        audioTransceiver.direction
+        ===
+        "recvonly"
+    ) {
+
+        audioTransceiver.direction =
+            "sendrecv";
+
+    }
+
+
+    let videoTransceiver =
+        peerConnection.getTransceivers()
+            .find(
+                (transceiver) => {
+
+                    return (
+                        transceiver
+                            .receiver
+                            .track
+                            ?.kind
+                        ===
+                        "video"
+                    );
+
+                }
+            );
+
+
+    if (!videoTransceiver) {
+
+        videoTransceiver =
+            peerConnection.addTransceiver(
+                "video",
+                {
+                    direction: "sendrecv",
+                }
+            );
+
+    } else if (
+        videoTransceiver.direction
+        ===
+        "recvonly"
+    ) {
+
+        videoTransceiver.direction =
+            "sendrecv";
+
+    }
+
+
+    console.log(
+        "ConnectX media transceivers initialized:",
+        {
+            audioMid:
+                audioTransceiver.mid,
+
+            videoMid:
+                videoTransceiver.mid,
+
+            transceiverCount:
+                peerConnection
+                    .getTransceivers()
+                    .length,
+        }
+    );
+
+
+    return {
+        audioTransceiver,
+        videoTransceiver,
+    };
+
+}
+
 
 
 /* ==========================================================
    ATTACH LOCAL TRACKS
 ========================================================== */
 
-
-function attachLocalTracks(
+async function attachLocalTracks(
     peerConnection
 ) {
 
-    const context = getMeetingContext();
-
-
-    const videoTransceiver = (
-
-        ensureVideoTransceiver(
-            peerConnection
-        )
-
-    );
+    const context =
+        getMeetingContext();
 
 
     if (!context.localStream) {
@@ -630,118 +776,139 @@ function attachLocalTracks(
             "ConnectX local stream is unavailable."
         );
 
-
         return;
 
     }
 
 
-    const audioTracks = (
+    const {
+        audioTransceiver,
+        videoTransceiver,
+    } = initializeMediaTransceivers(
+        peerConnection
+    );
 
+
+    /* ======================================================
+       AUDIO
+    ====================================================== */
+
+    const audioTracks = (
         context
             .localStream
             .getAudioTracks()
-
     );
 
 
-    const videoTrack = (
-
-        context
-            .localStream
-            .getVideoTracks()[0]
-
-        ||
-
-        null
-
-    );
+    const audioTrack =
+        audioTracks[0] || null;
 
 
-    audioTracks.forEach(
-        (track) => {
+    if (
+        audioTrack
+        &&
+        audioTransceiver.sender.track?.id
+        !==
+        audioTrack.id
+    ) {
 
-            const senderExists = (
+        try {
 
-                peerConnection
-                    .getSenders()
-                    .some(
-                        (sender) => {
-
-                            return (
-
-                                sender.track
-                                ?.id
-                                ===
-                                track.id
-
-                            );
-
-                        }
-                    )
-
+            await audioTransceiver.sender.replaceTrack(
+                audioTrack
             );
 
+        } catch (error) {
 
-            if (senderExists) {
-
-                return;
-
-            }
-
-
-            peerConnection.addTrack(
-
-                track,
-
-                context.localStream
-
+            console.error(
+                "ConnectX audio track replacement error:",
+                error
             );
 
         }
-    );
+
+    }
 
 
-    if (videoTrack) {
+    /* ======================================================
+       VIDEO
+    ====================================================== */
 
-        videoTransceiver
-            .sender
-            .replaceTrack(
-                videoTrack
-            )
-            .catch(
-                (error) => {
+    let videoTrack = null;
 
-                    console.error(
 
-                        "ConnectX initial video track attachment error:",
+    if (
+        context.isScreenSharing
+        &&
+        context.screenStream
+    ) {
 
-                        error
+        videoTrack =
+            getScreenTrack();
 
-                    );
+    }
 
-                }
+
+    if (!videoTrack) {
+
+        videoTrack =
+            getVideoTrack();
+
+    }
+
+
+    if (
+        videoTransceiver.sender.track?.id
+        !==
+        videoTrack?.id
+    ) {
+
+        try {
+
+            await videoTransceiver.sender.replaceTrack(
+                videoTrack || null
             );
+
+        } catch (error) {
+
+            console.error(
+                "ConnectX video track replacement error:",
+                error
+            );
+
+        }
 
     }
 
 
     console.log(
-
         "ConnectX local tracks attached:",
-
         {
+            audioTracks:
+                audioTracks.length,
 
-            audioTracks: (
-                audioTracks.length
-            ),
+            hasVideoTrack:
+                Boolean(videoTrack),
 
-            hasVideoTrack: Boolean(
-                videoTrack
-            ),
+            audioSenderTrack:
+                audioTransceiver
+                    .sender
+                    .track
+                    ?.id
+                    || null,
 
+            videoSenderTrack:
+                videoTransceiver
+                    .sender
+                    .track
+                    ?.id
+                    || null,
+
+            transceivers:
+                peerConnection
+                    .getTransceivers()
+                    .length,
         }
-
     );
 
 }
@@ -836,21 +1003,33 @@ function handleRemoteTrack(
     );
 
 
-    console.log(
+        console.log(
+            "=============================="
+        );
 
-        "ConnectX remote track received:",
+        console.log(
+            "REMOTE TRACK",
+            {
+                userId,
+                username,
+                trackKind: event.track.kind,
+                trackId: event.track.id,
+                streamCount: event.streams.length,
+                streamTracks:
+                    event.streams[0]
+                        ?.getTracks()
+                        .map(track => ({
+                            kind: track.kind,
+                            id: track.id,
+                            enabled: track.enabled,
+                            readyState: track.readyState,
+                        })),
+            }
+        );
 
-        {
-
-            userId: userId,
-
-            username: username,
-
-            kind: event.track.kind,
-
-        }
-
-    );
+        console.log(
+            "=============================="
+        );
 
 }
 
@@ -886,6 +1065,16 @@ function handleConnectionStateChange(
         peerConnection.connectionState
     ) {
 
+        case "disconnected":
+
+            console.warn(
+                "ConnectX WebRTC peer temporarily disconnected:",
+                userId
+            );
+
+            break;
+
+
         case "failed":
 
             cleanupPeer(
@@ -907,7 +1096,6 @@ function handleConnectionStateChange(
         default:
 
             break;
-
     }
 
 }
@@ -1016,13 +1204,10 @@ function createPeerConnection(
 
 
     const peerConnection = (
-
         new RTCPeerConnection(
             RTC_CONFIGURATION
         )
-
     );
-
 
     context.peerConnections.set(
 
@@ -1033,9 +1218,27 @@ function createPeerConnection(
     );
 
 
-    attachLocalTracks(
-        peerConnection
-    );
+    
+
+
+    console.log("========================================");
+    console.log("CONNECTX RTP SENDERS");
+
+    peerConnection.getSenders().forEach((sender, index) => {
+        console.log(
+    `Sender ${index + 1}`,
+    "track =",
+    sender.track,
+    "kind =",
+    sender.track?.kind,
+    "id =",
+    sender.track?.id,
+    "readyState =",
+    sender.track?.readyState
+);
+    });
+
+    console.log("========================================");
 
 
     peerConnection.addEventListener(
@@ -1220,6 +1423,30 @@ async function createOfferForPeer(
     );
 
 
+    /*
+    * Do not create two offers for the same
+    * peer at the same time.
+    */
+    if (
+        offerCreationInProgress.has(
+            normalizedUserId
+        )
+    ) {
+
+        console.log(
+            "ConnectX offer creation already in progress:",
+            normalizedUserId
+        );
+
+        return;
+
+    }
+
+    offerCreationInProgress.add(
+        normalizedUserId
+    );
+
+
     if (
 
         normalizedUserId
@@ -1243,6 +1470,10 @@ async function createOfferForPeer(
 
         )
 
+    );
+
+    await attachLocalTracks(
+        peerConnection
     );
 
 
@@ -1276,18 +1507,59 @@ async function createOfferForPeer(
     }
 
 
-    try {
+        try {
+
+        console.log("========================================");
+        console.log("SENDERS BEFORE OFFER");
+
+
+        console.log("========== TRANSCEIVERS ==========");
+
+        peerConnection.getTransceivers().forEach((transceiver, index) => {
+            console.log(`Transceiver ${index + 1}`, {
+                mid: transceiver.mid,
+                direction: transceiver.direction,
+                currentDirection: transceiver.currentDirection,
+                senderKind: transceiver.sender.track?.kind,
+                senderHasTrack: !!transceiver.sender.track,
+                receiverKind: transceiver.receiver.track?.kind,
+            });
+        });
+
+        console.log("==================================");
+
+        console.log({
+            signalingState: peerConnection.signalingState,
+            connectionState: peerConnection.connectionState,
+            transceivers: peerConnection.getTransceivers().length,
+        });
+
+        peerConnection.getSenders().forEach((sender, index) => {
+            console.log(`Sender ${index + 1}`, {
+                kind: sender.track?.kind,
+                id: sender.track?.id,
+                enabled: sender.track?.enabled,
+                readyState: sender.track?.readyState,
+                hasTrack: sender.track !== null,
+            });
+        });
+
+        console.log("========================================");
 
         const offer = (
-
             await peerConnection.createOffer()
-
         );
 
 
         await peerConnection.setLocalDescription(
             offer
         );
+
+
+        console.log("========================================");
+        console.log("CONNECTX OFFER SDP");
+        console.log(peerConnection.localDescription.sdp);
+        console.log("========================================");
 
 
         sendWebRtcSignal(
@@ -1325,6 +1597,12 @@ async function createOfferForPeer(
 
             error
 
+        );
+
+    } finally {
+
+        offerCreationInProgress.delete(
+            normalizedUserId
         );
 
     }
@@ -1387,33 +1665,56 @@ async function handleWebRtcOffer(
     try {
 
         await peerConnection.setRemoteDescription(
-
             new RTCSessionDescription(
                 data.payload
             )
+        );
 
+        await attachLocalTracks(
+            peerConnection
         );
 
 
         await flushPendingIceCandidates(
-
             senderUserId,
-
             peerConnection
-
         );
 
+        console.log("========================================");
+        console.log("SENDERS BEFORE ANSWER");
+
+        console.log({
+            signalingState: peerConnection.signalingState,
+            connectionState: peerConnection.connectionState,
+            transceivers: peerConnection.getTransceivers().length,
+        });
+
+        peerConnection.getSenders().forEach((sender, index) => {
+            console.log(`Sender ${index + 1}`, {
+                kind: sender.track?.kind,
+                id: sender.track?.id,
+                enabled: sender.track?.enabled,
+                readyState: sender.track?.readyState,
+                hasTrack: sender.track !== null,
+            });
+        });
+
+        console.log("========================================");
 
         const answer = (
-
             await peerConnection.createAnswer()
-
         );
-
 
         await peerConnection.setLocalDescription(
             answer
         );
+
+
+        console.log("========================================");
+        console.log("CONNECTX ANSWER SDP");
+        console.log(peerConnection.localDescription.sdp);
+        console.log("========================================");
+
 
 
         sendWebRtcSignal(
@@ -1870,11 +2171,15 @@ function cleanupPeer(userId) {
         normalizedUserId
     );
 
+    offerCreationInProgress.delete(
+        normalizedUserId
+    );
+
     context.pendingIceCandidates.delete(
         normalizedUserId
     );
 
-    context.remoteStreams.delete(
+    removeRemoteVideoTile(
         normalizedUserId
     );
 

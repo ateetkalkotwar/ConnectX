@@ -184,12 +184,15 @@ function sendSignalingMessage(
     }
 
 
-    socket.send(
+    console.log(
+        "ConnectX RAW SIGNALING SEND:",
+        data
+    );
 
+    socket.send(
         JSON.stringify(
             data
         )
-
     );
 
 
@@ -210,6 +213,26 @@ function sendWebRtcSignal(
 ) {
 
     const context = getMeetingContext();
+
+
+    console.log(
+        "ConnectX sendWebRtcSignal CALLED:",
+        {
+            type: type,
+            targetUserId: targetUserId,
+            currentUserId: context.currentUserId,
+            socketReadyState: (
+                context.signalingSocket
+                    ? context.signalingSocket.readyState
+                    : null
+            ),
+            payloadExists: (
+                payload !== undefined
+                &&
+                payload !== null
+            ),
+        }
+    );
 
 
     const normalizedTargetUserId = Number(
@@ -864,6 +887,12 @@ function connectSignalingSocket() {
             console.log(
                 "ConnectX signaling WebSocket connected."
             );
+
+            sendSignalingMessage({
+
+                type: "signaling_peer_sync_request",
+
+            });
 
 
             sendSignalingMessage({
