@@ -56,6 +56,11 @@ import {
 
 
 import {
+    initializeChat,
+} from "./chat.js?v=20260827_1";
+
+
+import {
     initializeLocalMedia,
     cleanupLocalMedia,
 } from "./media.js";
@@ -76,6 +81,28 @@ import {
 import {
     cleanupAllPeers,
 } from "./webrtc.js";
+
+
+import {
+    initializeSidePanel,
+} from "./side_panel.js?v=20260827_1";
+
+
+import {
+    initializeMeetingShell,
+    shutdownMeetingShell,
+} from "./meeting_shell.js";
+
+
+import {
+    initializeMeetingUIVisibility,
+    shutdownMeetingUIVisibility,
+} from "./meeting_ui_visibility.js";
+
+
+import {
+    initializeMeetingShare,
+} from "./meeting_share.js";
 
 
 /* ==========================================================
@@ -154,6 +181,8 @@ async function initializeMeetingRoom() {
          * opening real-time connections.
          */
 
+        initializeMeetingShell();
+
 
         initializeParticipants();
         
@@ -168,6 +197,18 @@ async function initializeMeetingRoom() {
 
 
         initializeModeration();
+
+        
+        initializeChat();
+
+
+        initializeSidePanel();
+
+
+        initializeMeetingUIVisibility();
+        
+
+        initializeMeetingShare();
 
 
         /*
@@ -321,6 +362,12 @@ function shutdownMeetingRoom() {
     /*
      * Stop WebSocket reconnection first.
      */
+
+
+    shutdownMeetingUIVisibility();
+    
+
+    shutdownMeetingShell();
 
 
     disconnectMeetingSocket();

@@ -38,6 +38,8 @@ const runtime = {
 
     activeScreenShareUserId: null,
 
+    screenShares: new Map(),
+
     pinnedParticipantId: null,
 
     autoSwitchSpeaker: true,
@@ -263,80 +265,126 @@ function initializeVideoStage() {
 
 function createVideoStage() {
 
-    const parent = runtime.videoGrid.parentElement;
+    const grid =
+        runtime.videoGrid;
 
-    if (!parent) {
+
+    if (!grid) {
 
         throw new Error(
-            "ConnectX video container not found."
+            "ConnectX video grid not found."
         );
 
     }
 
+
     /*
-     * Stage container
+     * The existing meeting HTML already provides
+     * the thumbnail strip.
      */
 
-    let stage = parent.querySelector(
-        "[data-active-video-stage]"
-    );
+    const existingStrip =
+        grid.closest(
+            "[data-thumbnail-strip]"
+        )
+        ||
+        grid.closest(
+            ".cx-meeting-thumbnail-strip"
+        );
+
+
+    if (!existingStrip) {
+
+        throw new Error(
+            "ConnectX meeting thumbnail strip not found."
+        );
+
+    }
+
+
+    /*
+     * The main meeting container is the parent
+     * of the thumbnail strip.
+     */
+
+    const main =
+        existingStrip.parentElement;
+
+
+    if (!main) {
+
+        throw new Error(
+            "ConnectX meeting main container not found."
+        );
+
+    }
+
+
+    /*
+     * ACTIVE VIDEO STAGE
+     *
+     * The stage must be a sibling of the
+     * thumbnail strip.
+     */
+
+    let stage =
+        main.querySelector(
+            "[data-active-video-stage]"
+        );
+
 
     if (!stage) {
 
-        stage = document.createElement(
-            "section"
-        );
+        stage =
+            document.createElement(
+                "section"
+            );
+
 
         stage.className =
             "cx-video-stage";
 
-        stage.dataset.activeVideoStage = "";
 
-        parent.insertBefore(
+        stage.dataset.activeVideoStage =
+            "";
+
+
+        main.insertBefore(
             stage,
-            runtime.videoGrid
+            existingStrip
         );
 
     }
 
-    runtime.stage = stage;
+
+    runtime.stage =
+        stage;
+
 
     /*
-     * Thumbnail strip
+     * IMPORTANT:
+     *
+     * Reuse the existing ConnectX thumbnail
+     * strip instead of creating a second
+     * strip with a different class.
      */
 
-    let strip = parent.querySelector(
-        "[data-video-thumbnail-strip]"
-    );
+    const strip =
+        existingStrip;
 
-    if (!strip) {
 
-        strip = document.createElement(
-            "section"
-        );
+    runtime.thumbnailStrip =
+        strip;
 
-        strip.className =
-            "cx-video-thumbnail-strip";
-
-        strip.dataset.videoThumbnailStrip = "";
-
-        parent.appendChild(
-            strip
-        );
-
-    }
-
-    runtime.thumbnailStrip = strip;
 
     /*
-     * Move grid into strip only once.
+     * Keep the participant grid inside
+     * the existing thumbnail strip.
      */
 
     if (
-
         runtime.videoGrid.parentElement !==
         strip
-
     ) {
 
         strip.appendChild(
@@ -2210,72 +2258,371 @@ function startScreenShareStage(
     username = "Participant"
 ) {
 
-    const participantId = Number(
-        userId
+    const participantId =
+        Number(
+            userId
+        );
+
+
+    if (
+        !stream
+    ) {
+
+        return;
+
+    }
+
+
+    const stage =
+        ensureStageVideoElement();
+
+
+    if (
+        !stage
+    ) {
+
+        return;
+
+    }
+
+
+    runtime.screenShares.set(
+        participantId,
+        {
+            stream:
+                stream,
+
+            username:
+                username,
+        }
     );
 
-    if (!stream) {
-
-        return;
-
-    }
-
-    const stage = ensureStageVideoElement();
-
-    if (!stage) {
-
-        return;
-
-    }
 
     runtime.activeScreenShareUserId =
         participantId;
 
-    /*
-     * Screen sharing has highest priority.
-     */
 
     runtime.stage.classList.add(
         "cx-stage-screen-sharing"
     );
 
-    /*
-     * Display shared screen.
-     */
 
-    stage.video.srcObject = stream;
+    renderScreenShareStage();
 
-    stage.video.hidden = false;
-
-    stage.placeholder.hidden = true;
-
-    stage.meta.innerHTML = "";
-
-    const title = document.createElement(
-        "div"
-    );
-
-    title.className =
-        "cx-stage-screen-share-title";
-
-    title.textContent =
-        `${username} is presenting`;
-
-    stage.meta.appendChild(
-        title
-    );
-
-    stage.video.play()
-
-        .catch(() => {});
 
     console.log(
-
         "ConnectX screen sharing started:",
-
         participantId
-
     );
+
+}
+
+
+
+function renderScreenShareStage() {
+
+    const stage =
+        ensureStageVideoElement();
+
+
+    if (
+        !stage
+    ) {
+
+        return;
+
+    }
+
+
+    const shares =
+        Array.from(
+            runtime.screenShares.entries()
+        );
+
+
+    /*
+     * No active screen shares.
+     */
+
+    if (
+        shares.length === 0
+    ) {
+
+        const grid =
+            runtime.stage.querySelector(
+                ".cx-screen-share-grid"
+            );
+
+
+        if (
+            grid
+        ) {
+
+            grid.remove();
+
+        }
+
+
+        stage.container.hidden =
+            false;
+
+
+        stage.video.srcObject =
+            null;
+
+        stage.video.hidden =
+            true;
+
+        stage.placeholder.hidden =
+            false;
+
+        stage.meta.innerHTML =
+            "";
+
+        runtime.stage.classList.remove(
+            "cx-stage-screen-sharing"
+        );
+
+
+        runtime.activeScreenShareUserId =
+            null;
+
+
+        return;
+
+    }
+
+
+    /*
+     * One screen share.
+     *
+     * Use the existing stage video
+     * so the current behavior stays
+     * unchanged.
+     */
+
+    if (
+        shares.length === 1
+    ) {
+
+        const [
+            participantId,
+            share,
+        ] =
+            shares[0];
+
+
+        const grid =
+            runtime.stage.querySelector(
+                ".cx-screen-share-grid"
+            );
+
+
+        if (
+            grid
+        ) {
+
+            grid.remove();
+
+        }
+
+
+        stage.container.hidden =
+            false;
+
+
+        stage.video.srcObject =
+            share.stream;
+
+
+        stage.video.hidden =
+            false;
+
+
+        stage.video.muted =
+            true;
+
+
+        stage.placeholder.hidden =
+            true;
+
+
+        stage.meta.innerHTML =
+            "";
+
+
+        const title =
+            document.createElement(
+                "div"
+            );
+
+
+        title.className =
+            "cx-stage-screen-share-title";
+
+
+        title.textContent =
+            `${share.username} is presenting`;
+
+
+        stage.meta.appendChild(
+            title
+        );
+
+
+        stage.video.play()
+            .catch(
+                () => {}
+            );
+
+
+        runtime.activeScreenShareUserId =
+            Number(
+                participantId
+            );
+
+
+        return;
+
+    }
+
+
+    /*
+     * Multiple screen shares.
+     */
+
+    stage.container.hidden =
+        true;
+
+
+    let grid =
+        runtime.stage.querySelector(
+            ".cx-screen-share-grid"
+        );
+
+
+    if (
+        !grid
+    ) {
+
+        grid =
+            document.createElement(
+                "div"
+            );
+
+
+        grid.className =
+            "cx-screen-share-grid";
+
+
+        runtime.stage.appendChild(
+            grid
+        );
+
+    }
+
+
+    grid.replaceChildren();
+
+
+    shares.forEach(
+        (
+            [
+                participantId,
+                share,
+            ]
+        ) => {
+
+            const tile =
+                document.createElement(
+                    "article"
+                );
+
+
+            tile.className =
+                "cx-screen-share-tile";
+
+
+            const video =
+                document.createElement(
+                    "video"
+                );
+
+
+            video.className =
+                "cx-screen-share-video";
+
+
+            video.autoplay =
+                true;
+
+            video.playsInline =
+                true;
+
+            video.muted =
+                true;
+
+
+            video.srcObject =
+                share.stream;
+
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+
+            label.className =
+                "cx-screen-share-label";
+
+
+            label.textContent =
+                `${share.username} is presenting`;
+
+
+            tile.appendChild(
+                video
+            );
+
+
+            tile.appendChild(
+                label
+            );
+
+
+            grid.appendChild(
+                tile
+            );
+
+
+            video.play()
+                .catch(
+                    () => {}
+                );
+
+
+        }
+    );
+
+
+    runtime.stage.classList.add(
+        "cx-stage-screen-sharing"
+    );
+
+
+    /*
+     * Keep the last participant as the
+     * compatibility value for existing
+     * stage logic.
+     */
+
+    runtime.activeScreenShareUserId =
+        Number(
+            shares[
+                shares.length - 1
+            ][0]
+        );
 
 }
 
@@ -2289,72 +2636,83 @@ function stopScreenShareStage(
     userId
 ) {
 
-    const participantId = Number(
-        userId
-    );
+    const participantId =
+        Number(
+            userId
+        );
+
 
     if (
-
-        runtime.activeScreenShareUserId !==
-        participantId
-
+        !runtime.screenShares.has(
+            participantId
+        )
     ) {
 
         return;
 
     }
 
-    runtime.activeScreenShareUserId =
-        null;
 
-    runtime.stage.classList.remove(
-        "cx-stage-screen-sharing"
+    runtime.screenShares.delete(
+        participantId
     );
 
+
+    renderScreenShareStage();
+
+
     /*
-     * Restore stage.
+     * No screen shares remain.
+     *
+     * Restore the normal camera
+     * stage.
      */
 
     if (
-
-        runtime.pinnedParticipantId !==
-        null
-
+        runtime.screenShares.size === 0
     ) {
 
-        setActiveParticipant(
-
-            runtime.pinnedParticipantId
-
+        runtime.stage.classList.remove(
+            "cx-stage-screen-sharing"
         );
 
-        return;
+
+        if (
+            runtime.pinnedParticipantId !==
+            null
+        ) {
+
+            setActiveParticipant(
+                runtime.pinnedParticipantId
+            );
+
+            return;
+
+        }
+
+
+        if (
+            runtime.activeParticipantId !==
+            null
+        ) {
+
+            setActiveParticipant(
+                runtime.activeParticipantId
+            );
+
+            return;
+
+        }
+
+
+        clearActiveStage();
 
     }
 
-    if (
-
-        runtime.activeParticipantId !==
-        null
-
-    ) {
-
-        setActiveParticipant(
-
-            runtime.activeParticipantId
-
-        );
-
-        return;
-
-    }
-
-    clearActiveStage();
 
     console.log(
-
-        "ConnectX screen sharing stopped."
-
+        "ConnectX screen sharing stopped:",
+        participantId
     );
 
 }
@@ -2483,6 +2841,8 @@ function cleanupVideoStage() {
 
     runtime.activeScreenShareUserId =
         null;
+
+    runtime.screenShares.clear();
 
     runtime.pinnedParticipantId =
         null;

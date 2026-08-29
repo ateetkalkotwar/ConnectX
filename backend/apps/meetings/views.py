@@ -1,6 +1,9 @@
 import json
 
 from asgiref.sync import async_to_sync
+from django.urls import reverse
+from django.utils import timezone
+
 
 from channels.layers import (
     get_channel_layer,
@@ -33,6 +36,7 @@ from .forms import (
 from .models import (
     Meeting,
     MeetingParticipant,
+    MeetingJoinRequest,
 )
 
 from .moderation import (
@@ -176,35 +180,209 @@ def join_meeting_view(
             meeting = form.meeting
 
 
-            try:
+            # ==================================================
+            # HOST CAN ALWAYS ENTER DIRECTLY
+            # ==================================================
 
-                join_meeting(
-                    user=request.user,
-                    meeting=meeting,
-                )
+            if meeting.host == request.user:
 
+                try:
 
-            except ValueError as error:
+                    join_meeting(
+                        user=request.user,
+                        meeting=meeting,
+                    )
 
-                form.add_error(
-                    "meeting_code",
-                    str(error),
-                )
+                except ValueError as error:
+
+                    form.add_error(
+                        "meeting_code",
+                        str(error),
+                    )
+
+                else:
+
+                    return redirect(
+                        "meeting_room",
+                        meeting_code=(
+                            meeting.meeting_code
+                        ),
+                    )
 
 
             else:
 
-                return redirect(
-                    "meeting_room",
-                    meeting_code=(
-                        meeting.meeting_code
-                    ),
+                # ==============================================
+                # CHECK EXISTING PARTICIPANT
+                # ==============================================
+
+                existing_participant = (
+                    MeetingParticipant.objects
+                    .filter(
+                        meeting=meeting,
+                        user=request.user,
+                    )
+                    .first()
                 )
 
 
+                # ==============================================
+                # ALREADY APPROVED / PREVIOUS PARTICIPANT
+                # ==============================================
+
+                if existing_participant is not None:
+
+                    try:
+
+                        join_meeting(
+                            user=request.user,
+                            meeting=meeting,
+                        )
+
+                    except ValueError as error:
+
+                        form.add_error(
+                            "meeting_code",
+                            str(error),
+                        )
+
+                    else:
+
+                        return redirect(
+                            "meeting_room",
+                            meeting_code=(
+                                meeting.meeting_code
+                            ),
+                        )
+
+
+                # ==============================================
+                # APPROVAL REQUIRED
+                # ==============================================
+
+                elif meeting.requires_approval:
+
+                    join_request = (
+                        MeetingJoinRequest.objects
+                        .filter(
+                            meeting=meeting,
+                            user=request.user,
+                            status=(
+                                MeetingJoinRequest
+                                .RequestStatus
+                                .PENDING
+                            ),
+                        )
+                        .order_by(
+                            "-created_at",
+                        )
+                        .first()
+                    )
+
+
+                    if join_request is None:
+
+                        join_request = (
+                            MeetingJoinRequest.objects.create(
+                                meeting=meeting,
+                                user=request.user,
+                            )
+                        )
+
+
+                    # ==================================================
+                    # NOTIFY HOST ABOUT PENDING REQUEST
+                    # ==================================================
+
+                    channel_layer = get_channel_layer()
+
+
+                    if channel_layer is not None:
+
+                        room_group_name = (
+                            f"meeting_{meeting.meeting_code}"
+                        )
+
+
+                        async_to_sync(
+                            channel_layer.group_send
+                        )(
+                            room_group_name,
+                            {
+                                "type":
+                                    "join_request_created",
+
+                                "request_id":
+                                    join_request.pk,
+
+                                "user_id":
+                                    request.user.pk,
+
+                                "username":
+                                    request.user.username,
+                            },
+                        )
+
+
+                    return render(
+                        request,
+                        "meetings/join_waiting.html",
+                        {
+                            "meeting": meeting,
+                            "join_request": (
+                                join_request
+                            ),
+                        },
+                    )
+
+
+                # ==============================================
+                # NORMAL MEETING
+                # ==============================================
+
+                else:
+
+                    try:
+
+                        join_meeting(
+                            user=request.user,
+                            meeting=meeting,
+                        )
+
+                    except ValueError as error:
+
+                        form.add_error(
+                            "meeting_code",
+                            str(error),
+                        )
+
+                    else:
+
+                        return redirect(
+                            "meeting_room",
+                            meeting_code=(
+                                meeting.meeting_code
+                            ),
+                        )
+
     else:
 
-        form = JoinMeetingForm()
+        meeting_code = (
+            request.GET.get(
+                "code",
+                "",
+            )
+            .strip()
+            .lower()
+        )
+
+
+        form = JoinMeetingForm(
+            initial={
+                "meeting_code":
+                    meeting_code,
+            }
+        )
 
 
     return render(
@@ -213,6 +391,256 @@ def join_meeting_view(
         {
             "form": form,
         },
+    )
+
+
+# ==========================================================
+# APPROVE JOIN REQUEST
+# ==========================================================
+
+
+@login_required
+@require_POST
+def approve_join_request_view(
+    request,
+    meeting_code,
+    request_id,
+):
+
+    meeting = get_object_or_404(
+        Meeting,
+        meeting_code=meeting_code,
+    )
+
+
+    if meeting.host != request.user:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": (
+                    "Only the meeting host "
+                    "can approve join requests."
+                ),
+            },
+            status=403,
+        )
+
+
+    join_request = get_object_or_404(
+        MeetingJoinRequest,
+        pk=request_id,
+        meeting=meeting,
+    )
+
+
+    if (
+        join_request.status
+        != MeetingJoinRequest
+        .RequestStatus
+        .PENDING
+    ):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": (
+                    "This join request has "
+                    "already been handled."
+                ),
+            },
+            status=409,
+        )
+
+
+    try:
+
+        participant = join_meeting(
+            user=join_request.user,
+            meeting=meeting,
+        )
+
+    except ValueError as error:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error),
+            },
+            status=400,
+        )
+
+
+    now = timezone.now()
+
+
+    join_request.status = (
+        MeetingJoinRequest
+        .RequestStatus
+        .APPROVED
+    )
+
+    join_request.responded_at = now
+
+    join_request.save(
+        update_fields=[
+            "status",
+            "responded_at",
+            "updated_at",
+        ],
+    )
+
+
+    return JsonResponse(
+        {
+            "success": True,
+            "status": "approved",
+            "participant_id": participant.pk,
+        }
+    )
+
+
+# ==========================================================
+# REJECT JOIN REQUEST
+# ==========================================================
+
+
+@login_required
+@require_POST
+def reject_join_request_view(
+    request,
+    meeting_code,
+    request_id,
+):
+
+    meeting = get_object_or_404(
+        Meeting,
+        meeting_code=meeting_code,
+    )
+
+
+    if meeting.host != request.user:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": (
+                    "Only the meeting host "
+                    "can reject join requests."
+                ),
+            },
+            status=403,
+        )
+
+
+    join_request = get_object_or_404(
+        MeetingJoinRequest,
+        pk=request_id,
+        meeting=meeting,
+    )
+
+
+    if (
+        join_request.status
+        != MeetingJoinRequest
+        .RequestStatus
+        .PENDING
+    ):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": (
+                    "This join request has "
+                    "already been handled."
+                ),
+            },
+            status=409,
+        )
+
+
+    now = timezone.now()
+
+
+    join_request.status = (
+        MeetingJoinRequest
+        .RequestStatus
+        .REJECTED
+    )
+
+    join_request.responded_at = now
+
+    join_request.save(
+        update_fields=[
+            "status",
+            "responded_at",
+            "updated_at",
+        ],
+    )
+
+
+    return JsonResponse(
+        {
+            "success": True,
+            "status": "rejected",
+        }
+    )
+
+
+# ==========================================================
+# JOIN REQUEST STATUS
+# ==========================================================
+
+
+@login_required
+def join_request_status_view(
+    request,
+    meeting_code,
+    request_id,
+):
+
+    meeting = get_object_or_404(
+        Meeting,
+        meeting_code=meeting_code,
+    )
+
+
+    join_request = get_object_or_404(
+        MeetingJoinRequest,
+        pk=request_id,
+        meeting=meeting,
+        user=request.user,
+    )
+
+
+    response = {
+        "success": True,
+        "status": join_request.status,
+    }
+
+
+    if (
+        join_request.status
+        == MeetingJoinRequest
+        .RequestStatus
+        .APPROVED
+    ):
+
+        response["meeting_url"] = (
+            request.build_absolute_uri(
+                reverse(
+                    "meeting_room",
+                    kwargs={
+                        "meeting_code":
+                            meeting.meeting_code,
+                    },
+                )
+            )
+        )
+
+
+    return JsonResponse(
+        response
     )
 
 
@@ -344,15 +772,24 @@ def meeting_room_view(
     )
 
 
+    share_url = request.build_absolute_uri(
+        f"{reverse('join_meeting')}?code={meeting.meeting_code}"
+    )
+
+
     return render(
         request,
         "meetings/meeting_room.html",
         {
             "meeting": meeting,
+
             "participant": participant,
+
             "active_participants": (
                 active_participants
             ),
+
+            "share_url": share_url,
         },
     )
 

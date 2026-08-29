@@ -90,7 +90,7 @@ class Meeting(models.Model):
     # ======================================================
 
     host_moderation_enabled = models.BooleanField(
-        default=True,
+        default=False,
     )
 
 
@@ -510,6 +510,97 @@ class MeetingInvitation(models.Model):
 
         return (
             f"{self.invited_user.username} - "
+            f"{self.meeting.meeting_code} - "
+            f"{self.status}"
+        )
+
+
+class MeetingJoinRequest(models.Model):
+
+    class RequestStatus(models.TextChoices):
+
+        PENDING = (
+            "pending",
+            "Pending",
+        )
+
+        APPROVED = (
+            "approved",
+            "Approved",
+        )
+
+        REJECTED = (
+            "rejected",
+            "Rejected",
+        )
+
+
+    meeting = models.ForeignKey(
+        Meeting,
+        on_delete=models.CASCADE,
+        related_name="join_requests",
+    )
+
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="meeting_join_requests",
+    )
+
+
+    status = models.CharField(
+        max_length=20,
+        choices=RequestStatus.choices,
+        default=RequestStatus.PENDING,
+        db_index=True,
+    )
+
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+
+    responded_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+
+    class Meta:
+
+        ordering = [
+            "-created_at",
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "meeting",
+                    "status",
+                    "created_at",
+                ],
+                name=(
+                    "meeting_join_request_idx"
+                ),
+            ),
+
+        ]
+
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.user.username} - "
             f"{self.meeting.meeting_code} - "
             f"{self.status}"
         )

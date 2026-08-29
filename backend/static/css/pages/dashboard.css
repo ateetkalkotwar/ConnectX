@@ -258,13 +258,13 @@
 
     align-items: center;
 
-    gap: 18px;
+    gap: 20px;
 
     width: 100%;
 
-    min-height: 132px;
+    min-height: 148px;
 
-    padding: 24px;
+    padding: 26px 24px;
 
     overflow: hidden;
 
@@ -512,6 +512,110 @@
 
     stroke-linejoin: round;
 
+}
+
+
+/* ==========================================================
+   QUICK ACTION CARD CONTENT
+========================================================== */
+
+.cx-dashboard-action {
+    display: grid;
+
+    grid-template-columns:
+        52px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-width: 0;
+}
+
+
+.cx-dashboard-action-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+}
+
+
+.cx-dashboard-action-icon svg {
+    width: 24px;
+    height: 24px;
+
+    flex-shrink: 0;
+}
+
+
+.cx-dashboard-action-content {
+    min-width: 0;
+}
+
+
+.cx-dashboard-action-content strong {
+    display: block;
+
+    color: var(--cx-text-primary);
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    letter-spacing: -0.01em;
+}
+
+
+.cx-dashboard-action-content small {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--cx-text-muted);
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    line-height: 1.45;
+
+    max-width: 240px;
+}
+
+
+.cx-dashboard-action-arrow {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
+.cx-dashboard-action-arrow svg {
+    width: 20px;
+    height: 20px;
 }
 
 
@@ -1188,6 +1292,32 @@
 
         border-radius: var(--cx-radius-lg);
 
+    }
+
+
+    .cx-dashboard-action {
+        grid-template-columns:
+            44px
+            minmax(0, 1fr)
+            auto;
+
+        gap: 12px;
+    }
+
+
+    .cx-dashboard-action-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+
+    .cx-dashboard-action-content strong {
+        white-space: normal;
+    }
+
+
+    .cx-dashboard-action-content small {
+        max-width: none;
     }
 
 }

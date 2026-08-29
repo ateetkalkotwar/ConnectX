@@ -307,6 +307,15 @@ class MeetingConsumer(
         )
 
 
+        if message_type == "chat_message":
+
+            await self.handle_chat_message(
+                data
+            )
+
+            return
+
+
         if message_type == "ping":
 
             await self.touch_current_presence()
@@ -330,6 +339,109 @@ class MeetingConsumer(
             ),
         )
 
+
+    # ======================================================
+    # CHAT MESSAGE
+    # ======================================================
+
+    async def handle_chat_message(
+        self,
+        data,
+    ):
+
+        message = data.get(
+            "message"
+        )
+
+        if not isinstance(
+            message,
+            str,
+        ):
+
+            await self.send_error(
+                message="Invalid chat message."
+            )
+
+            return
+
+        message = message.strip()
+
+        if not message:
+
+            await self.send_error(
+                message="Chat message cannot be empty."
+            )
+
+            return
+
+        if len(message) > 2000:
+
+            await self.send_error(
+                message="Chat message is too long."
+            )
+
+            return
+
+        user_id = getattr(
+            self.user,
+            "pk",
+            None,
+        )
+
+        username = getattr(
+            self.user,
+            "username",
+            "",
+        )
+
+        channel_layer = (
+            get_channel_layer()
+        )
+
+        if channel_layer is None:
+
+            await self.send_error(
+                message="Meeting chat is unavailable."
+            )
+
+            return
+
+        await channel_layer.group_send(
+            self.meeting_group_name,
+            {
+                "type": "chat_message",
+                "user_id": user_id,
+                "username": username,
+                "message": message,
+            },
+        )
+
+
+    # ======================================================
+    # CHAT MESSAGE EVENT
+    # ======================================================
+
+    async def chat_message(
+        self,
+        event,
+    ):
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "chat_message",
+                    "user_id": event.get(
+                        "user_id"
+                    ),
+                    "username": event.get(
+                        "username"
+                    ),
+                    "message": event.get(
+                        "message"
+                    ),
+                }
+            )
+        )
 
     # ======================================================
     # PRESENCE GRACE PERIOD
@@ -489,6 +601,45 @@ class MeetingConsumer(
 
 
     # ======================================================
+    # JOIN REQUEST CREATED EVENT
+    # ======================================================
+
+
+    async def join_request_created(
+        self,
+        event,
+    ):
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": (
+                        "join_request_created"
+                    ),
+
+                    "request_id": (
+                        event.get(
+                            "request_id"
+                        )
+                    ),
+
+                    "user_id": (
+                        event.get(
+                            "user_id"
+                        )
+                    ),
+
+                    "username": (
+                        event.get(
+                            "username"
+                        )
+                    ),
+                }
+            )
+        )
+
+
+    # ======================================================
     # PARTICIPANT JOINED EVENT
     # ======================================================
 
@@ -504,36 +655,64 @@ class MeetingConsumer(
                     "type": (
                         "participant_joined"
                     ),
-                    "participant_id": event[
-                        "participant_id"
-                    ],
-                    "user_id": event[
-                        "user_id"
-                    ],
-                    "username": event[
-                        "username"
-                    ],
-                    "role": event[
-                        "role"
-                    ],
-                    "is_muted": event[
-                        "is_muted"
-                    ],
-                    "is_video_enabled": event[
-                        "is_video_enabled"
-                    ],
-                    "is_screen_sharing": event[
-                        "is_screen_sharing"
-                    ],
-                    "forced_muted": event[
-                        "forced_muted"
-                    ],
-                    "forced_video_disabled": event[
-                        "forced_video_disabled"
-                    ],
+
+                    "participant_id": (
+                        event[
+                            "participant_id"
+                        ]
+                    ),
+
+                    "user_id": (
+                        event[
+                            "user_id"
+                        ]
+                    ),
+
+                    "username": (
+                        event[
+                            "username"
+                        ]
+                    ),
+
+                    "role": (
+                        event[
+                            "role"
+                        ]
+                    ),
+
+                    "is_muted": (
+                        event[
+                            "is_muted"
+                        ]
+                    ),
+
+                    "is_video_enabled": (
+                        event[
+                            "is_video_enabled"
+                        ]
+                    ),
+
+                    "is_screen_sharing": (
+                        event[
+                            "is_screen_sharing"
+                        ]
+                    ),
+
+                    "forced_muted": (
+                        event[
+                            "forced_muted"
+                        ]
+                    ),
+
+                    "forced_video_disabled": (
+                        event[
+                            "forced_video_disabled"
+                        ]
+                    ),
                 }
             )
         )
+
 
 
     # ======================================================
@@ -890,3 +1069,5 @@ class MeetingConsumer(
                     .forced_video_disabled
             ),
         }
+
+

@@ -78,7 +78,32 @@
         </div>
 
 
+
+
         <div class="cx-meeting-room-header-actions">
+
+
+            <button
+                type="button"
+                class="cx-meeting-room-menu-toggle"
+                data-meeting-shell-toggle
+                aria-label="Open application navigation"
+                aria-expanded="false">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true">
+
+                    <path d="M4 6H20"></path>
+
+                    <path d="M4 12H20"></path>
+
+                    <path d="M4 18H20"></path>
+
+                </svg>
+
+            </button>
 
             <span class="cx-meeting-room-role">
 
@@ -181,23 +206,26 @@
 
                     <div class="cx-meeting-video-meta">
 
-                        <span>
-                            {{ request.user.username }} (You)
+                        <div class="cx-meeting-video-meta-top">
+
+                            <small class="cx-meeting-video-role">
+                                {% if meeting.host == request.user %}
+                                    Host
+                                {% else %}
+                                    {{ participant.get_role_display }}
+                                {% endif %}
+                            </small>
+
+                            <span class="cx-meeting-video-you">
+                                You
+                            </span>
+
+                        </div>
+
+
+                        <span class="cx-meeting-video-name">
+                            {{ request.user.username }}
                         </span>
-
-                        <small>
-
-                            {% if meeting.host == request.user %}
-
-                                Host
-
-                            {% else %}
-
-                                {{ participant.get_role_display }}
-
-                            {% endif %}
-
-                        </small>
 
                     </div>
 
@@ -333,6 +361,34 @@
                 <button
                     type="button"
                     class="cx-meeting-control"
+                    data-meeting-control="share-meeting"
+                    aria-label="Share meeting">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true">
+
+                        <path
+                            d="M10 13C10.8 14.0667 11.9333 14.6667 13.2 14.6667C14.4667 14.6667 15.6 14.0667 16.4 13L18.4 11C20.0667 9.33333 20.0667 6.66667 18.4 5C16.7333 3.33333 14.0667 3.33333 12.4 5L11.4 6">
+                        </path>
+
+                        <path
+                            d="M14 11C13.2 9.93333 12.0667 9.33333 10.8 9.33333C9.53333 9.33333 8.4 9.93333 7.6 11L5.6 13C3.93333 14.6667 3.93333 17.3333 5.6 19C7.26667 20.6667 9.93333 20.6667 11.6 19L12.6 18">
+                        </path>
+
+                    </svg>
+
+                    <span>
+                        Invite
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-control"
                     data-meeting-control="people"
                     aria-label="Open participants"
                     aria-expanded="true">
@@ -439,6 +495,16 @@
                     {{ active_participants|length }}
 
                 </span>
+
+                <button
+                    type="button"
+                    class="cx-meeting-room-panel-close"
+                    data-participant-close
+                    aria-label="Close participants">
+
+                    ×
+
+                </button>
 
             </div>
 
@@ -640,7 +706,213 @@
 
             </div>
 
+                </aside>
+
+
+        <!-- =================================================
+             CHAT PANEL
+        ================================================== -->
+
+        <aside
+            class="cx-meeting-room-chat-panel"
+            data-chat-panel
+            hidden>
+            
+
+            <div class="cx-meeting-room-chat-header">
+
+                <div>
+
+                    <span>
+                        CHAT
+                    </span>
+
+                    <h2>
+                        Meeting chat
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-room-chat-close"
+                    data-chat-close
+                    aria-label="Close meeting chat">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div
+                class="cx-meeting-room-chat-messages"
+                data-chat-messages
+                aria-live="polite"
+                aria-atomic="false">
+            </div>
+
+
+            <div
+                class="cx-meeting-room-chat-empty"
+                data-chat-empty>
+
+                <span>
+                    💬
+                </span>
+
+                <p>
+                    No messages yet.
+                </p>
+
+                <small>
+                    Messages sent here are visible to everyone in the meeting.
+                </small>
+
+            </div>
+
+
+            <form
+                class="cx-meeting-room-chat-form"
+                data-chat-form>
+
+                <label
+                    class="cx-meeting-room-chat-input-wrapper">
+
+                    <input
+                        type="text"
+                        name="message"
+                        data-chat-input
+                        maxlength="2000"
+                        autocomplete="off"
+                        placeholder="Send a message...">
+
+                </label>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-room-chat-send"
+                    data-chat-send
+                    aria-label="Send message">
+
+                    Send
+
+                </button>
+
+            </form>
+
         </aside>
+
+
+
+        <!-- =====================================================
+             MEETING SHARE POPOVER
+        ====================================================== -->
+
+        <div
+            class="cx-meeting-share-popover"
+            data-meeting-share-popover
+            hidden>
+
+            <div class="cx-meeting-share-header">
+
+                <div>
+
+                    <span>
+                        INVITE
+                    </span>
+
+                    <h2>
+                        Share this meeting
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="cx-meeting-share-close"
+                    data-meeting-share-close
+                    aria-label="Close share">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <p class="cx-meeting-share-description">
+                Anyone with this link can request to join this meeting.
+            </p>
+
+
+            <div class="cx-meeting-share-link">
+
+                <input
+                    type="text"
+                    value="{{ share_url }}"
+                    data-meeting-share-url
+                    readonly
+                    aria-label="Meeting link">
+
+
+                <button
+                    type="button"
+                    data-meeting-share-copy>
+
+                    Copy
+
+                </button>
+
+            </div>
+
+
+            <small
+                class="cx-meeting-share-status"
+                data-meeting-share-status
+                aria-live="polite">
+            </small>
+
+        </div>
+        
+
+        <!-- =====================================================
+            JOIN REQUEST PANEL
+        ====================================================== -->
+
+        <section
+            class="cx-meeting-join-requests"
+            data-join-requests-panel
+            hidden>
+
+            <div class="cx-meeting-join-requests-header">
+
+                <div>
+
+                    <span>
+                        JOIN REQUEST
+                    </span>
+
+                    <h2>
+                        Someone wants to join
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="cx-meeting-join-request-list"
+                data-join-request-list>
+            </div>
+
+        </section>
+
 
     </div>
 
@@ -653,7 +925,7 @@
 
 <script
     type="module"
-    src="{% static 'js/meetings/meeting_room.js' %}">
+    src="{% static 'js/meetings/meeting_room.js' %}?v=20260827_1">
 </script>
 
 {% endblock %}

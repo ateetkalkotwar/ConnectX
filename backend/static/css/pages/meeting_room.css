@@ -286,6 +286,7 @@
 ========================================================== */
 
 .cx-meeting-room-body {
+
     position: relative;
 
     display: flex;
@@ -297,7 +298,31 @@
     min-height: 0;
 
     overflow: hidden;
+
 }
+
+
+
+/* ==========================================================
+   MEETING WORKSPACE
+========================================================== */
+
+.cx-meeting-workspace {
+
+    position: relative;
+
+    display: flex;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
 
 
 /* ==========================================================
@@ -306,6 +331,8 @@
 
 .cx-meeting-room-main {
     display: flex;
+
+    width: 100%;
 
     flex: 1;
 
@@ -698,9 +725,9 @@
 
     flex-direction: column;
 
-    flex: 0 0 330px;
+    flex: 0 0 300px;
 
-    width: 330px;
+    width: 300px;
 
     min-height: 0;
 
@@ -1582,6 +1609,3060 @@
     .cx-meeting-activity-toast,
     .cx-meeting-activity-toast--leaving {
         animation: none;
+    }
+
+}
+
+
+/* ==========================================================
+   CONNECTX CHAT PANEL
+========================================================== */
+
+.cx-meeting-room-chat-panel {
+
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    width: min(
+        380px,
+        100%
+    );
+
+    display: flex;
+
+    flex-direction: column;
+
+    background:
+        rgba(
+            18,
+            20,
+            28,
+            0.98
+        );
+
+    border-left:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    box-shadow:
+        -12px 0 30px
+        rgba(
+            0,
+            0,
+            0,
+            0.24
+        );
+
+    z-index: 50;
+
+    overflow: hidden;
+
+}
+
+
+/* ==========================================================
+   CHAT HEADER
+========================================================== */
+
+.cx-meeting-room-chat-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding:
+        18px
+        18px
+        16px;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+}
+
+
+.cx-meeting-room-chat-header
+span {
+
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.12em;
+
+    opacity: 0.55;
+
+}
+
+
+.cx-meeting-room-chat-header
+h2 {
+
+    margin:
+        4px
+        0
+        0;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.cx-meeting-room-chat-close {
+
+    width: 36px;
+
+    height: 36px;
+
+    display: grid;
+
+    place-items: center;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    color: inherit;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        background
+        160ms ease,
+        transform
+        160ms ease;
+
+}
+
+
+.cx-meeting-room-chat-close:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+}
+
+
+.cx-meeting-room-chat-close:active {
+
+    transform:
+        scale(
+            0.96
+        );
+
+}
+
+
+/* ==========================================================
+   CHAT MESSAGES
+========================================================== */
+
+.cx-meeting-room-chat-messages {
+
+    flex:
+        1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding:
+        18px;
+
+    overflow-y: auto;
+
+    overscroll-behavior:
+        contain;
+
+}
+
+
+.cx-meeting-room-chat-message {
+
+    max-width: 82%;
+
+    align-self:
+        flex-start;
+
+    padding:
+        10px
+        12px;
+
+    border-radius:
+        14px
+        14px
+        14px
+        5px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+}
+
+
+.cx-meeting-room-chat-message--own {
+
+    align-self:
+        flex-end;
+
+    border-radius:
+        14px
+        14px
+        5px
+        14px;
+
+    background:
+        rgba(
+            82,
+            110,
+            255,
+            0.18
+        );
+
+    border-color:
+        rgba(
+            110,
+            130,
+            255,
+            0.24
+        );
+
+}
+
+
+.cx-meeting-chat-message-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.cx-meeting-chat-message-name {
+
+    min-width: 0;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    overflow: hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.cx-meeting-chat-message-time {
+
+    flex:
+        0
+        0
+        auto;
+
+    font-size: 10px;
+
+    opacity: 0.45;
+
+}
+
+
+.cx-meeting-chat-message-body {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.45;
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+
+/* ==========================================================
+   EMPTY STATE
+========================================================== */
+
+.cx-meeting-room-chat-empty {
+
+    padding:
+        24px;
+
+    text-align:
+        center;
+
+    opacity: 0.65;
+
+}
+
+
+.cx-meeting-room-chat-empty
+span {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 28px;
+
+}
+
+
+.cx-meeting-room-chat-empty
+p {
+
+    margin:
+        0
+        0
+        6px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.cx-meeting-room-chat-empty
+small {
+
+    display: block;
+
+    max-width: 260px;
+
+    margin:
+        0
+        auto;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+
+}
+
+
+/* ==========================================================
+   CHAT COMPOSER
+========================================================== */
+
+.cx-meeting-room-chat-form {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        12px;
+
+    border-top:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    background:
+        rgba(
+            10,
+            12,
+            18,
+            0.72
+        );
+
+}
+
+
+.cx-meeting-room-chat-input-wrapper {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+}
+
+
+.cx-meeting-room-chat-input-wrapper
+input {
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        11px
+        13px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.1
+        );
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    color: inherit;
+
+    outline: none;
+
+    transition:
+        border-color
+        160ms ease,
+        background
+        160ms ease;
+
+}
+
+
+.cx-meeting-room-chat-input-wrapper
+input::placeholder {
+
+    opacity:
+        0.45;
+
+}
+
+
+.cx-meeting-room-chat-input-wrapper
+input:focus {
+
+    border-color:
+        rgba(
+            110,
+            130,
+            255,
+            0.6
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+
+}
+
+
+.cx-meeting-room-chat-send {
+
+    flex:
+        0
+        0
+        auto;
+
+    padding:
+        11px
+        15px;
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(
+            88,
+            110,
+            255,
+            0.95
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform
+        160ms ease,
+        opacity
+        160ms ease;
+
+}
+
+
+.cx-meeting-room-chat-send:hover {
+
+    opacity:
+        0.9;
+
+}
+
+
+.cx-meeting-room-chat-send:active {
+
+    transform:
+        scale(
+            0.97
+        );
+
+}
+
+
+.cx-meeting-room-chat-send:disabled {
+
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* ==========================================================
+   CHAT SCROLLBAR
+========================================================== */
+
+.cx-meeting-room-chat-messages::-webkit-scrollbar {
+
+    width:
+        7px;
+
+}
+
+
+.cx-meeting-room-chat-messages::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+    border-radius:
+        999px;
+
+}
+
+
+/* ==========================================================
+   CHAT RESPONSIVE
+========================================================== */
+
+@media (
+    max-width: 640px
+) {
+
+    .cx-meeting-room-chat-panel {
+
+        width:
+            100%;
+
+        border-left:
+            0;
+
+    }
+
+
+    .cx-meeting-room-chat-message {
+
+        max-width:
+            88%;
+
+    }
+
+}
+
+
+/* ==========================================================
+   THUMBNAIL STRIP
+========================================================== */
+
+.cx-meeting-thumbnail-strip {
+
+    flex: 0 0 150px;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+
+.cx-meeting-thumbnail-strip
+.cx-meeting-video-grid {
+
+    display: flex;
+
+    flex: none;
+
+    align-items: stretch;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    height: 150px;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    align-content: unset;
+
+}
+
+
+.cx-meeting-thumbnail-strip
+.cx-meeting-video-tile {
+
+    flex:
+        0
+        0
+        210px;
+
+    min-height: 150px;
+
+    height: 150px;
+
+}
+
+
+/* ==========================================================
+   ACTIVE VIDEO STAGE
+========================================================== */
+
+.cx-meeting-stage {
+
+    position: relative;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.12
+        );
+
+    border-radius: 18px;
+
+    background:
+        #020617;
+
+}
+
+
+.cx-meeting-stage-video {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+/* ==========================================================
+   CONNECTX VIDEO STAGE RENDERER
+========================================================== */
+
+.cx-meeting-stage {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+
+.cx-video-stage {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+
+.cx-video-stage-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+
+.cx-video-stage-video {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    background:
+        #020617;
+
+}
+
+
+.cx-video-stage-placeholder {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        #111827;
+
+}
+
+
+.cx-video-stage-meta {
+
+    position: absolute;
+
+    right: 12px;
+
+    bottom: 12px;
+
+    left: 12px;
+
+    z-index: 5;
+
+}
+
+
+.cx-video-stage-placeholder[hidden],
+.cx-video-stage-video[hidden] {
+
+    display: none;
+
+}
+
+
+/* ==========================================================
+   MULTIPLE SCREEN SHARING
+========================================================== */
+
+.cx-screen-share-grid {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                min(100%, 420px),
+                1fr
+            )
+        );
+
+    grid-auto-rows:
+        minmax(
+            0,
+            1fr
+        );
+
+    gap:
+        10px;
+
+    padding:
+        10px;
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: auto;
+
+    background:
+        #020617;
+
+}
+
+
+.cx-screen-share-tile {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.14
+        );
+
+    border-radius:
+        14px;
+
+    background:
+        #0b1220;
+
+}
+
+
+.cx-screen-share-video {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    object-fit: contain;
+
+    background:
+        #020617;
+
+}
+
+
+.cx-screen-share-label {
+
+    position: absolute;
+
+    right: 10px;
+
+    bottom: 10px;
+
+    left: 10px;
+
+    padding:
+        8px
+        10px;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(
+            2,
+            6,
+            23,
+            0.72
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    backdrop-filter:
+        blur(
+            10px
+        );
+
+}
+
+
+/* ==========================================================
+   CONNECTX MEETING APPLICATION SHELL
+========================================================== */
+
+
+/*
+ * A live meeting gets its own full-width workspace.
+ *
+ * The normal application search/header is not needed
+ * while inside the meeting.
+ */
+
+.cx-meeting-room-active
+.cx-app-header {
+
+    display: none;
+
+}
+
+
+/*
+ * The meeting page occupies the available
+ * application content area without the normal
+ * page header.
+ */
+
+.cx-meeting-room-active
+.cx-app-main {
+
+    min-height: 100%;
+
+}
+
+
+/*
+ * Hide the normal application sidebar
+ * while entering a meeting.
+ *
+ * It will be opened by the meeting menu button.
+ */
+
+.cx-meeting-shell-closed
+.cx-sidebar {
+
+    display: none;
+
+}
+
+
+/*
+ * When the meeting navigation is opened,
+ * show the existing application sidebar
+ * as an overlay.
+ */
+
+.cx-meeting-shell-open
+.cx-sidebar {
+
+    display: flex;
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 324px;
+
+    z-index: 1000;
+
+}
+
+
+/*
+ * Dark backdrop behind the opened application
+ * navigation.
+ */
+
+.cx-meeting-shell-open
+#cx-sidebar-overlay {
+
+    display: block;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 999;
+
+}
+
+
+/*
+ * Keep the meeting itself above the normal
+ * application layer.
+ */
+
+.cx-meeting-room {
+
+    position: relative;
+
+    z-index: 1;
+
+}
+
+
+/*
+ * The meeting menu button.
+ */
+
+.cx-meeting-room-menu-toggle {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 44px;
+
+    height: 44px;
+
+    padding: 0;
+
+    border: 1px solid
+        rgba(
+            148,
+            163,
+            184,
+            0.16
+        );
+
+    border-radius: 12px;
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            0.78
+        );
+
+    color: #e2e8f0;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease;
+
+}
+
+
+.cx-meeting-room-menu-toggle:hover {
+
+    background:
+        rgba(
+            79,
+            70,
+            229,
+            0.22
+        );
+
+    border-color:
+        rgba(
+            129,
+            140,
+            248,
+            0.35
+        );
+
+    transform:
+        translateY(
+            -1px
+        );
+
+}
+
+
+.cx-meeting-room-menu-toggle svg {
+
+    width: 20px;
+
+    height: 20px;
+
+    stroke:
+        currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+/* ==========================================================
+   EXPAND MEETING CONTENT WHEN APP SIDEBAR IS HIDDEN
+========================================================== */
+
+.cx-meeting-room-active
+.cx-app-content {
+
+    margin-left:
+        0 !important;
+
+    width:
+        100% !important;
+
+    max-width:
+        none !important;
+
+}
+
+
+/*
+ * The meeting itself should use the complete
+ * application viewport.
+ */
+
+.cx-meeting-room-active
+.cx-app-main {
+
+    width:
+        100% !important;
+
+    max-width:
+        none !important;
+
+    margin:
+        0 !important;
+
+    padding:
+        0 !important;
+
+}
+
+
+.cx-meeting-room-active {
+
+    width:
+        100vw !important;
+
+    max-width:
+        none !important;
+
+    margin-left:
+        0 !important;
+
+}
+
+
+
+/* ==========================================================
+   CONNECTX FINAL IMMERSIVE STAGE LAYOUT
+========================================================== */
+
+
+/*
+ * The meeting room is the viewport.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room {
+
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    width: 100vw !important;
+
+    height: 100vh !important;
+
+    height: 100dvh !important;
+
+    min-width: 100vw !important;
+
+    min-height: 100vh !important;
+
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+}
+
+
+/*
+ * The body fills the viewport.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-body {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+
+    overflow: hidden !important;
+
+}
+
+
+/*
+ * Workspace fills the viewport.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-workspace {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+
+    overflow: hidden !important;
+
+}
+
+
+/*
+ * Main is only a viewport container.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-main {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+
+    overflow: hidden !important;
+
+}
+
+
+/*
+ * IMPORTANT:
+ * The original .cx-meeting-stage is the parent
+ * in which video_stage.js creates .cx-video-stage.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-stage {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    border-radius: 0 !important;
+
+    overflow: hidden !important;
+
+    background:
+        #020617 !important;
+
+}
+
+
+/*
+ * The dynamically-created renderer stage.
+ */
+
+.cx-meeting-room-active
+.cx-video-stage {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    z-index: 1 !important;
+
+}
+
+
+/*
+ * Renderer container.
+ */
+
+.cx-meeting-room-active
+.cx-video-stage-container {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+}
+
+
+/*
+ * Actual video.
+ */
+
+.cx-meeting-room-active
+.cx-video-stage-video {
+
+    position: absolute !important;
+
+    inset: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    object-fit: contain !important;
+
+    background:
+        #020617 !important;
+
+}
+
+
+/*
+ * Keep the thumbnail strip completely independent
+ * from the main video stage.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-thumbnail-strip {
+
+    position: absolute !important;
+
+    right: auto !important;
+
+    bottom: 92px !important;
+
+    left: 20px !important;
+
+    width: auto !important;
+
+    height: 116px !important;
+
+    max-width:
+        calc(
+            100vw - 40px
+        ) !important;
+
+    z-index: 220 !important;
+
+}
+
+
+/*
+ * Keep the controls independent from the stage.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-controls {
+
+    position: absolute !important;
+
+    right: auto !important;
+
+    bottom: 20px !important;
+
+    left: 50% !important;
+
+    z-index: 250 !important;
+
+    transform:
+        translateX(
+            -50%
+        ) !important;
+
+}
+
+
+/*
+ * Header stays above the video.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-header {
+
+    position: absolute !important;
+
+    inset:
+        0
+        0
+        auto
+        0 !important;
+
+    z-index: 300 !important;
+
+}
+
+
+/*
+ * Side panels stay above the video.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-panel {
+
+    z-index: 400 !important;
+
+}
+
+
+.cx-meeting-room-active
+.cx-meeting-room-chat-panel {
+
+    z-index: 450 !important;
+
+}
+
+
+/* ==========================================================
+   CONNECTX VIDEO TILE FLOATING META
+========================================================== */
+
+
+.cx-meeting-room-active
+.cx-meeting-video-meta {
+
+    position: absolute;
+
+    right: 10px;
+
+    bottom: 10px;
+
+    left: 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    pointer-events: none;
+
+    backdrop-filter: none;
+
+}
+
+
+/*
+ * Top floating row.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-video-meta-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+}
+
+
+/*
+ * Host / Participant label.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-video-role {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding:
+        4px
+        8px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    border:
+        1px
+        solid
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            2,
+            6,
+            23,
+            0.68
+        );
+
+    backdrop-filter:
+        blur(8px);
+
+}
+
+
+/*
+ * "You" badge at top-right.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-video-you {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding:
+        4px
+        8px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    border:
+        1px
+        solid
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            79,
+            70,
+            229,
+            0.78
+        );
+
+    backdrop-filter:
+        blur(8px);
+
+}
+
+
+/*
+ * Name at the bottom.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-video-name {
+
+    display: block;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    text-align: left;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0
+        2px
+        8px
+        rgba(
+            0,
+            0,
+            0,
+            0.9
+        );
+
+}
+
+
+/* ==========================================================
+   CONNECTX IMMERSIVE MEETING UI AUTO-HIDE
+========================================================== */
+
+
+/*
+ * Header information
+ */
+
+.cx-meeting-room-info.cx-meeting-ui-hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateY(
+            -12px
+        );
+
+}
+
+
+/*
+ * Role badge
+ */
+
+.cx-meeting-room-role.cx-meeting-ui-hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateY(
+            -12px
+        );
+
+}
+
+
+/*
+ * Leave button
+ */
+
+.cx-meeting-room-leave.cx-meeting-ui-hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateY(
+            -12px
+        );
+
+}
+
+
+/*
+ * Participant thumbnails
+ */
+
+.cx-meeting-thumbnail-strip.cx-meeting-ui-hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateY(
+            18px
+        );
+
+}
+
+
+/*
+ * Bottom meeting controls
+ */
+
+.cx-meeting-room-controls.cx-meeting-ui-hidden {
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translate(
+            -50%,
+            24px
+        );
+
+}
+
+
+/*
+ * Smooth transitions
+ */
+
+.cx-meeting-room-info,
+
+.cx-meeting-room-role,
+
+.cx-meeting-room-leave,
+
+.cx-meeting-thumbnail-strip,
+
+.cx-meeting-room-controls {
+
+    transition:
+        opacity
+        220ms
+        ease,
+
+        transform
+        220ms
+        ease;
+
+}
+
+
+/*
+ * The left menu button is always available.
+ */
+
+.cx-meeting-room-menu-toggle {
+
+    opacity:
+        1 !important;
+
+    pointer-events:
+        auto !important;
+
+    transform:
+        none !important;
+
+}
+
+
+/* ==========================================================
+   CONNECTX MEETING MENU — TOP LEFT
+========================================================== */
+
+.cx-meeting-room-active
+.cx-meeting-room-menu-toggle {
+
+    position: fixed !important;
+
+    top: 20px !important;
+
+    left: 20px !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+
+    z-index: 900 !important;
+
+    margin: 0 !important;
+
+}
+
+
+/* ==========================================================
+   CONNECTX IMMERSIVE HEADER — NO RESERVED SPACE
+========================================================== */
+
+
+/*
+ * Header becomes an overlay layer.
+ * It occupies no layout height.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-header {
+
+    position: absolute !important;
+
+    top: 0 !important;
+
+    right: 0 !important;
+
+    left: 0 !important;
+
+    width: 100% !important;
+
+    height: 0 !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    background: transparent !important;
+
+    pointer-events: none;
+
+    z-index: 300 !important;
+
+}
+
+
+/*
+ * Left meeting information floats over the video.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-info {
+
+    position: absolute !important;
+
+    top: 20px !important;
+
+    left: 88px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 14px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    pointer-events: auto;
+
+}
+
+
+/*
+ * Right-side header actions.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-header-actions {
+
+    position: absolute !important;
+
+    top: 20px !important;
+
+    right: 20px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    pointer-events: auto;
+
+}
+
+
+/*
+ * Hamburger remains permanently accessible.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-menu-toggle {
+
+    position: fixed !important;
+
+    top: 20px !important;
+
+    left: 20px !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+
+    z-index: 900 !important;
+
+    margin: 0 !important;
+
+}
+
+
+/*
+ * Prevent the LIVE badge from touching the menu.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-live {
+
+    flex-shrink: 0;
+
+}
+
+
+/*
+ * Keep title information compact.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-title {
+
+    min-width: 0;
+
+}
+
+
+/*
+ * Make the title readable over the video.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-title h1,
+
+.cx-meeting-room-active
+.cx-meeting-room-title p {
+
+    text-shadow:
+        0
+        2px
+        12px
+        rgba(
+            0,
+            0,
+            0,
+            0.75
+        );
+
+}
+
+
+/*
+ * Header information disappears upward during
+ * the inactive state, but the menu remains.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-info.cx-meeting-ui-hidden {
+
+    opacity: 0 !important;
+
+    pointer-events: none !important;
+
+    transform:
+        translateY(
+            -14px
+        ) !important;
+
+}
+
+
+/* ==========================================================
+   CONNECTX MEETING SIDE PANEL
+   PEOPLE <-> CHAT
+========================================================== */
+
+
+/*
+ * Participants panel.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-panel {
+
+    position: fixed !important;
+
+    top: 0 !important;
+
+    right: 0 !important;
+
+    bottom: 0 !important;
+
+    left: auto !important;
+
+    width: 340px !important;
+
+    max-width:
+        90vw !important;
+
+    height: 100vh !important;
+
+    height: 100dvh !important;
+
+    margin: 0 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    flex: none !important;
+
+    z-index: 500 !important;
+
+    border-top: 0 !important;
+
+    border-right: 0 !important;
+
+    border-bottom: 0 !important;
+
+    border-left:
+        1px solid
+        rgba(
+            148,
+            163,
+            184,
+            0.16
+        ) !important;
+
+    border-radius: 20px 0 0 20px !important;
+
+    background:
+        rgba(
+            8,
+            11,
+            20,
+            0.94
+        ) !important;
+
+    box-shadow:
+        -20px
+        0
+        55px
+        rgba(
+            0,
+            0,
+            0,
+            0.38
+        ) !important;
+
+    backdrop-filter:
+        blur(18px);
+
+}
+
+
+/*
+ * Chat uses exactly the same right-side position.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-chat-panel {
+
+    position: fixed !important;
+
+    top: 0 !important;
+
+    right: 0 !important;
+
+    bottom: 0 !important;
+
+    left: auto !important;
+
+    width: 360px !important;
+
+    max-width:
+        90vw !important;
+
+    height: 100vh !important;
+
+    height: 100dvh !important;
+
+    margin: 0 !important;
+
+    z-index: 550 !important;
+
+    border-radius:
+        20px
+        0
+        0
+        20px !important;
+
+}
+
+
+/*
+ * Hidden panels are completely removed.
+ */
+
+.cx-meeting-room-active
+.cx-meeting-room-panel[hidden],
+
+.cx-meeting-room-active
+.cx-meeting-room-chat-panel[hidden] {
+
+    display: none !important;
+
+}
+
+
+/* ==========================================================
+   CONNECTX PARTICIPANTS PANEL CLOSE BUTTON
+========================================================== */
+
+.cx-meeting-room-active
+.cx-meeting-room-panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.cx-meeting-room-active
+.cx-meeting-room-panel-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.cx-meeting-room-active
+.cx-meeting-room-panel-close {
+
+    width: 36px;
+
+    height: 36px;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    color: inherit;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background
+        160ms
+        ease,
+
+        transform
+        160ms
+        ease;
+
+}
+
+
+.cx-meeting-room-active
+.cx-meeting-room-panel-close:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+}
+
+
+.cx-meeting-room-active
+.cx-meeting-room-panel-close:active {
+
+    transform:
+        scale(
+            0.96
+        );
+
+}
+
+/* ==========================================================
+   JOIN REQUEST PANEL
+========================================================== */
+
+
+.cx-meeting-join-requests {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 20px;
+
+    width: 360px;
+
+    max-width: calc(
+        100vw - 40px
+    );
+
+    z-index: 700;
+
+    padding: 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.18
+        );
+
+    border-radius: 18px;
+
+    background:
+        rgba(
+            10,
+            15,
+            28,
+            0.96
+        );
+
+    box-shadow:
+        0
+        20px
+        60px
+        rgba(
+            0,
+            0,
+            0,
+            0.42
+        );
+
+    backdrop-filter:
+        blur(18px);
+
+}
+
+
+.cx-meeting-join-requests[hidden] {
+
+    display: none;
+
+}
+
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+
+.cx-meeting-join-requests-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.cx-meeting-join-requests-header span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+
+    opacity: 0.58;
+
+}
+
+
+.cx-meeting-join-requests-header h2 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    line-height: 1.25;
+
+}
+
+
+/* ==========================================================
+   REQUEST LIST
+========================================================== */
+
+
+.cx-meeting-join-request-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    max-height: 340px;
+
+    overflow-y: auto;
+
+}
+
+
+/* ==========================================================
+   REQUEST CARD
+========================================================== */
+
+
+.cx-meeting-join-request {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding: 13px;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.12
+        );
+
+    border-radius: 14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+}
+
+
+.cx-meeting-join-request-info {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.cx-meeting-join-request-info strong {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+
+}
+
+
+.cx-meeting-join-request-info small {
+
+    font-size: 12px;
+
+    opacity: 0.58;
+
+}
+
+
+/* ==========================================================
+   REQUEST ACTIONS
+========================================================== */
+
+
+.cx-meeting-join-request-actions {
+
+    display: flex;
+
+    flex-shrink: 0;
+
+    gap: 7px;
+
+}
+
+
+.cx-meeting-join-request-actions button {
+
+    min-height: 34px;
+
+    padding:
+        0
+        11px;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.16
+        );
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.cx-meeting-join-request-actions
+button[data-join-request-action="reject"] {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.04
+        );
+
+}
+
+
+.cx-meeting-join-request-actions
+button[data-join-request-action="approve"] {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+}
+
+
+.cx-meeting-join-request-actions
+button:disabled {
+
+    opacity: 0.45;
+
+    cursor: wait;
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+
+@media (
+    max-width: 767px
+) {
+
+    .cx-meeting-join-requests {
+
+        top: 12px;
+
+        right: 12px;
+
+        left: 12px;
+
+        width: auto;
+
+        max-width: none;
+
+    }
+
+}
+
+/* ==========================================================
+   MEETING SHARE POPOVER
+========================================================== */
+
+
+.cx-meeting-share-popover {
+
+    position: fixed;
+
+    top: 88px;
+
+    right: 24px;
+
+    z-index: 1200;
+
+    width: 380px;
+
+    max-width: calc(
+        100vw - 32px
+    );
+
+    padding: 20px;
+
+    border:
+        1px solid
+        rgba(
+            148,
+            163,
+            184,
+            0.18
+        );
+
+    border-radius: 18px;
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            0.97
+        );
+
+    box-shadow:
+        0
+        24px
+        70px
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        );
+
+    backdrop-filter:
+        blur(18px);
+
+}
+
+
+.cx-meeting-share-popover[hidden] {
+
+    display: none;
+
+}
+
+
+/* ==========================================================
+   SHARE HEADER
+========================================================== */
+
+
+.cx-meeting-share-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+}
+
+
+.cx-meeting-share-header span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.14em;
+
+    opacity: 0.55;
+
+}
+
+
+.cx-meeting-share-header h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================================
+   CLOSE BUTTON
+========================================================== */
+
+
+.cx-meeting-share-close {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 34px;
+
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+.cx-meeting-share-close:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+}
+
+
+/* ==========================================================
+   DESCRIPTION
+========================================================== */
+
+
+.cx-meeting-share-description {
+
+    margin:
+        14px
+        0
+        16px;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    opacity: 0.62;
+
+}
+
+
+/* ==========================================================
+   SHARE LINK
+========================================================== */
+
+
+.cx-meeting-share-link {
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap: 8px;
+
+}
+
+
+.cx-meeting-share-link input {
+
+    min-width: 0;
+
+    flex: 1;
+
+    height: 42px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.16
+        );
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.04
+        );
+
+    font-size: 12px;
+
+    color: inherit;
+
+}
+
+
+.cx-meeting-share-link button {
+
+    min-width: 72px;
+
+    height: 42px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px
+        solid
+        rgba(
+            148,
+            163,
+            184,
+            0.16
+        );
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    color: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.cx-meeting-share-link button:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.13
+        );
+
+}
+
+
+/* ==========================================================
+   STATUS
+========================================================== */
+
+
+.cx-meeting-share-status {
+
+    display: block;
+
+    min-height: 18px;
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    opacity: 0.62;
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+
+@media (
+    max-width: 767px
+) {
+
+    .cx-meeting-share-popover {
+
+        top: 76px;
+
+        right: 12px;
+
+        left: 12px;
+
+        width: auto;
+
+        max-width: none;
+
     }
 
 }

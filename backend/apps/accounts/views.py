@@ -1,7 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.decorators.http import require_POST
+
+from apps.meetings.models import Meeting
 
 from .forms import LoginForm, RegisterForm
 
@@ -112,9 +116,79 @@ def logout_view(request):
 
 
 @login_required
-def dashboard_view(request):
+def dashboard_view(
+    request,
+):
+
+    now = timezone.now()
+
+
+    user_meetings = (
+        Meeting.objects
+        .filter(
+            Q(
+                host=request.user
+            )
+            |
+            Q(
+                participants__user=request.user
+            )
+        )
+        .distinct()
+    )
+
+
+    upcoming_meetings = (
+        user_meetings
+        .filter(
+            status=Meeting.MeetingStatus.SCHEDULED,
+            scheduled_at__isnull=False,
+            scheduled_at__gte=now,
+        )
+        .order_by(
+            "scheduled_at",
+        )[:5]
+    )
+
+
+    recent_meetings = (
+        user_meetings
+        .filter(
+            status=Meeting.MeetingStatus.ENDED,
+        )
+        .order_by(
+            "-ended_at",
+        )[:5]
+    )
+
 
     return render(
         request,
-        "accounts/dashboard.html"
+        "accounts/dashboard.html",
+        {
+            "upcoming_meetings":
+                upcoming_meetings,
+
+            "recent_meetings":
+                recent_meetings,
+
+            "meeting_count":
+                user_meetings.count(),
+        },
+    )
+
+
+
+
+from django.http import JsonResponse
+
+
+def health_check_view(
+    request,
+):
+
+    return JsonResponse(
+        {
+            "status": "ok",
+        }
     )

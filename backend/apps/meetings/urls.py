@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import reverse
 
 from . import views
 
@@ -50,8 +51,28 @@ urlpatterns = [
     ),
 
     path(
+        "<str:meeting_code>/join-requests/<int:request_id>/approve/",
+        views.approve_join_request_view,
+        name="approve_join_request",
+    ),
+
+    path(
+        "<str:meeting_code>/join-requests/<int:request_id>/reject/",
+        views.reject_join_request_view,
+        name="reject_join_request",
+    ),
+
+    path(
+        "<str:meeting_code>/join-requests/<int:request_id>/status/",
+        views.join_request_status_view,
+        name="join_request_status",
+    ),
+
+    path(
         "<str:meeting_code>/",
         views.meeting_room_view,
         name="meeting_room",
     ),
+
+    
 ]

@@ -332,26 +332,18 @@ function getParticipantByUserId(
    UPDATE PARTICIPANT COUNT
 ========================================================== */
 
-
 function updateParticipantCount() {
 
-    const context = getMeetingContext();
+    const context =
+        getMeetingContext();
 
 
-    const participantList = (
-        context.elements.participantList
-    );
-
-
-    const participantCount = (
-        context.elements.participantCount
-    );
+    const participantList =
+        context.elements.participantList;
 
 
     if (
         !participantList
-        ||
-        !participantCount
     ) {
 
         return;
@@ -359,26 +351,63 @@ function updateParticipantCount() {
     }
 
 
-    const participants = (
-
+    const participants =
         participantList.querySelectorAll(
             "[data-user-id]"
+        );
+
+
+    const participantCount =
+        participants.length;
+
+
+    /*
+     * Update the participant panel count.
+     */
+
+    document
+        .querySelectorAll(
+            "[data-participant-count]"
         )
+        .forEach(
+            (
+                element
+            ) => {
 
-    );
+                element.textContent =
+                    String(
+                        participantCount
+                    );
+
+            }
+        );
 
 
-    participantCount.textContent = String(
-        participants.length
-    );
+    /*
+    * Update the People control count.
+    */
+
+    const peopleControlCount =
+        document.querySelector(
+            "[data-people-control-count]"
+        );
+
+
+    if (
+        peopleControlCount
+    ) {
+
+        peopleControlCount.textContent =
+            String(
+                participantCount
+            );
+
+    }
 
 
     console.log(
-
         "ConnectX participant count updated:",
-
-        participants.length
-
+        participantCount
     );
 
 }

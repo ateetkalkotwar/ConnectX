@@ -126,30 +126,32 @@ New Meeting | ConnectX
             </div>
 
 
-            <div class="cx-meeting-form-field">
-
-                <label for="{{ form.max_participants.id_for_label }}">
-                    Maximum participants
-                </label>
+            <label class="cx-meeting-form-toggle">
 
                 <input
-                    type="number"
-                    name="{{ form.max_participants.html_name }}"
-                    id="{{ form.max_participants.id_for_label }}"
-                    value="{{ form.max_participants.value|default:'100' }}"
-                    min="1"
-                    max="100"
-                    required>
+                    type="checkbox"
+                    name="{{ form.host_moderation_enabled.html_name }}"
+                    {% if form.host_moderation_enabled.value %}
+                    checked
+                    {% endif %}>
 
-                {% for error in form.max_participants.errors %}
+                <span class="cx-meeting-form-toggle-control">
+                    <span></span>
+                </span>
 
-                    <span class="cx-meeting-form-error">
-                        {{ error }}
-                    </span>
+                <span class="cx-meeting-form-toggle-content">
 
-                {% endfor %}
+                    <strong>
+                        Host controls
+                    </strong>
 
-            </div>
+                    <small>
+                        Allow the host to manage participants' microphone, camera, and meeting access.
+                    </small>
+
+                </span>
+
+            </label>
 
 
             <label class="cx-meeting-form-toggle">
@@ -172,7 +174,7 @@ New Meeting | ConnectX
                     </strong>
 
                     <small>
-                        Participants must be approved before entering the meeting.
+                        Participants must be approved by the host before entering the meeting.
                     </small>
 
                 </span>

@@ -46,6 +46,17 @@ import {
 } from "./controls.js";
 
 
+import {
+    handleChatMessage,
+} from "./chat_socket.js";
+
+
+import {
+    showJoinRequest,
+} from "./moderation.js";
+
+
+
 /* ==========================================================
    SOCKET RUNTIME
 ========================================================== */
@@ -302,6 +313,45 @@ function handleParticipantJoined(
 
         participant
 
+    );
+
+}
+
+
+/* ==========================================================
+   HANDLE JOIN REQUEST CREATED
+========================================================== */
+
+
+function handleJoinRequestCreated(
+    data
+) {
+
+    const request = {
+
+        type:
+            "join_request_created",
+
+        request_id:
+            data.request_id,
+
+        user_id:
+            data.user_id,
+
+        username:
+            data.username,
+
+    };
+
+
+    showJoinRequest(
+        request
+    );
+
+
+    console.log(
+        "ConnectX join request created:",
+        request
     );
 
 }
@@ -728,6 +778,14 @@ function handleMeetingSocketMessage(
     switch (
         data.type
     ) {
+        
+        case "join_request_created":
+
+            handleJoinRequestCreated(
+                data
+            );
+
+            break;
 
         case "participant_joined":
 
@@ -741,6 +799,15 @@ function handleMeetingSocketMessage(
         case "participant_left":
 
             handleParticipantLeft(
+                data
+            );
+
+            break;
+
+
+        case "chat_message":
+
+            handleChatMessage(
                 data
             );
 
@@ -1033,6 +1100,13 @@ function connectMeetingSocket() {
     );
 
 
+    const context =
+        getMeetingContext();
+
+    context.meetingSocket =
+        meetingSocket;
+
+
     meetingSocket.addEventListener(
 
         "open",
@@ -1091,6 +1165,20 @@ function connectMeetingSocket() {
             stopMeetingHeartbeat();
 
 
+            const context =
+                getMeetingContext();
+
+            if (
+                context.meetingSocket ===
+                meetingSocket
+            ) {
+
+                context.meetingSocket =
+                    null;
+
+            }
+
+
             meetingSocket = null;
 
 
@@ -1138,6 +1226,20 @@ function disconnectMeetingSocket() {
 
 
     if (meetingSocket) {
+
+        const context =
+            getMeetingContext();
+
+        if (
+            context.meetingSocket ===
+            meetingSocket
+        ) {
+
+            context.meetingSocket =
+                null;
+
+        }
+
 
         meetingSocket.close(
             1000,

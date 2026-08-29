@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .views import health_check_view
 
 
 urlpatterns = [
@@ -33,6 +34,12 @@ urlpatterns = [
         "dashboard/",
         views.dashboard_view,
         name="dashboard",
+    ),
+
+    path(
+        "health/",
+        health_check_view,
+        name="health_check",
     ),
 
 ]

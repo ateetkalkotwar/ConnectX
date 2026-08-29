@@ -111,39 +111,12 @@ Dashboard | ConnectX
 
             <!-- NEW MEETING -->
 
-            <button
-                type="button"
+            <a
+                href="{% url 'create_meeting' %}"
                 class="
                     cx-dashboard-action
                     cx-dashboard-action--primary
                 ">
-
-                <span class="cx-dashboard-action-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <rect
-                            x="3"
-                            y="5"
-                            width="13"
-                            height="14"
-                            rx="2">
-                        </rect>
-
-                        <path d="M16 10L21 7V17L16 14">
-                        </path>
-
-                        <path d="M9.5 9V15">
-                        </path>
-
-                        <path d="M6.5 12H12.5">
-                        </path>
-
-                    </svg>
-
-                </span>
 
 
                 <span class="cx-dashboard-action-content">
@@ -158,51 +131,21 @@ Dashboard | ConnectX
 
                 </span>
 
-
                 <span class="cx-dashboard-action-arrow">
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <path d="M5 12H19">
-                        </path>
-
-                        <path d="M14 7L19 12L14 17">
-                        </path>
-
-                    </svg>
 
                 </span>
 
-            </button>
+            </a>
 
 
             <!-- JOIN MEETING -->
 
-            <button
-                type="button"
+            <a
+                href="{% url 'join_meeting' %}"
                 class="cx-dashboard-action">
 
-                <span class="cx-dashboard-action-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <path d="M14 5L21 12L14 19">
-                        </path>
-
-                        <path d="M21 12H9">
-                        </path>
-
-                        <path d="M9 5H5C3.9 5 3 5.9 3 7V17C3 18.1 3.9 19 5 19H9">
-                        </path>
-
-                    </svg>
-
-                </span>
-
+                <!-- KEEP THE EXISTING ICON -->
 
                 <span class="cx-dashboard-action-content">
 
@@ -216,65 +159,22 @@ Dashboard | ConnectX
 
                 </span>
 
-
                 <span class="cx-dashboard-action-arrow">
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <path d="M5 12H19">
-                        </path>
-
-                        <path d="M14 7L19 12L14 17">
-                        </path>
-
-                    </svg>
+                    <!-- KEEP THE EXISTING ARROW SVG -->
 
                 </span>
 
-            </button>
+            </a>
 
 
             <!-- SCHEDULE -->
 
-            <button
-                type="button"
+            <a
+                href="{% url 'schedule_meeting' %}"
                 class="cx-dashboard-action">
 
-                <span class="cx-dashboard-action-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <rect
-                            x="3"
-                            y="5"
-                            width="18"
-                            height="16"
-                            rx="2">
-                        </rect>
-
-                        <path d="M8 3V7">
-                        </path>
-
-                        <path d="M16 3V7">
-                        </path>
-
-                        <path d="M3 10H21">
-                        </path>
-
-                        <path d="M12 14V18">
-                        </path>
-
-                        <path d="M10 16H14">
-                        </path>
-
-                    </svg>
-
-                </span>
-
+                <!-- KEEP THE EXISTING ICON -->
 
                 <span class="cx-dashboard-action-content">
 
@@ -288,24 +188,13 @@ Dashboard | ConnectX
 
                 </span>
 
-
                 <span class="cx-dashboard-action-arrow">
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <path d="M5 12H19">
-                        </path>
-
-                        <path d="M14 7L19 12L14 17">
-                        </path>
-
-                    </svg>
+                    <!-- KEEP THE EXISTING ARROW SVG -->
 
                 </span>
 
-            </button>
+            </a>
 
         </div>
 
@@ -340,63 +229,78 @@ Dashboard | ConnectX
                 </div>
 
 
-                <a href="#">
+                <a href="{% url 'meetings' %}">
                     View all
                 </a>
 
             </div>
 
 
-            <div class="cx-dashboard-empty">
+            {% if upcoming_meetings %}
 
-                <span class="cx-dashboard-empty-icon">
+                <div class="cx-dashboard-meeting-list">
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
+                    {% for meeting in upcoming_meetings %}
 
-                        <rect
-                            x="3"
-                            y="5"
-                            width="18"
-                            height="16"
-                            rx="2">
-                        </rect>
+                        <a
+                            href="{% url 'meeting_room' meeting.meeting_code %}"
+                            class="cx-dashboard-meeting">
 
-                        <path d="M8 3V7">
-                        </path>
+                            <div class="cx-dashboard-meeting-content">
 
-                        <path d="M16 3V7">
-                        </path>
+                                <strong>
+                                    {{ meeting.title }}
+                                </strong>
 
-                        <path d="M3 10H21">
-                        </path>
+                                <span>
+                                    {{ meeting.scheduled_at|date:"d M Y" }}
+                                    ·
+                                    {{ meeting.scheduled_at|time:"g:i A" }}
+                                </span>
 
-                    </svg>
-
-                </span>
+                            </div>
 
 
-                <h3>
-                    No upcoming meetings
-                </h3>
+                            <span
+                                class="cx-dashboard-meeting-arrow"
+                                aria-hidden="true">
+
+                                →
+
+                            </span>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="cx-dashboard-empty">
 
 
-                <p>
-
-                    Meetings you schedule will appear
-                    here.
-
-                </p>
+                    <h3>
+                        No upcoming meetings
+                    </h3>
 
 
-                <button type="button">
+                    <p>
+                        Meetings you schedule will appear here.
+                    </p>
 
-                    Schedule a meeting
 
-                </button>
+                    <a
+                        href="{% url 'schedule_meeting' %}"
+                        class="cx-dashboard-empty-action">
 
-            </div>
+                        Schedule a meeting
+
+                    </a>
+
+                </div>
+
+            {% endif %}
 
         </section>
 
@@ -412,223 +316,94 @@ Dashboard | ConnectX
                 <div>
 
                     <span class="cx-dashboard-section-label">
-                        MESSAGES
+                        RECENT
                     </span>
 
                     <h2>
-                        Recent conversations
+                        Recent meetings
                     </h2>
 
                 </div>
 
 
-                <a href="#">
+                <a href="{% url 'meetings' %}">
                     View all
                 </a>
 
             </div>
 
 
-            <div class="cx-dashboard-empty">
+            {% if recent_meetings %}
 
-                <span class="cx-dashboard-empty-icon">
+                <div class="cx-dashboard-meeting-list">
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
+                    {% for meeting in recent_meetings %}
 
-                        <path
-                            d="M21 15A4 4 0 0 1 17 19H8L3 22V7A4 4 0 0 1 7 3H17A4 4 0 0 1 21 7Z">
-                        </path>
+                        <a
+                            href="{% url 'meetings' %}"
+                            class="cx-dashboard-meeting">
 
-                        <path d="M8 9H16">
-                        </path>
+                            <div class="cx-dashboard-meeting-content">
 
-                        <path d="M8 13H13">
-                        </path>
+                                <strong>
+                                    {{ meeting.title }}
+                                </strong>
 
-                    </svg>
+                                <span>
+                                    Completed
+                                    ·
+                                    {{ meeting.ended_at|date:"d M Y" }}
+                                    ·
+                                    {{ meeting.ended_at|time:"g:i A" }}
+                                </span>
 
-                </span>
-
-
-                <h3>
-                    No conversations yet
-                </h3>
-
-
-                <p>
-
-                    Start connecting with people on
-                    ConnectX.
-
-                </p>
+                            </div>
 
 
-                <button type="button">
+                            <span
+                                class="cx-dashboard-meeting-arrow"
+                                aria-hidden="true">
 
-                    Start a conversation
+                                →
 
-                </button>
+                            </span>
 
-            </div>
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="cx-dashboard-empty">
+
+
+                    <h3>
+                        No recent meetings
+                    </h3>
+
+
+                    <p>
+                        Completed meetings will appear here.
+                    </p>
+
+
+                    <a
+                        href="{% url 'meetings' %}"
+                        class="cx-dashboard-empty-action">
+
+                        View meetings
+
+                    </a>
+
+                </div>
+
+            {% endif %}
 
         </section>
 
     </div>
-
-
-    <!-- =====================================================
-         ACTIVITY
-    ====================================================== -->
-
-    <section
-        class="
-            cx-dashboard-section
-            cx-dashboard-activity-section
-        ">
-
-        <div class="cx-dashboard-section-header">
-
-            <div>
-
-                <span class="cx-dashboard-section-label">
-                    OVERVIEW
-                </span>
-
-                <h2>
-                    Your activity
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <div class="cx-dashboard-stats">
-
-
-            <article class="cx-dashboard-stat">
-
-                <span class="cx-dashboard-stat-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <rect
-                            x="3"
-                            y="5"
-                            width="13"
-                            height="14"
-                            rx="2">
-                        </rect>
-
-                        <path d="M16 10L21 7V17L16 14">
-                        </path>
-
-                    </svg>
-
-                </span>
-
-
-                <div>
-
-                    <strong>
-                        0
-                    </strong>
-
-                    <span>
-                        Meetings
-                    </span>
-
-                </div>
-
-            </article>
-
-
-            <article class="cx-dashboard-stat">
-
-                <span class="cx-dashboard-stat-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <path
-                            d="M21 15A4 4 0 0 1 17 19H8L3 22V7A4 4 0 0 1 7 3H17A4 4 0 0 1 21 7Z">
-                        </path>
-
-                    </svg>
-
-                </span>
-
-
-                <div>
-
-                    <strong>
-                        0
-                    </strong>
-
-                    <span>
-                        Conversations
-                    </span>
-
-                </div>
-
-            </article>
-
-
-            <article class="cx-dashboard-stat">
-
-                <span class="cx-dashboard-stat-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none">
-
-                        <circle
-                            cx="9"
-                            cy="8"
-                            r="4">
-                        </circle>
-
-                        <path
-                            d="M2 21C2 17.1 5.1 14 9 14">
-                        </path>
-
-                        <circle
-                            cx="17"
-                            cy="9"
-                            r="3">
-                        </circle>
-
-                        <path
-                            d="M14 15C18.4 15 22 17.7 22 21">
-                        </path>
-
-                    </svg>
-
-                </span>
-
-
-                <div>
-
-                    <strong>
-                        0
-                    </strong>
-
-                    <span>
-                        Contacts
-                    </span>
-
-                </div>
-
-            </article>
-
-        </div>
-
-    </section>
 
 </div>
 

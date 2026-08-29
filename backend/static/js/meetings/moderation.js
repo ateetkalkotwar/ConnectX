@@ -30,10 +30,400 @@ import {
 } from "./meeting_api.js";
 
 
+/* ==========================================================
+   ESCAPE HTML
+========================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.textContent =
+        String(
+            value
+            ?? ""
+        );
+
+    return element.innerHTML;
+
+}
+
+
 
 /* ==========================================================
    GET PARTICIPANT ELEMENT
 ========================================================== */
+
+const joinRequestRuntime = {
+
+    panel:
+        null,
+
+    list:
+        null,
+
+};
+
+function initializeJoinRequestUI() {
+
+    joinRequestRuntime.panel =
+        document.querySelector(
+            "[data-join-requests-panel]"
+        );
+
+    joinRequestRuntime.list =
+        document.querySelector(
+            "[data-join-request-list]"
+        );
+
+
+    if (!joinRequestRuntime.panel) {
+        return;
+    }
+
+    if (!joinRequestRuntime.list) {
+        return;
+    }
+
+
+    console.log(
+        "ConnectX join request UI initialized."
+    );
+
+}
+
+
+function showJoinRequest(
+    requestData
+) {
+
+    const context =
+        getMeetingContext();
+
+
+    if (!context.isHost) {
+        return;
+    }
+
+
+    if (!joinRequestRuntime.panel) {
+        return;
+    }
+
+
+    if (!joinRequestRuntime.list) {
+        return;
+    }
+
+
+    const requestId =
+        Number(
+            requestData.request_id
+        );
+
+
+    if (
+        !Number.isInteger(
+            requestId
+        )
+    ) {
+        return;
+    }
+
+
+    const username =
+        String(
+            requestData.username
+            ||
+            "Participant"
+        );
+
+
+    const existingRequest =
+        joinRequestRuntime.list.querySelector(
+            `[data-join-request-id="${requestId}"]`
+        );
+
+
+    if (existingRequest) {
+        return;
+    }
+
+
+    const requestElement =
+        document.createElement(
+            "article"
+        );
+
+
+    requestElement.className =
+        "cx-meeting-join-request";
+
+
+    requestElement.dataset.joinRequestId =
+        String(
+            requestId
+        );
+
+
+    requestElement.innerHTML = `
+
+        <div
+            class="cx-meeting-join-request-info">
+
+            <strong>
+                ${escapeHtml(username)}
+            </strong>
+
+            <small>
+                Wants to join this meeting
+            </small>
+
+        </div>
+
+
+        <div
+            class="cx-meeting-join-request-actions">
+
+            <button
+                type="button"
+                data-join-request-action="reject"
+                data-request-id="${requestId}">
+
+                Reject
+
+            </button>
+
+
+            <button
+                type="button"
+                data-join-request-action="approve"
+                data-request-id="${requestId}">
+
+                Accept
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    joinRequestRuntime.list.appendChild(
+        requestElement
+    );
+
+
+    joinRequestRuntime.panel.hidden =
+        false;
+
+}
+
+
+async function handleJoinRequestAction(
+    requestId,
+    action
+) {
+
+    const context =
+        getMeetingContext();
+
+
+    if (!context.isHost) {
+
+        return;
+
+    }
+
+
+    const meetingCode =
+        context.meetingCode;
+
+
+    if (!meetingCode) {
+
+        throw new Error(
+            "Meeting code is unavailable."
+        );
+
+    }
+
+
+    const endpoint =
+        action === "approve"
+            ? "approve"
+            : "reject";
+
+
+    const url =
+        `/meetings/${meetingCode}/join-requests/${requestId}/${endpoint}/`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                method:
+                    "POST",
+
+                headers: {
+                    "X-CSRFToken":
+                        getCsrfToken(),
+
+                    "Content-Type":
+                        "application/json",
+                },
+
+                credentials:
+                    "same-origin",
+            }
+        );
+
+
+    const data =
+        await parseJsonResponse(
+            response
+        )
+        ||
+        {};
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error
+            ||
+            "Unable to process join request."
+        );
+
+    }
+
+
+    removeJoinRequest(
+        requestId
+    );
+
+}
+
+
+function removeJoinRequest(
+    requestId
+) {
+
+    const element =
+        joinRequestRuntime.list
+            ?.querySelector(
+                `[data-join-request-id="${requestId}"]`
+            );
+
+
+    if (element) {
+
+        element.remove();
+
+    }
+
+
+    if (
+        joinRequestRuntime.list
+        &&
+        joinRequestRuntime.list
+            .children
+            .length === 0
+    ) {
+
+        joinRequestRuntime.panel.hidden =
+            true;
+
+    }
+
+}
+
+
+function bindJoinRequestEvents() {
+
+    if (
+        !joinRequestRuntime.list
+    ) {
+        return;
+    }
+
+
+    joinRequestRuntime.list.addEventListener(
+        "click",
+        async (
+            event
+        ) => {
+
+            const button =
+                event.target.closest(
+                    "[data-join-request-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const requestId =
+                Number(
+                    button.dataset.requestId
+                );
+
+
+            const action =
+                button.dataset.joinRequestAction;
+
+
+            if (
+                !Number.isInteger(
+                    requestId
+                )
+            ) {
+                return;
+            }
+
+
+            button.disabled =
+                true;
+
+
+            try {
+
+                await handleJoinRequestAction(
+                    requestId,
+                    action
+                );
+
+
+            } catch (
+                error
+            ) {
+
+                console.error(
+                    "ConnectX join request error:",
+                    error
+                );
+
+
+                button.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+}
+
+
+
 
 
 function getParticipantElement(
@@ -762,6 +1152,10 @@ function initializeModeration() {
         "ConnectX moderation initialized."
     );
 
+    initializeJoinRequestUI();
+
+    bindJoinRequestEvents();
+
 }
 
 
@@ -771,8 +1165,9 @@ function initializeModeration() {
 
 
 export {
-
     initializeModeration,
+    
+    showJoinRequest,
 
     moderateParticipant,
 

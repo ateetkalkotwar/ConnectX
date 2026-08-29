@@ -1,0 +1,301 @@
+{% extends "layouts/app_layout.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Waiting for approval | ConnectX
+{% endblock %}
+
+
+{% block app_page_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pages/meeting_forms.css' %}">
+
+{% endblock %}
+
+
+{% block app_content %}
+
+<div class="cx-meeting-form-page">
+
+    <section class="cx-meeting-form-shell">
+
+        <div class="cx-meeting-form-header">
+
+            <div>
+
+                <span class="cx-meeting-form-eyebrow">
+                    MEETING REQUEST
+                </span>
+
+                <h1>
+                    Waiting for approval
+                </h1>
+
+                <p>
+                    Your request to join
+                    <strong>
+                        {{ meeting.title }}
+                    </strong>
+                    has been sent to the host.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cx-meeting-form">
+
+            <div
+                class="cx-meeting-form-toggle"
+                style="cursor: default;">
+
+                <span class="cx-meeting-form-toggle-control">
+                    <span></span>
+                </span>
+
+                <span class="cx-meeting-form-toggle-content">
+
+                    <strong
+                        data-join-request-status>
+                        Waiting for the host
+                    </strong>
+
+                    <small
+                        data-join-request-message>
+                        Please keep this page open. You will
+                        enter the meeting automatically after
+                        the host approves your request.
+                    </small>
+
+                </span>
+
+            </div>
+
+
+            <div class="cx-meeting-form-actions">
+
+                <a
+                    href="{% url 'join_meeting' %}"
+                    class="cx-meeting-form-cancel">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const statusElement =
+            document.querySelector(
+                "[data-join-request-status]"
+            );
+
+
+        const messageElement =
+            document.querySelector(
+                "[data-join-request-message]"
+            );
+
+
+        const requestId =
+            Number(
+                "{{ join_request.pk }}"
+            );
+
+
+        const meetingCode =
+            "{{ meeting.meeting_code }}";
+
+
+        if (
+            !requestId
+            ||
+            !meetingCode
+        ) {
+
+            return;
+
+        }
+
+
+        let checking =
+            false;
+
+
+        async function checkJoinRequestStatus() {
+
+            if (checking) {
+
+                return;
+
+            }
+
+
+            checking = true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/meetings/${meetingCode}/join-requests/${requestId}/status/`,
+                        {
+                            method:
+                                "GET",
+
+                            credentials:
+                                "same-origin",
+
+                            cache:
+                                "no-store",
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error
+                        ||
+                        "Unable to check join request."
+                    );
+
+                }
+
+
+                if (
+                    data.status ===
+                    "approved"
+                ) {
+
+                    if (statusElement) {
+
+                        statusElement.textContent =
+                            "Approved";
+
+                    }
+
+
+                    if (messageElement) {
+
+                        messageElement.textContent =
+                            "The host approved your request. Entering the meeting...";
+
+                    }
+
+
+                    window.setTimeout(
+                        () => {
+
+                            if (
+                                data.meeting_url
+                            ) {
+
+                                window.location.href =
+                                    data.meeting_url;
+
+                            }
+
+                        },
+                        500
+                    );
+
+
+                    return;
+
+                }
+
+
+                if (
+                    data.status ===
+                    "rejected"
+                ) {
+
+                    if (statusElement) {
+
+                        statusElement.textContent =
+                            "Request declined";
+
+                    }
+
+
+                    if (messageElement) {
+
+                        messageElement.textContent =
+                            "The host did not approve your request to join this meeting.";
+
+                    }
+
+
+                    return;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "ConnectX join request status error:",
+                    error
+                );
+
+            } finally {
+
+                checking = false;
+
+            }
+
+        }
+
+
+        checkJoinRequestStatus();
+
+
+        const statusInterval =
+            window.setInterval(
+                () => {
+
+                    checkJoinRequestStatus();
+
+                },
+                2000
+            );
+
+
+        window.addEventListener(
+            "beforeunload",
+            () => {
+
+                window.clearInterval(
+                    statusInterval
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -13,7 +13,7 @@ class CreateMeetingForm(forms.ModelForm):
         fields = (
             "title",
             "description",
-            "max_participants",
+            "host_moderation_enabled",
             "requires_approval",
         )
 
