@@ -1913,19 +1913,23 @@ function setActiveParticipant(
 
     /*
      * Update stage video.
+     *
+     * The local participant's stream must
+     * never be played back through the
+     * meeting audio output.
      */
 
-    if (
+    const isLocalParticipant =
+        participantId ===
+        context.currentUserId;
 
-        stage.video.srcObject !==
-        stream
 
-    ) {
+    stage.video.muted =
+        isLocalParticipant;
 
-        stage.video.srcObject =
-            stream || null;
 
-    }
+    stage.video.srcObject =
+        stream || null;
 
     /*
      * Update placeholder.
