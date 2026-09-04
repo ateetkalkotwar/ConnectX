@@ -7,6 +7,11 @@ from .models import (
     MeetingPresenceSession,
 )
 
+from .meeting_lifecycle import (
+    end_meeting_if_empty,
+)
+
+
 
 @transaction.atomic
 def create_instant_meeting(
@@ -269,6 +274,11 @@ def leave_meeting(
             "is_screen_sharing",
             "updated_at",
         ]
+    )
+
+
+    end_meeting_if_empty(
+        meeting=meeting,
     )
 
 

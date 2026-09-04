@@ -14,6 +14,7 @@ from channels.layers import (
 )
 
 from .models import (
+    Meeting,
     MeetingParticipant,
 )
 
@@ -23,6 +24,10 @@ from .presence import (
     get_presence_reconnect_grace_seconds,
     synchronize_participant_presence,
     touch_presence,
+)
+
+from .meeting_lifecycle import (
+    end_meeting_if_empty,
 )
 
 
@@ -541,6 +546,11 @@ class MeetingConsumer(
                 ),
             },
         )
+
+
+        await self.end_empty_meeting()
+
+
 
 
     # ======================================================
@@ -1070,4 +1080,30 @@ class MeetingConsumer(
             ),
         }
 
+    # ======================================================
+    # DATABASE: END EMPTY MEETING
+    # ======================================================
 
+
+    @database_sync_to_async
+    def end_empty_meeting(
+        self,
+    ):
+
+        meeting = (
+            Meeting.objects
+            .filter(
+                meeting_code=self.meeting_code,
+            )
+            .first()
+        )
+
+
+        if meeting is None:
+
+            return False
+
+
+        return end_meeting_if_empty(
+            meeting=meeting,
+        )
